@@ -59,3 +59,46 @@ async def registrarUsuario(email: str, username: str, password: str) -> str:
     except Exception as e:
         print(f"Error al registrar usuario: {e}")
         return f"Error al registrar usuario: {str(e)}"
+    
+async def consultar_saldo_disponible(username: str) -> float:
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            query = "SELECT saldo_virtual FROM usuarios WHERE nombre_usuario = $1"
+            saldo = await connection.fetchval(query, username)
+            if saldo is None:
+                raise ValueError(f"No se encontró el usuario: {username}")
+            print("El saldo obtenido es de:", saldo)
+            return float(saldo)
+    except Exception as e:
+        print(f"Error al consultar saldo: {e}")
+        raise
+
+async def actualizar_saldo(username: str, cantidad: float):
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            query = "UPDATE usuarios SET saldo_virtual = saldo_virtual - $1 WHERE nombre_usuario = $2"
+            await connection.execute(query, cantidad, username)
+    except Exception as e:
+        print(f"Error al actualizar saldo: {e}")
+        raise
+
+async def registrar_compra(username: str, activo: str, cantidad: float, precio: float):
+#  id_transaccion | id_usuario | simbolo_activo | tipo_transaccion | cantidad | precio | monto_total | creado_en
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            idUsuario = await connection.fetchval("SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1", username)
+            query = "INSERT INTO transacciones (id_usuario, simbolo_activo, tipo_transaccion, cantidad, precio, monto_total) VALUES ($1, $2, 'compra', $3, $4, $5)"
+            await connection.execute(query, idUsuario, activo, cantidad, precio, cantidad * precio)
+
+    except Exception as e:
+        print(f"Error al registrar compra: {e}")
+        

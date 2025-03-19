@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from dbHelper import *
 from contextlib import asynccontextmanager
-
+from APIcaller import *
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -13,7 +13,6 @@ async def lifespan(app: FastAPI):
         await close_db()
 
 app = FastAPI(lifespan=lifespan)
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -47,3 +46,58 @@ async def register(email: str = Body(...), username: str = Body(...), password: 
         print(f"Error en la ruta /register: {e}")
         raise HTTPException(status_code=500, detail="Error interno del servidor")
     
+@app.get("/consult")
+async def consult(activo: str, periodo: str):
+    print("Entramos en el endpoint de consult")
+    try:
+        datos_activo = obtener_datos_activo(activo, periodo)
+        return {"datos": datos_activo}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/datos-pre-transaccion")
+async def datos_pre_transaccion(activo: str, username: str):
+    try:
+        precioActivo = await obtener_valor_actual(activo)
+        saldoDisponible = await consultar_saldo_disponible(username)
+        return {"precioActivo": precioActivo, "saldoDisponible": saldoDisponible}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/consultar-saldo")
+async def consultar_saldo(username: str):
+    try:
+        saldo = await consultar_saldo_disponible(username)
+        return {"saldo": saldo}
+    except ValueError as e:
+        # Este error se lanzará si no se encuentra el usuario
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        # Para otros errores inesperados
+        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
+    
+@app.get("/consultar-precio-actual")
+def consultar_precio_actual(activo: str):
+    try:
+        precio = obtener_valor_actual(activo)
+        return {"precio": precio}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/comprar-acciones")
+async def comprar_acciones(username: str, activo: str, cantidad: float):
+    try:
+        precio = await obtener_valor_actual(activo)
+        saldo = await consultar_saldo_disponible(username)
+        if saldo < cantidad:
+            raise HTTPException(status_code=400, detail="Saldo insuficiente")
+        actualizar_saldo(username, cantidad)
+        registrar_compra(username, activo, cantidad, precio)
+        actualizar_cartera(username, activo, cantidad, precio)
+        return {"message": "Compra realizada exitosamente"}
+    except ValueError as e:
+        # Este error se lanzará si no se encuentra el usuario
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        # Para otros errores inesperados
+        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
