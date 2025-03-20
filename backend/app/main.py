@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from dbHelper import *
 from contextlib import asynccontextmanager
-from APIcaller import *
+from priceConsultor import *
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

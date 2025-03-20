@@ -24,62 +24,47 @@ const Market = () => {
     { value: 1, label: 'Apple (AAPL)', ticker: 'AAPL' },
     { value: 2, label: 'Microsoft (MSFT)', ticker: 'MSFT' },
     { value: 3, label: 'Amazon (AMZN)', ticker: 'AMZN' },
-    { value: 4, label: 'Alphabet (GOOGL)', ticker: 'GOOGL' },
-    { value: 5, label: 'Meta Platforms (META)', ticker: 'META' },
-    { value: 6, label: 'Tesla (TSLA)', ticker: 'TSLA' },
-    { value: 7, label: 'NVIDIA (NVDA)', ticker: 'NVDA' },
-    { value: 8, label: 'Netflix (NFLX)', ticker: 'NFLX' },
-    { value: 9, label: 'Walt Disney (DIS)', ticker: 'DIS' },
-    { value: 10, label: 'Coca-Cola (KO)', ticker: 'KO' },
-    { value: 11, label: 'Walmart (WMT)', ticker: 'WMT' },
-    { value: 12, label: 'JPMorgan Chase (JPM)', ticker: 'JPM' },
-    { value: 13, label: 'Johnson & Johnson (JNJ)', ticker: 'JNJ' },
-    { value: 14, label: 'Visa (V)', ticker: 'V' },
-    { value: 15, label: 'Procter & Gamble (PG)', ticker: 'PG' },
-    { value: 16, label: 'ExxonMobil (XOM)', ticker: 'XOM' },
-    { value: 17, label: 'Chevron (CVX)', ticker: 'CVX' },
-    { value: 18, label: 'Home Depot (HD)', ticker: 'HD' },
-    { value: 19, label: 'Intel (INTC)', ticker: 'INTC' },
-    { value: 20, label: 'Cisco Systems (CSCO)', ticker: 'CSCO' },
-    { value: 21, label: 'Verizon (VZ)', ticker: 'VZ' },
-    { value: 22, label: 'AT&T (T)', ticker: 'T' },
-    { value: 23, label: 'Adobe (ADBE)', ticker: 'ADBE' },
-    { value: 24, label: 'PayPal (PYPL)', ticker: 'PYPL' },
-    { value: 25, label: 'Nike (NKE)', ticker: 'NKE' },
-    { value: 26, label: 'McDonalds (MCD)', ticker: 'MCD' },
-    { value: 27, label: 'IBM (IBM)', ticker: 'IBM' },
-    { value: 28, label: 'Boeing (BA)', ticker: 'BA' },
-    { value: 29, label: 'Mastercard (MA)', ticker: 'MA' },
-    { value: 30, label: 'Pfizer (PFE)', ticker: 'PFE' },
-    { value: 31, label: 'Merck (MRK)', ticker: 'MRK' },
-    { value: 32, label: 'Salesforce (CRM)', ticker: 'CRM' },
-    { value: 33, label: 'Goldman Sachs (GS)', ticker: 'GS' },
-    { value: 34, label: 'Caterpillar (CAT)', ticker: 'CAT' },
-    { value: 35, label: '3M (MMM)', ticker: 'MMM' },
-    { value: 36, label: 'American Express (AXP)', ticker: 'AXP' },
-    { value: 37, label: 'UnitedHealth Group (UNH)', ticker: 'UNH' },
-    { value: 38, label: 'Starbucks (SBUX)', ticker: 'SBUX' },
-    { value: 39, label: 'Advanced Micro Devices (AMD)', ticker: 'AMD' },
-    { value: 40, label: 'Oracle (ORCL)', ticker: 'ORCL' },
-    { value: 41, label: 'Qualcomm (QCOM)', ticker: 'QCOM' },
-    { value: 42, label: 'Costco (COST)', ticker: 'COST' },
-    { value: 43, label: 'PepsiCo (PEP)', ticker: 'PEP' },
-    { value: 44, label: 'Comcast (CMCSA)', ticker: 'CMCSA' },
-    { value: 45, label: 'General Electric (GE)', ticker: 'GE' },
-    { value: 46, label: 'Target (TGT)', ticker: 'TGT' },
-    { value: 47, label: 'Ford Motor (F)', ticker: 'F' },
-    { value: 48, label: 'General Motors (GM)', ticker: 'GM' },
-    { value: 49, label: 'Spotify (SPOT)', ticker: 'SPOT' },
-    { value: 50, label: 'Airbnb (ABNB)', ticker: 'ABNB' }
-  ];
+    { value: 4, label: 'Google (GOOGL)', ticker: 'GOOGL' },
+    { value: 5, label: 'NVIDIA (NVDA)', ticker: 'NVDA' },
+    { value: 6, label: 'JPMorgan Chase & Co (JPM)', ticker: 'JPM' },
+    { value: 7, label: 'Johnson & Johnson (JNJ)', ticker: 'JNJ' },
+    { value: 8, label: 'The Walt Disney Company (DIS)', ticker: 'DIS' },
+    { value: 9, label: 'The Coca-Cola Company (KO)', ticker: 'KO' },
+    { value: 10, label: 'Nike (NKE)', ticker: 'NKE' },
+    { value: 11, label: 'Adobe (ADBE)', ticker: 'ADBE' },
+    { value: 12, label: 'Netflix (NFLX)', ticker: 'NFLX' },
+    { value: 13, label: 'Salesforce / Slack (CRM)', ticker: 'CRM' },
+    { value: 14, label: 'Costco (COST)', ticker: 'COST' },
+    { value: 15, label: 'The Home Depot (HD)', ticker: 'HD' },
+    { value: 16, label: 'Cisco (CSCO)', ticker: 'CSCO' },
+    { value: 17, label: 'Toyota (TM)', ticker: 'TM' },
+    { value: 18, label: 'Procter & Gamble (PG)', ticker: 'PG' },
+    { value: 19, label: 'Starbucks (SBUX)', ticker: 'SBUX' },
+    { value: 20, label: 'American Express (AXP)', ticker: 'AXP' },
+    { value: 21, label: 'AMD (AMD)', ticker: 'AMD' },
+    { value: 22, label: 'McDonalds (MCD)', ticker: 'MCD' },
+    { value: 23, label: 'FedEx (FDX)', ticker: 'FDX' },
+    { value: 24, label: 'Target (TGT)', ticker: 'TGT' },
+    { value: 25, label: 'Unilever (UL)', ticker: 'UL' },
+    { value: 26, label: '3M (MMM)', ticker: 'MMM' },
+    { value: 27, label: 'Southwest Airlines (LUV)', ticker: 'LUV' },
+    { value: 28, label: 'Hershey Company (HSY)', ticker: 'HSY' },
+    { value: 29, label: 'Colgate Palmolive (CL)', ticker: 'CL' },
+    { value: 30, label: 'Marriott (MAR)', ticker: 'MAR' },
+    { value: 31, label: 'Honda (HMC)', ticker: 'HMC' },
+    { value: 32, label: 'Logitech (LOGI)', ticker: 'LOGI' },
+    { value: 33, label: 'Philips (PHG)', ticker: 'PHG' },
+    { value: 34, label: 'Nintendo (NTDOY)', ticker: 'NTDOY' },
+    { value: 35, label: 'American Eagle Outfitters (AEO)', ticker: 'AEO' },
+    { value: 36, label: 'Foot Locker (FL)', ticker: 'FL' },
+    { value: 37, label: 'Nordstrom (JWN)', ticker: 'JWN' }
+    ]
   
 
   const opcionesTiempo = [
-    { value: 1, label: '1 año', codigo:'año'},
+    { value: 1, label: '1 año', codigo:'anno'},
     { value: 2, label: '1 mes', codigo:'mes'},
-    { value: 3, label: '1 semana', codigo:'semana'},
-    { value: 4, label: '1 día', codigo:'dia'},
-    { value: 5, label: '1 hora', codigo:'hora'}]
+    { value: 3, label: '1 semana', codigo:'semana'}]
 
     
     
@@ -119,12 +104,6 @@ const Market = () => {
           break;
         case '1 semana':
           periodoTiempo = 'de la última semana';
-          break;
-        case '1 día':
-          periodoTiempo = 'del último día';
-          break;
-        case '1 hora':
-          periodoTiempo = 'de la última hora';
           break;
         default:
           periodoTiempo = '';
@@ -239,9 +218,8 @@ const Market = () => {
       {datosListos && <Grafica datos={datos} />}
       {datosCargando && <p>Cargando datos...</p>}
       </div>
-      <div>
-        {/* Este botón solo se debe mostrar cuando estén los datos listos */}
-      {<button className = 'text-end' onClick={preCompra}>Comprar</button>}
+      <div className='text-end mb-3 mt-2'>
+        {datosListos && <button onClick={preCompra}>Comprar</button>}
       </div>
     
      </div>

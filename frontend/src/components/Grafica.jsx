@@ -30,15 +30,24 @@ function Grafica({ datos }) {
   }
 
   const labels = datosArray.map(d => d.fecha);
-  const valores = datosArray.map(d => d.valor);
+  const valores = datosArray.map(d => d.precio);
+  const primerValor = datosArray[0].precio;
+  const ultimoValor = datosArray[datosArray.length - 1].precio;
+  const colorLinea = primerValor < ultimoValor ? 'rgb(5, 225, 78)' : 'rgb(255, 0, 0)';
 
   const data = {
     labels,
     datasets: [{
-      label: 'Valor',
       data: valores,
-      borderColor: 'rgb(5, 225, 78)',
-      tension: 0
+      label : 'Precio',
+      borderColor: colorLinea,
+      tension: 0,
+      pointRadius: 0,          // Radio del punto normal
+      pointHoverRadius: 0,     // Radio al hacer hover
+      pointHitRadius: 20,       // Área de detección del punto
+      showLine: true,          // Asegurar que se muestre la línea
+      borderWidth: 2           // Grosor de la línea
+
     }]
   };
   
