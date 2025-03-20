@@ -7,17 +7,17 @@ body{
   border-radius: 5px !important;
 }
 .dropdown-acciones .react-dropdown-select-input {
-  color: black; 
+  color: black; /* Cambia el color del texto de búsqueda */
 }
 
 .dropdown-acciones .react-dropdown-select-dropdown {
-  background-color: #f0f0f0; 
+  background-color: #f0f0f0; /* Cambia el color de fondo del menú desplegable */
 }
 
 .dropdown-acciones .react-dropdown-select-item {
-  color: #333; 
+  color: #333; /* Cambia el color del texto de las opciones */
 }
 
 .dropdown-acciones .react-dropdown-select-item:hover {
-  background-color: #e0e0e0; 
+  background-color: #e0e0e0; /* Cambia el color de fondo al pasar el mouse */
 }

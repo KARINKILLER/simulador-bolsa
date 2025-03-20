@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './componentes/Login';
-import Register from './componentes/Register';
-import Market from './componentes/Market';
-import Perfil from './componentes/Perfil';
-import Transacciones from './componentes/Transacciones';
-import Help from './componentes/Help';
+import Login from './components/Login';
+import Register from './components/Register';
+import Market from './components/Market';
+import Perfil from './components/Perfil';
+import Transacciones from './components/Transacciones';
+import Help from './components/Help';
 
 
 function App() {

@@ -2,3 +2,7 @@ fastapi
 uvicorn
 bcrypt
 asyncpg
+requests
+datetime
+contextlib
+polars
