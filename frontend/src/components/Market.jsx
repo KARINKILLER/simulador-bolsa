@@ -144,6 +144,7 @@ const Market = () => {
   const preCompra = async () => {
     //Petición para saber de cuánto dinero se dispone y cuanto vale una acción
     const response = await fetch(`http://localhost:8000/datos-pre-transaccion?activo=${tickerSeleccionado}&username=ejemplo`);
+    
     if (!response.ok) throw new Error(`Error: ${response.status}`);
     const datosPreCompra = await response.json();
 
@@ -175,13 +176,19 @@ const Market = () => {
     setModalOpen(false);  
   };
 
+  const ajustarMaximo = () => {
+    const cantidadCompra = document.getElementById('cantidad-compra').value;
+    if (cantidadCompra > saldoDisponible){
+      document.getElementById('cantidad-compra').value = saldoDisponible;
+    }
+  }
   return (
       <div className='container'>
 
         <Modal isOpen={modalOpen}>
                     <h2 title='El precio de la acción podría variar si se tarda en realizar la compra'>Vas a comprar acciones de {accionSeleccionada} a ${precioActivo} &#9432;</h2>
                     <h4>¿Cuánto dinero quieres gastarte? ($)</h4>
-                    <input type='number' step = "0.5" max = {saldoDisponible} id='cantidad-compra'></input>
+                    <input type='number' step = "0.5" max = {saldoDisponible} onBlur={ajustarMaximo} id='cantidad-compra'></input>
                     <button className='mb-2 ms-2' onClick={confirmarCompra}>Confirmar</button>
                     <button className='mb-2 ms-2' onClick={cerrarModal}>Cancelar</button>
                     <br></br>

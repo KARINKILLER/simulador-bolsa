@@ -11,7 +11,7 @@ def obtener_datos_activo(ticker, periodo):
     fecha_actual = datetime.now()
     fecha_simulada = fecha_actual - timedelta(days=365.25 * 20) 
     fecha_simulada_str = fecha_simulada.strftime("%Y-%m-%d")
-    print(fecha_simulada_str)
+    # print(fecha_simulada_str)
     base_query = (
         df.filter(pl.col("Ticker") == ticker)
         .filter(pl.col("Date") <= fecha_simulada_str)
@@ -37,10 +37,11 @@ def obtener_datos_activo(ticker, periodo):
     lista = result.to_dicts()
     return lista[::-1]
 
-def obtener_valor_actual(ticker):
+async def obtener_valor_actual(ticker):
     fecha_actual = datetime.now()
     fecha_simulada = fecha_actual - timedelta(days=365.25 * 20) 
     fecha_simulada_str = fecha_simulada.strftime("%Y-%m-%d")
+    # print(fecha_simulada_str)
     base_query = (
         df.filter(pl.col("Ticker") == ticker)
         .filter(pl.col("Date") <= fecha_simulada_str)
@@ -49,12 +50,15 @@ def obtener_valor_actual(ticker):
     ticker_data = base_query.head(1)
 
     precio_actual = ticker_data.select([
-        pl.col("Date").str.slice(0, 10).alias("fecha"),
         pl.col("Close").alias("precio")
     ])
-    return precio_actual.to_dicts()
+    #extraer el precio actual a una variable guardando solo el valor del precio de manera más sencilla 
+    precio_actual = precio_actual.to_dict()['precio'][0]
+    precio_actual = round(precio_actual, 2)
+
+    return precio_actual
 
 # Ejemplo de uso
-ticker = 'JWN'
-ultimo_valor = obtener_valor_actual(ticker)
-print(f"Último valor de {ticker}: {ultimo_valor}")
+# ticker = 'AAPL'
+# ultimo_valor = obtener_valor_actual(ticker)
+# print(f"Último valor de {ticker}: {ultimo_valor}")
