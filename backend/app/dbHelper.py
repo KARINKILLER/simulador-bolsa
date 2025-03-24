@@ -102,3 +102,37 @@ async def registrar_compra(username: str, activo: str, cantidad: float, precio: 
     except Exception as e:
         print(f"Error al registrar compra: {e}")
         
+async def actualizar_cartera(username: str, activo: str, cantidad: float, precio: float, stopLoss: float, takeProfit: float):
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            async with connection.transaction():  # Transacción atómica
+                # Obtener ID de usuario
+                query = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1"
+                idUsuario = await connection.fetchval(query, username)
+                
+                # Buscar registro existente
+                query_registro = "SELECT cantidad, precio_promedio_compra FROM cartera WHERE id_usuario = $1 AND simbolo_activo = $2"
+                registro_actual = await connection.fetchrow(query_registro, idUsuario, activo)
+                
+                if registro_actual:
+                    # Calcular nuevo promedio ponderado
+                    cantidad_actual = registro_actual['cantidad']
+                    precio_actual = registro_actual['precio_promedio_compra']
+                    
+                    nueva_cantidad_total = cantidad_actual + cantidad
+                    nuevo_precio_promedio = ((cantidad_actual * precio_actual) +(cantidad * precio)) / nueva_cantidad_total
+                    
+                    # Actualizar registro existente
+                    query_actualizar = "UPDATE cartera SET cantidad = $1, precio_promedio_compra = $2, stop_loss = $3, take_profit = $4 WHERE id_usuario = $5 AND simbolo_activo = $6"
+                    await connection.execute(query_actualizar, nueva_cantidad_total, nuevo_precio_promedio, stopLoss, takeProfit, idUsuario, activo)
+                else:
+                    # Insertar nuevo registro
+                    query_insertar = "INSERT INTO cartera (id_usuario, simbolo_activo, cantidad, precio_promedio_compra, stop_loss, take_profit) VALUES ($1, $2, $3, $4, $5, $6)"
+                    await connection.execute(query_insertar, idUsuario, activo, cantidad, precio, stopLoss, takeProfit)
+                    
+    except Exception as e:
+        print(f"Error al actualizar cartera: {e}")
+        raise

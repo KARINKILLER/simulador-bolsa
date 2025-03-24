@@ -85,15 +85,15 @@ def consultar_precio_actual(activo: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/comprar-acciones")
-async def comprar_acciones(username: str, activo: str, cantidad: float):
+async def comprar_acciones(username: str, activo: str, cantidad: float, stopLoss: float, takeProfit: float):
     try:
         precio = await obtener_valor_actual(activo)
         saldo = await consultar_saldo_disponible(username)
         if saldo < cantidad:
             raise HTTPException(status_code=400, detail="Saldo insuficiente")
-        actualizar_saldo(username, cantidad)
-        registrar_compra(username, activo, cantidad, precio)
-        actualizar_cartera(username, activo, cantidad, precio)
+        await actualizar_saldo(username, cantidad)
+        await registrar_compra(username, activo, cantidad, precio)
+        await actualizar_cartera(username, activo, cantidad, precio, stopLoss, takeProfit)
         return {"message": "Compra realizada exitosamente"}
     except ValueError as e:
         # Este error se lanzará si no se encuentra el usuario

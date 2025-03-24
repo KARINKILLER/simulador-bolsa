@@ -157,10 +157,19 @@ const Market = () => {
   };
  const confirmarCompra = () =>{
     const cantidadCompra = document.getElementById('cantidad-compra').value;
+    let stopLoss = document.getElementById('stop-loss').value;
+    let takeProfit = document.getElementById('take-profit').value;
+    if (stopLoss === ''){
+      stopLoss = 0;
+    }
+    if (takeProfit === ''){
+      takeProfit = 0;
+    }
+
     console.log("Se van a comprar " + cantidadCompra + " acciones de " + tickerSeleccionado);
     //Poner simbolo de cargando o algo
     //Petición
-    fetch(`http://localhost:8000/comprar-acciones?activo=${tickerSeleccionado}&cantidad=${cantidadCompra}&username=ejemplo`)
+    fetch(`http://localhost:8000/comprar-acciones?activo=${tickerSeleccionado}&cantidad=${cantidadCompra}&stopLoss=${stopLoss}&takeProfit=${takeProfit}&username=ejemplo`)
     .then(response => response.json())
     .then(data => {
       console.log(data)
@@ -189,10 +198,16 @@ const Market = () => {
                     <h2 title='El precio de la acción podría variar si se tarda en realizar la compra'>Vas a comprar acciones de {accionSeleccionada} a ${precioActivo} &#9432;</h2>
                     <h4>¿Cuánto dinero quieres gastarte? ($)</h4>
                     <input type='number' step = "0.5" max = {saldoDisponible} onBlur={ajustarMaximo} id='cantidad-compra'></input>
-                    <button className='mb-2 ms-2' onClick={confirmarCompra}>Confirmar</button>
+                    <h5 title='Stop loss y take profit: % que tiene que BAJAR o SUBIR un activo para ser vendido automáticamente'>Configura tu stop loss y tu take profit (%) &#9432;</h5>
+                    <h6>Stop loss</h6>
+                    <input title='Si lo dejas vacío o en 0 no se ejecutarán acciones automáticas' type='number' step = "0.5" min = "0" id='stop-loss' placeholder='0' className='me-2'></input>
+                    <h6>Take profit</h6>
+                    <input title='Si lo dejas vacío o en 0 no se ejecutarán acciones automáticas' type='number' step = "0.5" min = "0" id='take-profit' placeholder='0'></input>
+                    <br></br>
+                    <button className='mt-2 mb-2 ms-2' onClick={confirmarCompra}>Confirmar</button>
                     <button className='mb-2 ms-2' onClick={cerrarModal}>Cancelar</button>
                     <br></br>
-                  </Modal>
+         </Modal>
 
         <div className="mt-3 text-end display-box">
           <Link to="/perfil">Perfil</Link>

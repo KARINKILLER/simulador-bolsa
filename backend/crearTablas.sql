@@ -1,3 +1,7 @@
+\c postgres;
+
+DROP DATABASE IF EXISTS tfg;
+
 CREATE DATABASE tfg;
 
 \c tfg;
@@ -8,21 +12,17 @@ CREATE TABLE usuarios (
     correo_electronico VARCHAR(100) UNIQUE NOT NULL, 
     contrasenna VARCHAR(255) NOT NULL,   
     saldo_virtual NUMERIC(15, 2),
-    es_admin BOOLEAN DEFAULT FALSE,
+    es_admin BOOLEAN DEFAULT FALSE
 );
 
-
 CREATE TABLE cartera (
-    id_cartera SERIAL PRIMARY KEY,       
-    id_usuario INT REFERENCES usuarios(id_usuario) ON DELETE CASCADE, 
+    id_usuario INT PRIMARY KEY REFERENCES usuarios(id_usuario) ON DELETE CASCADE, 
     simbolo_activo VARCHAR(10) NOT NULL,    
     stop_loss NUMERIC(15, 4),
     take_profit NUMERIC(15,4),
     cantidad NUMERIC(15, 4) NOT NULL,        
-    precio_promedio_compra NUMERIC(15, 4) NOT NULL, 
-    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    precio_promedio_compra NUMERIC(15, 4) NOT NULL
 );
-
 
 CREATE TABLE transacciones (
     id_transaccion SERIAL PRIMARY KEY,  
