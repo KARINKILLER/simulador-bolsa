@@ -109,3 +109,11 @@ async def reinicio(username: str):
         return {"message": "Cartera reiniciada correctamente"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/cargar-perfil")
+async def cargar_perfil(username: str):
+    try:
+        perfil = await cargarPerfil(username)
+        return perfil
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

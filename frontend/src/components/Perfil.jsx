@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Modal from './Modal';
-
+import GraficaDonut from './GraficaDonut';
 
 const Perfil = () =>{
-    const cargarPerfil = async () => {
-        const response = await fetch('http://localhost:8000/perfil?username=ejemplo');
-        if (!response.ok) throw new Error(`Error: ${response.status}`);
-        const data = await response.json();
-        console.log(data);
-    }
-    
+
+    const [datosPerfil, setDatosPerfil] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
+
+    useEffect(() => {
+        const cargarPerfil = async () => {
+            try {
+                const response = await fetch('http://localhost:8000/cargar-perfil?username=ejemplo');
+                if (!response.ok) throw new Error(`Error: ${response.status}`);
+                const datos = await response.json();
+                setDatosPerfil(datos);
+                console.log(datos);
+            } catch (error) {
+                console.error("Error al cargar el perfil:", error);
+            }
+        };
+
+        cargarPerfil();
+    }, []);
+
     
     const preReinicio = () => {
         setModalOpen(true);
@@ -47,7 +59,7 @@ const Perfil = () =>{
         <div className='text-center text-white'>
             <p>Nombre de usuario</p>
             <p>Fondos</p>
-            <p>Donut de fondos</p>
+            <GraficaDonut activos={datosPerfil} />
             <p>últimas transacciones:</p>
             <p>*Fecha* - *Compraste/vendiste* *activo* por valor de *numero* $</p>
             <p>*Fecha* - *Compraste/vendiste* *activo* por valor de *numero* $</p>

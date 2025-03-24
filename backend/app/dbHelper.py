@@ -160,3 +160,32 @@ async def reiniciar(username: str):
     except Exception as e:
         print(f"Error al eliminar datos y restablecer saldo: {e}")
         raise
+
+async def cargarPerfil (username: str):
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            query = "SELECT saldo_virtual FROM usuarios WHERE nombre_usuario = $1"
+            saldo = await connection.fetchrow(query, username)
+            query_id = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1"
+            id_usuario = await connection.fetchval(query_id, username)
+            query_activos = "SELECT simbolo_activo, cantidad FROM cartera WHERE id_usuario = $1"
+            activos = await connection.fetch(query_activos, id_usuario)
+            datos_activos = [
+                {"activo": "Saldo", "cantidad": float(saldo['saldo_virtual'])}
+            ]
+            
+            # Agregar cada activo como objeto independiente
+            for activo in activos:
+                datos_activos.append({
+                    "activo": activo['simbolo_activo'],
+                    "cantidad": float(activo['cantidad'])
+                })
+            return datos_activos
+
+
+    except Exception as e:
+        print(f"Error al consultar datos de perfil: {e}")
+        raise
