@@ -101,3 +101,11 @@ async def comprar_acciones(username: str, activo: str, cantidad: float, stopLoss
     except Exception as e:
         # Para otros errores inesperados
         raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
+    
+@app.get("/reinicio")
+async def reinicio(username: str):
+    try:
+        await reiniciar(username)
+        return {"message": "Cartera reiniciada correctamente"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

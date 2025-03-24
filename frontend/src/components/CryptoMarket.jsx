@@ -5,7 +5,7 @@ import Grafica from './Grafica';
 import Modal from './Modal';
 
 
-const Market = () => {
+const CryptoMarket = () => {
   //petición de datos
   
 
@@ -24,44 +24,8 @@ const Market = () => {
   
 
 
-  const opcionesAcciones = [
-    { value: 1, label: 'Apple (AAPL)', ticker: 'AAPL' },
-    { value: 2, label: 'Microsoft (MSFT)', ticker: 'MSFT' },
-    { value: 3, label: 'Amazon (AMZN)', ticker: 'AMZN' },
-    { value: 4, label: 'Google (GOOGL)', ticker: 'GOOGL' },
-    { value: 5, label: 'NVIDIA (NVDA)', ticker: 'NVDA' },
-    { value: 6, label: 'JPMorgan Chase & Co (JPM)', ticker: 'JPM' },
-    { value: 7, label: 'Johnson & Johnson (JNJ)', ticker: 'JNJ' },
-    { value: 8, label: 'The Walt Disney Company (DIS)', ticker: 'DIS' },
-    { value: 9, label: 'The Coca-Cola Company (KO)', ticker: 'KO' },
-    { value: 10, label: 'Nike (NKE)', ticker: 'NKE' },
-    { value: 11, label: 'Adobe (ADBE)', ticker: 'ADBE' },
-    { value: 12, label: 'Netflix (NFLX)', ticker: 'NFLX' },
-    { value: 13, label: 'Salesforce / Slack (CRM)', ticker: 'CRM' },
-    { value: 14, label: 'Costco (COST)', ticker: 'COST' },
-    { value: 15, label: 'The Home Depot (HD)', ticker: 'HD' },
-    { value: 16, label: 'Cisco (CSCO)', ticker: 'CSCO' },
-    { value: 17, label: 'Toyota (TM)', ticker: 'TM' },
-    { value: 18, label: 'Procter & Gamble (PG)', ticker: 'PG' },
-    { value: 19, label: 'Starbucks (SBUX)', ticker: 'SBUX' },
-    { value: 20, label: 'American Express (AXP)', ticker: 'AXP' },
-    { value: 21, label: 'AMD (AMD)', ticker: 'AMD' },
-    { value: 22, label: 'McDonalds (MCD)', ticker: 'MCD' },
-    { value: 23, label: 'FedEx (FDX)', ticker: 'FDX' },
-    { value: 24, label: 'Target (TGT)', ticker: 'TGT' },
-    { value: 25, label: 'Unilever (UL)', ticker: 'UL' },
-    { value: 26, label: '3M (MMM)', ticker: 'MMM' },
-    { value: 27, label: 'Southwest Airlines (LUV)', ticker: 'LUV' },
-    { value: 28, label: 'Hershey Company (HSY)', ticker: 'HSY' },
-    { value: 29, label: 'Colgate Palmolive (CL)', ticker: 'CL' },
-    { value: 30, label: 'Marriott (MAR)', ticker: 'MAR' },
-    { value: 31, label: 'Honda (HMC)', ticker: 'HMC' },
-    { value: 32, label: 'Logitech (LOGI)', ticker: 'LOGI' },
-    { value: 33, label: 'Philips (PHG)', ticker: 'PHG' },
-    { value: 34, label: 'Nintendo (NTDOY)', ticker: 'NTDOY' },
-    { value: 35, label: 'American Eagle Outfitters (AEO)', ticker: 'AEO' },
-    { value: 36, label: 'Foot Locker (FL)', ticker: 'FL' },
-    { value: 37, label: 'Nordstrom (JWN)', ticker: 'JWN' }
+  const opcionesCriptoMonedas = [
+    
     ]
   
 
@@ -252,5 +216,5 @@ const Market = () => {
    );
 }
   
-  export default Market;
+  export default CryptoMarket;
   

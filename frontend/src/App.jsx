@@ -6,6 +6,7 @@ import Market from './components/Market';
 import Perfil from './components/Perfil';
 import Transacciones from './components/Transacciones';
 import Help from './components/Help';
+import CryptoMarket from './components/CryptoMarket';
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/market" element={<Market />} />
+        <Route path="/cryptomarket" element={<CryptoMarket />} />
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/help" element={<Help />} />
         <Route path="/transacciones" element={<Transacciones />} />
