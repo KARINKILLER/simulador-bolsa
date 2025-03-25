@@ -110,10 +110,18 @@ async def reinicio(username: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/cargar-perfil")
+@app.get("/cargar-activos-perfil")
 async def cargar_perfil(username: str):
     try:
         perfil = await cargarPerfil(username)
         return perfil
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/cargar-transacciones-perfil")
+async def cargar_transacciones_perfil(username: str):
+    try:
+        transacciones = await cargarTransaccionesPerfil(username)
+        return transacciones
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

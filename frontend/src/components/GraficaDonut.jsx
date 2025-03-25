@@ -37,6 +37,9 @@ function GraficaDonut({ activos }) {
     plugins: {
       legend: {
         position: 'top',
+        labels: {
+          color: 'white'
+        }
       },
       tooltip: {
         callbacks: {
@@ -52,6 +55,7 @@ function GraficaDonut({ activos }) {
       },
       title: {
         display: true,
+        color: 'white',
         text: 'Distribución de Activos'
       }
     }
