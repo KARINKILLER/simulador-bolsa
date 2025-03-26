@@ -1,15 +1,6 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js';
+import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend} from 'chart.js';
 import plugin from 'eslint-plugin-react';
 
 ChartJS.register(
@@ -42,16 +33,22 @@ function Grafica({ datos }) {
       label : 'Precio',
       borderColor: colorLinea,
       tension: 0,
-      pointRadius: 0,          // Radio del punto normal
-      pointHoverRadius: 0,     // Radio al hacer hover
-      pointHitRadius: 20,       // Área de detección del punto
-      showLine: true,          // Asegurar que se muestre la línea
-      borderWidth: 2           // Grosor de la línea
+      pointRadius: 0,         
+      pointHoverRadius: 0,    
+      pointHitRadius: 20,     
+      showLine: true,         
+      borderWidth: 2          
 
     }]
   };
   
   const options = {
+    // maintainAspectRatio: false,
+    interaction:{
+      mode: 'index',
+      intersect: false,
+      axis: 'x'
+    },
     scales: {
       y: {
         beginAtZero: false,
@@ -67,7 +64,6 @@ function Grafica({ datos }) {
         callbacks: {
           label: (context) => {
             let label;
-            console.log(context.raw);   
             if (context.parsed !== null) {
               label = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.raw);
             }

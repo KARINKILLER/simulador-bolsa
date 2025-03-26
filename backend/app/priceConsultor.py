@@ -54,7 +54,7 @@ async def obtener_valor_actual(ticker):
     ])
     #extraer el precio actual a una variable guardando solo el valor del precio de manera más sencilla 
     precio_actual = precio_actual.to_dict()['precio'][0]
-    precio_actual = round(precio_actual, 2)
+    precio_actual = round(precio_actual, 4)
 
     return precio_actual
 

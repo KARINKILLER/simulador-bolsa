@@ -44,7 +44,6 @@ function GraficaDonut({ activos }) {
       tooltip: {
         callbacks: {
           label: (context)=> {
-            console.log(context.parsed);   
             let label;
             if (context.parsed !== null) {
               label = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);

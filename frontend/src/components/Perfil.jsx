@@ -67,7 +67,9 @@ const Perfil = () =>{
         <div className='text-center text-white'>
             <p>Nombre de usuario</p>
             <p>Fondos</p>
-            <GraficaDonut activos={datosActivos} />
+            <div className='grafica-donut'>
+                <GraficaDonut activos={datosActivos} options={{maintainAspectRatio: false}}/>
+            </div>
             <p className='mt-2'>Últimas transacciones:</p>
             {transaccionesDisponibles && <ListaTransacciones transacciones={datosTransacciones} />}
             {!transaccionesDisponibles && <p>Cargando transacciones...</p>}

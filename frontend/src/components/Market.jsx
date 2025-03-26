@@ -11,6 +11,7 @@ const Market = () => {
 
 
   const [opcion, setOpcion] = useState('');
+  const [seleccion, setSeleccion] = useState(false);
   const [accionSeleccionada, setAccionSeleccionada] = useState('Acción generica');
   const [tickerSeleccionado, setTickerSeleccionado] = useState('TKGN');
   const [tiempoSeleccionado, setTiempoSeleccionado] = useState('');
@@ -77,10 +78,12 @@ const Market = () => {
       setAccionSeleccionada(values[0].label);
       setTickerSeleccionado(values[0].ticker);
       actualizarOpcion(values[0].label, tiempoSeleccionado);
+      setSeleccion(true);
     } else {
       setAccionSeleccionada('');
       setTickerSeleccionado('');
       actualizarOpcion('', tiempoSeleccionado);
+      setSeleccion(false);
     }
   };
 
@@ -237,15 +240,19 @@ const Market = () => {
           </div>
       </div>
       <div className='text-center mt-3'>
-      <button onClick={pedirDatos}>Realizar petición</button>
+      <button onClick={pedirDatos}>Consultar valores</button>
       {(opcion && <div className="text-white">{opcion}</div>)}
      </div>
      <div className='text-center text-white'>
-      {datosListos && <Grafica datos={datos} />}
+     {datosListos && 
+      // <div className='grafica-valores'>
+        <Grafica datos={datos} />
+      // </div>
+      }
       {datosCargando && <p>Cargando datos...</p>}
       </div>
       <div className='text-end mb-3 mt-2'>
-        {datosListos && <button onClick={preCompra}>Comprar</button>}
+        {seleccion && <button onClick={preCompra}>Comprar</button>}
       </div>
     
      </div>

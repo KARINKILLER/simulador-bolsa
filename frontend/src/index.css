@@ -21,3 +21,21 @@ body{
 .dropdown-acciones .react-dropdown-select-item:hover {
   background-color: #e0e0e0; /* Cambia el color de fondo al pasar el mouse */
 }
+
+
+.grafica-donut{
+  width: 75vh;
+  height: 75vh;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.grafica-valores {
+  width: 90vh;
+  height: 90vh;
+  margin: 0 auto;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+}
