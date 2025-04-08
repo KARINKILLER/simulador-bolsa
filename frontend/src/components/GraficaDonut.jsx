@@ -15,7 +15,7 @@ function GraficaDonut({ activos }) {
   }
 
   const labels = activos.map(a => a.activo);
-  const cantidades = activos.map(a => a.cantidad);
+  const valores = activos.map(a => a.valor);
 
   const colores = [
     '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
@@ -26,7 +26,7 @@ function GraficaDonut({ activos }) {
     labels,
     datasets: [{
       label: 'Porcentaje por Activo',
-      data: cantidades,
+      data: valores,
       backgroundColor: colores.slice(0, activos.length),
       hoverOffset: 4
     }]

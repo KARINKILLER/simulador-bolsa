@@ -188,6 +188,11 @@ const Market = () => {
     setModalOpen(false);
   }
 
+  // const preVenta = async () => {
+  //   //Petición para saber cuantas acciones se tienen y cuanto vale una acción
+  //   const response = await fetch(`http://localhost:8000/datos-pre-transaccion-venta?activo=${tickerSeleccionado}&username=ejemplo`);
+  // }
+
   const cerrarModal = () => {
     setModalOpen(false);  
   };
@@ -254,7 +259,9 @@ const Market = () => {
       <div className='text-end mb-3 mt-2'>
         {seleccion && <button onClick={preCompra}>Comprar</button>}
       </div>
-    
+      {/* <div className='text-end mb-3 mt-2'>
+        {seleccion && <button onClick={preVenta}>Vender</button>}
+      </div> */}
      </div>
    );
 }

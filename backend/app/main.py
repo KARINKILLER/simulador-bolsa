@@ -125,3 +125,11 @@ async def cargar_transacciones_perfil(username: str):
         return transacciones
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/cargar-todas-transacciones")
+async def cargar_todas_transacciones(username: str):
+    try:
+        transacciones = await cargarTodasLasTransacciones(username)
+        return transacciones
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

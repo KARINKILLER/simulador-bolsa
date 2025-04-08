@@ -47,6 +47,13 @@ const Perfil = () =>{
         alert('Cuenta reiniciada con éxito');
         setModalOpen(false);  
     }
+
+    const calcularSumaTotal = (activos) => {
+        return activos
+          .reduce((total, activo) => total + activo.valor, 0)
+          .toFixed(2);
+      };
+
     return (
         <div className='container'>
 
@@ -66,10 +73,13 @@ const Perfil = () =>{
         <Link className='col' to ="/">Cerrar sesión</Link>
         <div className='text-center text-white'>
             <p>Nombre de usuario</p>
-            <p>Fondos</p>
+            <h3>Fondos</h3>
             <div className='grafica-donut'>
                 <GraficaDonut activos={datosActivos} options={{maintainAspectRatio: false}}/>
             </div>
+            <h3 className='mt-2'>Saldo total</h3>
+            {datosActivos && (<p className='mt-2'> ${calcularSumaTotal(datosActivos)}</p>)}
+            <h3 className='mt-2'>Activos</h3>
             <p className='mt-2'>Últimas transacciones:</p>
             {transaccionesDisponibles && <ListaTransacciones transacciones={datosTransacciones} />}
             {!transaccionesDisponibles && <p>Cargando transacciones...</p>}

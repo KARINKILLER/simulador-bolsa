@@ -1,5 +1,7 @@
 import asyncpg
 from pwEncrypt import *
+from priceConsultor import *
+
 
 DATABASE_CONFIG = {
     "user": "postgres",
@@ -161,7 +163,7 @@ async def reiniciar(username: str):
         print(f"Error al eliminar datos y restablecer saldo: {e}")
         raise
 
-async def cargarPerfil (username: str):
+async def cargarPerfil(username: str):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
 
@@ -171,24 +173,46 @@ async def cargarPerfil (username: str):
             saldo = await connection.fetchrow(query, username)
             query_id = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1"
             id_usuario = await connection.fetchval(query_id, username)
-            query_activos = "SELECT simbolo_activo, cantidad FROM cartera WHERE id_usuario = $1"
+            
+            # Modificamos la consulta para incluir el precio_promedio_compra
+            query_activos = """
+                SELECT simbolo_activo, cantidad, precio_promedio_compra 
+                FROM cartera 
+                WHERE id_usuario = $1
+            """
             activos = await connection.fetch(query_activos, id_usuario)
+            
+            # Inicializamos con el saldo disponible
             datos_activos = [
-                {"activo": "Saldo", "cantidad": float(saldo['saldo_virtual'])}
+                {"activo": "Saldo", "valor": float(saldo['saldo_virtual'])}
             ]
             
-            # Agregar cada activo como objeto independiente
+            # Para cada activo, calculamos su valor actual total
             for activo in activos:
-                datos_activos.append({
-                    "activo": activo['simbolo_activo'],
-                    "cantidad": float(activo['cantidad'])
-                })
-            return datos_activos
+                simbolo = activo['simbolo_activo']
+                cantidad_invertida = float(activo['cantidad'])
+                precio_promedio = float(activo['precio_promedio_compra'])
+                
+                # Calculamos el número real de acciones
+                num_acciones = cantidad_invertida / precio_promedio if precio_promedio > 0 else 0
+                
+                # Obtenemos el precio actual del mercado
+                precio_actual = await obtener_valor_actual(simbolo)
+                
+                # Calculamos el valor total actual (num_acciones * precio_actual)
+                valor_total_actual = round(num_acciones * precio_actual,4)
 
+                datos_activos.append({
+                    "activo": simbolo,
+                    "valor": valor_total_actual
+                })
+            
+            return datos_activos
 
     except Exception as e:
         print(f"Error al consultar datos de perfil: {e}")
         raise
+
 
 async def cargarTransaccionesPerfil(username: str):
     if not connection_pool:
@@ -200,6 +224,22 @@ async def cargarTransaccionesPerfil(username: str):
             id_usuario = await connection.fetchval(query_id, username)
             #coge solo las últimas 3 transacciones
             query = "SELECT simbolo_activo, tipo_transaccion, cantidad, precio, monto_total, creado_en FROM transacciones WHERE id_usuario = $1 ORDER BY creado_en DESC LIMIT 3"
+            transacciones = await connection.fetch(query, id_usuario)
+            lista_transacciones = [dict(transaccion) for transaccion in transacciones]
+            return lista_transacciones
+    except Exception as e:
+        print(f"Error al consultar transacciones: {e}")
+        raise
+
+async def cargarTodasLasTransacciones(username: str):
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            query_id = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1"
+            id_usuario = await connection.fetchval(query_id, username)
+            query = "SELECT simbolo_activo, tipo_transaccion, cantidad, precio, monto_total, creado_en FROM transacciones WHERE id_usuario = $1 ORDER BY creado_en DESC"
             transacciones = await connection.fetch(query, id_usuario)
             lista_transacciones = [dict(transaccion) for transaccion in transacciones]
             return lista_transacciones
