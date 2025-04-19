@@ -201,10 +201,12 @@ async def cargarPerfil(username: str):
                 
                 # Calculamos el valor total actual (num_acciones * precio_actual)
                 valor_total_actual = round(num_acciones * precio_actual,4)
-
+                
                 datos_activos.append({
                     "activo": simbolo,
-                    "valor": valor_total_actual
+                    "valor": valor_total_actual,
+                    "precio_actual": precio_actual,
+                    "precio_inicial": activo['precio_promedio_compra']
                 })
             
             return datos_activos

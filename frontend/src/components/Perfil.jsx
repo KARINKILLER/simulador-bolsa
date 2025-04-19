@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import GraficaDonut from './GraficaDonut';
 import ListaTransacciones from './ListaTransacciones';
+import ListaActivos from './ListaActivos';
 
 const Perfil = () =>{   
     const [datosActivos, setDatosActivos] = useState(null);
@@ -23,12 +24,11 @@ const Perfil = () =>{
                 setDatosTransacciones(datosTransacciones);
                 setTransaccionesDisponibles(true);
                 console.log(datosActivos);   
-                console.log(datosTransacciones);
+                // console.log(datosTransacciones);
             } catch (error) {
                 console.error("Error al cargar el perfil:", error);
             }
         };
-
         cargarPerfil();
     }, []);
 
@@ -80,6 +80,11 @@ const Perfil = () =>{
             <h3 className='mt-2'>Saldo total</h3>
             {datosActivos && (<p className='mt-2'> ${calcularSumaTotal(datosActivos)}</p>)}
             <h3 className='mt-2'>Activos</h3>
+                {datosActivos && (
+                    <div className="mt-4">
+                        <ListaActivos data={datosActivos} />
+                    </div>
+                )}
             <p className='mt-2'>Últimas transacciones:</p>
             {transaccionesDisponibles && <ListaTransacciones transacciones={datosTransacciones} />}
             {!transaccionesDisponibles && <p>Cargando transacciones...</p>}
