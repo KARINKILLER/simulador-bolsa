@@ -1,22 +1,51 @@
-import {React, useEffect, useState} from 'react';
-import { Link} from 'react-router-dom';
+import { React, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import ListaTransacciones from './ListaTransacciones';
-const Transacciones = () =>{
+
+const Transacciones = () => {
     const [datosTransacciones, setDatosTransacciones] = useState([]);
     const [transaccionesDisponibles, setTransaccionesDisponibles] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
+        const verificarSesion = async () => {
+            try {
+                const response = await fetch("http://localhost:8000/session-status", {
+                    method: "GET",
+                    credentials: "include"
+                });
+                
+                const data = await response.json();
+                if (!data.authenticated) {
+                    navigate("/error");
+                }
+            } catch (error) {
+                navigate("/error");
+            }
+        };
+
         const cargarTransacciones = async () => {
-            const response = await fetch('http://localhost:8000/cargar-todas-transacciones?username=ejemplo');
-            if (!response.ok) throw new Error(`Error: ${response.status}`);
-            const datosTransacciones = await response.json();
-            setDatosTransacciones(datosTransacciones);
-            setTransaccionesDisponibles(true);
-            console.log(datosTransacciones);
-        }
+            try {
+                await verificarSesion();
+                
+                const response = await fetch('http://localhost:8000/cargar-todas-transacciones', {
+                    credentials: 'include'
+                });
+                
+                if (!response.ok) throw new Error(`Error: ${response.status}`);
+                
+                const datosTransacciones = await response.json();
+                setDatosTransacciones(datosTransacciones);
+                setTransaccionesDisponibles(true);
+                
+            } catch (error) {
+                console.error("Error al cargar transacciones:", error);
+                navigate("/error");
+            }
+        };
+
         cargarTransacciones();
-    }
-    , []);
+    }, [navigate]);
 
     return (
         <div className='container mt-3'>

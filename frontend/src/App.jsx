@@ -7,6 +7,7 @@ import Perfil from './components/Perfil';
 import Transacciones from './components/Transacciones';
 import Help from './components/Help';
 import CryptoMarket from './components/CryptoMarket';
+import Error from './components/Error';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/help" element={<Help />} />
         <Route path="/transacciones" element={<Transacciones />} />
+        <Route path="/error" element={<Error />} />
       </Routes>
     </Router>
   );

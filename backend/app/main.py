@@ -1,8 +1,10 @@
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI, HTTPException, Body, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from dbHelper import *
+from starlette.middleware.sessions import SessionMiddleware
 from contextlib import asynccontextmanager
+from dbHelper import *
 from priceConsultor import *
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -16,24 +18,64 @@ app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
+app.add_middleware(
+    SessionMiddleware, 
+    secret_key="tu_clave_secreta_muy_larga_y_compleja",
+    session_cookie="session_cookie",
+    same_site="lax",
+    https_only=False,
+    # domain="localhost"  
+)
+
+
+# Dependencia para obtener usuario actual
+async def get_current_user(request: Request):
+    username = request.session.get("username")
+    if not username:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    return username
+
+# Dependencia para verificar admin
+# async def check_admin(username: str = Depends(get_current_user)):
+#     if not await es_admin_en_bd(username):  # Implementar esta función en dbHelper
+#         raise HTTPException(403, "Requiere privilegios de administrador")
+#     return username
+
+# Endpoints de autenticación
 @app.post("/login")
-async def login(username: str = Body(...), password: str = Body(...)):
+async def login(request: Request, username: str = Body(...), password: str = Body(...)):
     try:
-        login_valido = await validarLogin(username, password)
-        if login_valido:
-            #Crear el JWT
-            return {"message": "Inicio de sesión exitoso", "username": username}
-        else:
-            raise HTTPException(status_code=401, detail="Credenciales incorrectas")
+        if await validarLogin(username, password):
+            request.session["username"] = username
+            print(request.session["username"])
+            return {"message": "Inicio de sesión exitoso"}
+        raise HTTPException(401, "Credenciales incorrectas")
     except Exception as e:
-        print(f"Error en la ruta /login: {e}")
-        raise HTTPException(status_code=401, detail="Credenciales incorrectas")
+        print(f"Error en login: {e}")
+        raise HTTPException(500, "Error interno")
+
+@app.post("/logout")
+async def logout(request: Request):
+    request.session.clear()
+    return {"message": "Sesión cerrada"}
+
+@app.get("/session-status")
+async def session_status(request: Request):
+    print("Sesión actual:", request.session)
+    username = request.session.get("username")
+    return {
+        "authenticated": bool(username),
+        "username": username,
+        "session_id": request.session.get("_session_id")
+    }
+
 
 
 @app.post("/register")
@@ -56,25 +98,30 @@ async def consult(activo: str, periodo: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/datos-pre-transaccion")
-async def datos_pre_transaccion(activo: str, username: str):
+async def datos_pre_transaccion(
+    activo: str, 
+    usuario: str = Depends(get_current_user)
+):
     try:
-        precioActivo = await obtener_valor_actual(activo)
-        saldoDisponible = await consultar_saldo_disponible(username)
-        return {"precioActivo": precioActivo, "saldoDisponible": saldoDisponible}
+        precio_activo = await obtener_valor_actual(activo)
+        saldo_disponible = await consultar_saldo_disponible(usuario)
+        return {
+            "precioActivo": precio_activo,
+            "saldoDisponible": saldo_disponible
+        }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(500, detail=str(e))
+
     
 @app.get("/consultar-saldo")
-async def consultar_saldo(username: str):
+async def consultar_saldo(usuario: str = Depends(get_current_user)):
     try:
-        saldo = await consultar_saldo_disponible(username)
-        return {"saldo": saldo}
+        return {"saldo": await consultar_saldo_disponible(usuario)}
     except ValueError as e:
-        # Este error se lanzará si no se encuentra el usuario
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(404, str(e))
     except Exception as e:
-        # Para otros errores inesperados
-        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
+        raise HTTPException(500, str(e))
+    
     
 @app.get("/consultar-precio-actual")
 def consultar_precio_actual(activo: str):
@@ -84,52 +131,52 @@ def consultar_precio_actual(activo: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/comprar-acciones")
-async def comprar_acciones(username: str, activo: str, cantidad: float, stopLoss: float, takeProfit: float):
+@app.post("/comprar-acciones")
+async def comprar_acciones(activo: str,cantidad: float,stopLoss: float,takeProfit: float,usuario: str = Depends(get_current_user)):
     try:
         precio = await obtener_valor_actual(activo)
-        saldo = await consultar_saldo_disponible(username)
+        saldo = await consultar_saldo_disponible(usuario)
+        
         if saldo < cantidad:
-            raise HTTPException(status_code=400, detail="Saldo insuficiente")
-        await actualizar_saldo(username, cantidad)
-        await registrar_compra(username, activo, cantidad, precio)
-        await actualizar_cartera(username, activo, cantidad, precio, stopLoss, takeProfit)
+            raise HTTPException(400, "Saldo insuficiente")
+            
+        await actualizar_saldo(usuario, cantidad)
+        await registrar_compra(usuario, activo, cantidad, precio)
+        await actualizar_cartera(usuario, activo, cantidad, precio, stopLoss, takeProfit)
+        
         return {"message": "Compra realizada exitosamente"}
     except ValueError as e:
-        # Este error se lanzará si no se encuentra el usuario
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(404, str(e))
     except Exception as e:
-        # Para otros errores inesperados
-        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
+        raise HTTPException(500, f"Error interno: {str(e)}")
+
     
-@app.get("/reinicio")
-async def reinicio(username: str):
+@app.post("/reinicio")
+async def reinicio(usuario: str = Depends(get_current_user)):
     try:
-        await reiniciar(username)
+        await reiniciar(usuario)
         return {"message": "Cartera reiniciada correctamente"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(500, str(e))
 
 @app.get("/cargar-activos-perfil")
-async def cargar_perfil(username: str):
+async def cargar_perfil(usuario: str = Depends(get_current_user)):
     try:
-        perfil = await cargarPerfil(username)
-        return perfil
+        return await cargarPerfil(usuario)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
+        raise HTTPException(500, str(e))
+
 @app.get("/cargar-transacciones-perfil")
-async def cargar_transacciones_perfil(username: str):
+async def cargar_transacciones_perfil(usuario: str = Depends(get_current_user)):
     try:
-        transacciones = await cargarTransaccionesPerfil(username)
-        return transacciones
+        return await cargarTransaccionesPerfil(usuario)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(500, str(e))
 
 @app.get("/cargar-todas-transacciones")
-async def cargar_todas_transacciones(username: str):
+async def cargar_todas_transacciones(usuario: str = Depends(get_current_user)):
     try:
-        transacciones = await cargarTodasLasTransacciones(username)
-        return transacciones
+        return await cargarTodasLasTransacciones(usuario)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(500, str(e))
+

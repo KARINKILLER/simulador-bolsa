@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 import Select from 'react-dropdown-select';
 import Grafica from './Grafica';
 import Modal from './Modal';
@@ -7,7 +7,22 @@ import Modal from './Modal';
 
 const Market = () => {
   //petición de datos
-  
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("http://localhost:8000/session-status", {method: "GET",credentials: "include"})
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (!data.authenticated) {
+          navigate("/error"); // Redirige si no hay sesión
+        }
+      })
+      .catch(error => {
+        // En caso de error de red, también redirige
+        navigate("/error");
+      });
+  }, [navigate]);
 
 
   const [opcion, setOpcion] = useState('');
@@ -150,8 +165,7 @@ const Market = () => {
 
   const preCompra = async () => {
     //Petición para saber de cuánto dinero se dispone y cuanto vale una acción
-    const response = await fetch(`http://localhost:8000/datos-pre-transaccion?activo=${tickerSeleccionado}&username=ejemplo`);
-    
+    const response = await fetch(`http://localhost:8000/datos-pre-transaccion?activo=${tickerSeleccionado}`, {credentials: 'include'});    
     if (!response.ok) throw new Error(`Error: ${response.status}`);
     const datosPreCompra = await response.json();
 
@@ -162,35 +176,40 @@ const Market = () => {
     console.log("Se van a comprar acciones de " + tickerSeleccionado);
     setModalOpen(true);
   };
- const confirmarCompra = () =>{
+const confirmarCompra = async () => {
     const cantidadCompra = document.getElementById('cantidad-compra').value;
-    let stopLoss = document.getElementById('stop-loss').value;
-    let takeProfit = document.getElementById('take-profit').value;
-    if (stopLoss === ''){
-      stopLoss = 0;
-    }
-    if (takeProfit === ''){
-      takeProfit = 0;
-    }
+    const stopLoss = document.getElementById('stop-loss').value || 0;
+    const takeProfit = document.getElementById('take-profit').value || 0;
 
-    console.log("Se van a comprar " + cantidadCompra + " acciones de " + tickerSeleccionado);
-    //Poner simbolo de cargando o algo
-    //Petición
-    fetch(`http://localhost:8000/comprar-acciones?activo=${tickerSeleccionado}&cantidad=${cantidadCompra}&stopLoss=${stopLoss}&takeProfit=${takeProfit}&username=ejemplo`)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-      setModalOpen(false);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-    setModalOpen(false);
-  }
+    try {
+        const response = await fetch('http://localhost:8000/comprar-acciones', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                activo: tickerSeleccionado,
+                cantidad: cantidadCompra,
+                stopLoss: stopLoss,
+                takeProfit: takeProfit
+            }),
+            credentials: 'include'
+        });
+
+        if (!response.ok) throw new Error('Error en la compra');
+        
+        const data = await response.json();
+        console.log(data);
+        setModalOpen(false);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
 
   // const preVenta = async () => {
   //   //Petición para saber cuantas acciones se tienen y cuanto vale una acción
-  //   const response = await fetch(`http://localhost:8000/datos-pre-transaccion-venta?activo=${tickerSeleccionado}&username=ejemplo`);
+  //   const response = await fetch(`http://localhost:8000/datos-pre-transaccion-venta?activo=${tickerSeleccionado}`, {credentials: 'include'}));
   // }
 
   const cerrarModal = () => {

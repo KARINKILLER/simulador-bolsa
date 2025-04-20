@@ -5,32 +5,59 @@ import GraficaDonut from './GraficaDonut';
 import ListaTransacciones from './ListaTransacciones';
 import ListaActivos from './ListaActivos';
 
-const Perfil = () =>{   
+const Perfil = () => {   
     const [datosActivos, setDatosActivos] = useState(null);
     const [datosTransacciones, setDatosTransacciones] = useState([]);
     const [transaccionesDisponibles, setTransaccionesDisponibles] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
+        const verificarSesion = async () => {
+            try {
+                const response = await fetch("http://localhost:8000/session-status", {
+                    method: "GET",
+                    credentials: "include"
+                });
+                
+                const data = await response.json();
+                if (!data.authenticated) {
+                    navigate("/error");
+                }
+            } catch (error) {
+                navigate("/error");
+            }
+        };
+
         const cargarPerfil = async () => {
             try {
-                const response = await fetch('http://localhost:8000/cargar-activos-perfil?username=ejemplo');
-                const response2 = await fetch('http://localhost:8000/cargar-transacciones-perfil?username=ejemplo');
+                await verificarSesion();
+                
+                const response = await fetch('http://localhost:8000/cargar-activos-perfil', {
+                    credentials: 'include'
+                });
+                const response2 = await fetch('http://localhost:8000/cargar-transacciones-perfil', {
+                    credentials: 'include'
+                });
+                
                 if (!response.ok) throw new Error(`Error: ${response.status}`);
                 if (!response2.ok) throw new Error(`Error: ${response2.status}`);
+                
                 const datosActivos = await response.json();
                 const datosTransacciones = await response2.json();
+                
                 setDatosActivos(datosActivos);
                 setDatosTransacciones(datosTransacciones);
                 setTransaccionesDisponibles(true);
-                console.log(datosActivos);   
-                // console.log(datosTransacciones);
+                
             } catch (error) {
                 console.error("Error al cargar el perfil:", error);
+                navigate("/error");
             }
         };
+
         cargarPerfil();
-    }, []);
+    }, [navigate]);
 
     
     const preReinicio = () => {
@@ -42,7 +69,7 @@ const Perfil = () =>{
     };
 
     const reinicio = async () => {
-        const response = await fetch('http://localhost:8000/reinicio?username=ejemplo');
+        const response = await fetch('http://localhost:8000/reinicio', {credentials: 'include'});
         if (!response.ok) throw new Error(`Error: ${response.status}`);
         alert('Cuenta reiniciada con éxito');
         setModalOpen(false);  
@@ -53,6 +80,23 @@ const Perfil = () =>{
           .reduce((total, activo) => total + activo.valor, 0)
           .toFixed(2);
       };
+    
+    const logout = async () => {
+        try {
+            const response = await fetch('http://localhost:8000/logout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include' 
+            });
+            if (response.ok) {
+                window.location.href = '/'; // Redirigir a la página de inicio de sesión
+            } else {
+                console.error('Error al cerrar sesión');
+            }
+        } catch (error) {
+            console.error('Error de conexión con el servidor', error);
+        }
+    }
 
     return (
         <div className='container'>
@@ -70,7 +114,7 @@ const Perfil = () =>{
         <div className='mt-3 row'>
         <Link className='col' to="/market">Volver</Link>
         <p className='col-9'></p>
-        <Link className='col' to ="/">Cerrar sesión</Link>
+        <button className='col-2 btn btn-danger' onClick={logout}>Cerrar sesión</button>
         <div className='text-center text-white'>
             <p>Nombre de usuario</p>
             <h3>Fondos</h3>
