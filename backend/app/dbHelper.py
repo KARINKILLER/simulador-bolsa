@@ -224,7 +224,6 @@ async def cargarTransaccionesPerfil(username: str):
         async with connection_pool.acquire() as connection:
             query_id = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1"
             id_usuario = await connection.fetchval(query_id, username)
-            #coge solo las últimas 3 transacciones
             query = "SELECT simbolo_activo, tipo_transaccion, cantidad, precio, monto_total, creado_en FROM transacciones WHERE id_usuario = $1 ORDER BY creado_en DESC LIMIT 3"
             transacciones = await connection.fetch(query, id_usuario)
             lista_transacciones = [dict(transaccion) for transaccion in transacciones]
@@ -247,4 +246,39 @@ async def cargarTodasLasTransacciones(username: str):
             return lista_transacciones
     except Exception as e:
         print(f"Error al consultar transacciones: {e}")
+        raise
+
+async def consultar_cantidad_acciones(username: str, activo: str) -> float:
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            query = "SELECT cantidad, precio_promedio_compra FROM cartera WHERE id_usuario = (SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1) AND simbolo_activo = $2"
+            #dividir cantidad entre precio promedio para obtener el número real de acciones
+            resultado = await connection.fetchrow(query, username, activo)
+            if resultado is None:
+                return -1
+            numAcciones = round(resultado['cantidad']/resultado['precio_promedio_compra'],4)
+            
+            return numAcciones
+    except Exception as e:
+        print(f"Error al consultar cantidad de acciones: {e}")
+        raise
+
+async def consultar_cantidad_disponible(username: str, activo: str) -> float:
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            query = "SELECT cantidad FROM cartera WHERE id_usuario = (SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1) AND simbolo_activo = $2"
+            resultado = await connection.fetchrow(query, username, activo)
+            if resultado is None:
+                return -1
+            numAcciones = round(resultado['cantidad'],4)
+            
+            return numAcciones
+    except Exception as e:
+        print(f"Error al consultar cantidad de acciones: {e}")
         raise

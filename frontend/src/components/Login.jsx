@@ -8,7 +8,7 @@ const Login = () => {
   const enviarFormulario = async (e) => {
     e.preventDefault();
     try {
-      console.log("Botón pulsado")
+      console.log("Intentamos iniciar sesión");
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
       const response = await fetch('http://localhost:8000/login', {

@@ -6,7 +6,6 @@ import Modal from './Modal';
 
 
 const Market = () => {
-  //petición de datos
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,9 +33,13 @@ const Market = () => {
   const [datos, setDatos] = useState([]);  
   const [datosListos, setDatosListos] = useState(false);
   const [datosCargando, setDatosCargando] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalCompraOpen, setModalCompraOpen] = useState(false);
+  const [modalVentaOpen, setModalVentaOpen] = useState(false);
   const [precioActivo, setPrecioActivo] = useState(0);
   const [saldoDisponible, setSaldoDisponible] = useState(0);
+  const [cantidadDisponible, setCantidadDisponible] = useState(0);
+  const [numAcciones, setNumAcciones] = useState(0);
+  const [accionDisponible, setAccionDisponible] = useState(false);
   
 
 
@@ -165,7 +168,7 @@ const Market = () => {
 
   const preCompra = async () => {
     //Petición para saber de cuánto dinero se dispone y cuanto vale una acción
-    const response = await fetch(`http://localhost:8000/datos-pre-transaccion?activo=${tickerSeleccionado}`, {credentials: 'include'});    
+    const response = await fetch(`http://localhost:8000/datos-pre-transaccion-compra?activo=${tickerSeleccionado}`, {credentials: 'include'});    
     if (!response.ok) throw new Error(`Error: ${response.status}`);
     const datosPreCompra = await response.json();
 
@@ -174,7 +177,7 @@ const Market = () => {
     setSaldoDisponible(datosPreCompra.saldoDisponible)
 
     console.log("Se van a comprar acciones de " + tickerSeleccionado);
-    setModalOpen(true);
+    setModalCompraOpen(true);
   };
 const confirmarCompra = async () => {
     const cantidadCompra = document.getElementById('cantidad-compra').value;
@@ -200,7 +203,7 @@ const confirmarCompra = async () => {
         
         const data = await response.json();
         console.log(data);
-        setModalOpen(false);
+        setModalCompraOpen(false);
     } catch (error) {
         console.error('Error:', error);
     }
@@ -211,24 +214,66 @@ const confirmarCompra = async () => {
   //   //Petición para saber cuantas acciones se tienen y cuanto vale una acción
   //   const response = await fetch(`http://localhost:8000/datos-pre-transaccion-venta?activo=${tickerSeleccionado}`, {credentials: 'include'}));
   // }
+  const preVenta = async () => {
+    console.log("Mirar si se tienen acciones y cuanto valen")
+    const response = await fetch(`http://localhost:8000/datos-pre-transaccion-venta?activo=${tickerSeleccionado}`, {credentials: 'include'});
+    if (!response.ok) throw new Error(`Error: ${response.status}`);
+    const datosPreVenta = await response.json();
+    setPrecioActivo(datosPreVenta.precioActivo);
+    setCantidadDisponible(datosPreVenta.cantidadDisponible);
+    setNumAcciones(datosPreVenta.numAcciones);
+    setModalVentaOpen(true);
+    
+  }
 
-  const cerrarModal = () => {
-    setModalOpen(false);  
+  const confirmarVenta = async () => {
+    const cantidadVenta = document.getElementById('cantidad-venta').value;
+    console.log("Vendemos")
+    cerrarModalVenta();
+  }
+
+  const cerrarModalCompra = () => {
+    setModalCompraOpen(false);  
   };
 
-  const ajustarMaximo = () => {
-    const cantidadCompra = document.getElementById('cantidad-compra').value;
-    if (cantidadCompra > saldoDisponible){
-      document.getElementById('cantidad-compra').value = saldoDisponible;
+  const cerrarModalVenta = () => {
+    setModalVentaOpen(false);
+  };
+
+  const ajustarMaximo = (id, maximo) => {
+    const cantidad = document.getElementById(id).value;
+    if (cantidad > maximo){
+      document.getElementById(id).value = maximo;
     }
   }
   return (
       <div className='container'>
 
-        <Modal isOpen={modalOpen}>
+        <Modal isOpen = {modalVentaOpen}>
+
+          { (numAcciones>0) && (<div>
+            <h2>Vas a vender acciones de {accionSeleccionada}</h2>
+          <h4 info ='Cuando vendes una acción se transforma en saldo virtual'>¿Cuánto dinero de esta acción quieres vender?</h4>
+          <input placeholder = "0"  type='number' id='cantidad-venta' step = "1" max = {cantidadDisponible} onBlur={() => ajustarMaximo('cantidad-venta', cantidadDisponible)} ></input>
+          <button className='mt-2 mb-2 ms-2' onClick={confirmarVenta}>Confirmar</button>
+          <button className='mb-2 ms-2' onClick={cerrarModalVenta}>Cancelar</button>
+          <br></br></div>
+          )}
+          { (numAcciones<=0) && (<div className='text-center'>
+            <h2>No tienes acciones de {accionSeleccionada}</h2>
+            <button className='mb-2 mt-2' onClick={cerrarModalVenta}>Aceptar</button>
+            <br></br></div>)
+          
+          }
+         
+        
+        </Modal>
+
+
+        <Modal isOpen={modalCompraOpen}>
                     <h2 title='El precio de la acción podría variar si se tarda en realizar la compra'>Vas a comprar acciones de {accionSeleccionada} a ${precioActivo} &#9432;</h2>
                     <h4>¿Cuánto dinero quieres gastarte? ($)</h4>
-                    <input type='number' step = "0.5" max = {saldoDisponible} onBlur={ajustarMaximo} id='cantidad-compra'></input>
+                    <input type='number' placeholder='0' id='cantidad-compra' step = "0.5" max = {saldoDisponible} onBlur={() => ajustarMaximo('cantidad-compra', saldoDisponible)} ></input>
                     <h5 title='Stop loss y take profit: % que tiene que BAJAR o SUBIR un activo para ser vendido automáticamente'>Configura tu stop loss y tu take profit (%) &#9432;</h5>
                     <h6>Stop loss</h6>
                     <input title='Si lo dejas vacío o en 0 no se ejecutarán acciones automáticas' type='number' step = "0.5" min = "0" id='stop-loss' placeholder='0' className='me-2'></input>
@@ -236,9 +281,10 @@ const confirmarCompra = async () => {
                     <input title='Si lo dejas vacío o en 0 no se ejecutarán acciones automáticas' type='number' step = "0.5" min = "0" id='take-profit' placeholder='0'></input>
                     <br></br>
                     <button className='mt-2 mb-2 ms-2' onClick={confirmarCompra}>Confirmar</button>
-                    <button className='mb-2 ms-2' onClick={cerrarModal}>Cancelar</button>
+                    <button className='mb-2 ms-2' onClick={cerrarModalCompra}>Cancelar</button>
                     <br></br>
          </Modal>
+
 
         <div className="mt-3 text-end display-box">
           <Link to="/perfil">Perfil</Link>
@@ -264,7 +310,7 @@ const confirmarCompra = async () => {
           </div>
       </div>
       <div className='text-center mt-3'>
-      <button onClick={pedirDatos}>Consultar valores</button>
+      {(opcion) && (tiempoSeleccionado) && <button onClick={pedirDatos}>Consultar valores</button>}
       {(opcion && <div className="text-white">{opcion}</div>)}
      </div>
      <div className='text-center text-white'>
@@ -275,12 +321,17 @@ const confirmarCompra = async () => {
       }
       {datosCargando && <p>Cargando datos...</p>}
       </div>
-      <div className='text-end mb-3 mt-2'>
-        {seleccion && <button onClick={preCompra}>Comprar</button>}
+        <div className='row'>
+        <div id = 'placeholder' className='col-10'></div>
+
+
+          <div className='col-1 text-end mb-3 mt-2'>
+            {seleccion && <button className = 'btn btn-success' onClick={preCompra}>Comprar</button>}
+          </div>
+          {<div className='col-1 text-end mb-3 mt-2'>
+            {seleccion && <button className = 'btn btn-danger' onClick={preVenta}>Vender</button>}
+          </div>}
       </div>
-      {/* <div className='text-end mb-3 mt-2'>
-        {seleccion && <button onClick={preVenta}>Vender</button>}
-      </div> */}
      </div>
    );
 }

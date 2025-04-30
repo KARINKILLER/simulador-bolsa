@@ -59,7 +59,7 @@ async def login(request: Request, username: str = Body(...), password: str = Bod
         raise HTTPException(401, "Credenciales incorrectas")
     except Exception as e:
         print(f"Error en login: {e}")
-        raise HTTPException(500, "Error interno")
+        raise HTTPException(500, e)
 
 @app.post("/logout")
 async def logout(request: Request):
@@ -97,7 +97,7 @@ async def consult(activo: str, periodo: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/datos-pre-transaccion")
+@app.get("/datos-pre-transaccion-compra")
 async def datos_pre_transaccion(
     activo: str, 
     usuario: str = Depends(get_current_user)
@@ -180,3 +180,23 @@ async def cargar_todas_transacciones(usuario: str = Depends(get_current_user)):
     except Exception as e:
         raise HTTPException(500, str(e))
 
+@app.get("/datos-pre-transaccion-venta")
+async def datos_pre_transaccion_venta(
+    activo: str, 
+    usuario: str = Depends(get_current_user)
+):
+    try:
+        precio_activo = await obtener_valor_actual(activo)
+        print(precio_activo)
+        #Consultar cuantas acciones tiene el usuario de este activo y devolver 
+        numAcciones = await consultar_cantidad_acciones(usuario, activo)
+        print(numAcciones)
+        cantidadDisponible = await consultar_cantidad_disponible(usuario, activo)
+        print(cantidadDisponible)
+        return {
+            "precioActivo": precio_activo,
+            "numAcciones": numAcciones,
+            "cantidadDisponible": cantidadDisponible
+        }
+    except Exception as e:
+        raise HTTPException(500, detail=str(e))
