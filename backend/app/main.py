@@ -200,3 +200,26 @@ async def datos_pre_transaccion_venta(
         }
     except Exception as e:
         raise HTTPException(500, detail=str(e))
+    
+@app.post("/vender-acciones")
+async def vender_acciones(activo: str,cantidad: float,usuario: str = Depends(get_current_user)):
+    try:
+        precio = await obtener_valor_actual(activo)
+        
+        if cantidad <= 0:
+            raise HTTPException(400, "Cantidad no válida")
+            
+        # Comprobar si el usuario tiene suficientes acciones para vender
+        cantidadDisponible = await consultar_cantidad_disponible(usuario, activo)
+        if cantidadDisponible < cantidad:
+            raise HTTPException(400, "No tienes suficientes acciones para vender")
+            
+        await actualizar_saldo(usuario, -cantidad)  # Vender implica sumar al saldo
+        await registrar_venta(usuario, activo, cantidad, precio)
+        await eliminar_acciones(usuario, activo, cantidad)
+        
+        return {"message": "Venta realizada exitosamente"}
+    except ValueError as e:
+        raise HTTPException(404, str(e))
+    except Exception as e:
+        raise HTTPException(500, f"Error interno: {str(e)}")

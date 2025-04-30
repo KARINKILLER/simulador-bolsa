@@ -228,7 +228,8 @@ const confirmarCompra = async () => {
 
   const confirmarVenta = async () => {
     const cantidadVenta = document.getElementById('cantidad-venta').value;
-    console.log("Vendemos")
+    const response = await fetch(`http://localhost:8000/vender-acciones?activo=${tickerSeleccionado}&cantidad=${cantidadVenta}`, {credentials: 'include', method: 'POST'});
+    if (!response.ok) throw new Error(`Error: ${response.status}`);
     cerrarModalVenta();
   }
 
@@ -254,6 +255,7 @@ const confirmarCompra = async () => {
           { (numAcciones>0) && (<div>
             <h2>Vas a vender acciones de {accionSeleccionada}</h2>
           <h4 info ='Cuando vendes una acción se transforma en saldo virtual'>¿Cuánto dinero de esta acción quieres vender?</h4>
+          <h5>Cantidad disponible: ${cantidadDisponible}</h5>
           <input placeholder = "0"  type='number' id='cantidad-venta' step = "1" max = {cantidadDisponible} onBlur={() => ajustarMaximo('cantidad-venta', cantidadDisponible)} ></input>
           <button className='mt-2 mb-2 ms-2' onClick={confirmarVenta}>Confirmar</button>
           <button className='mb-2 ms-2' onClick={cerrarModalVenta}>Cancelar</button>

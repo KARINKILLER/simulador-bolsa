@@ -282,3 +282,31 @@ async def consultar_cantidad_disponible(username: str, activo: str) -> float:
     except Exception as e:
         print(f"Error al consultar cantidad de acciones: {e}")
         raise
+
+async def registrar_venta(username: str, activo: str, cantidad: float, precio: float):
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            idUsuario = await connection.fetchval("SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1", username)
+            query = "INSERT INTO transacciones (id_usuario, simbolo_activo, tipo_transaccion, cantidad, precio, monto_total) VALUES ($1, $2, 'venta', $3, $4, $5)"
+            await connection.execute(query, idUsuario, activo, cantidad, precio, cantidad/precio)
+
+    except Exception as e:
+        print(f"Error al registrar venta: {e}")
+
+async def eliminar_acciones(username: str, activo: str, cantidad: float):
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            query = "UPDATE cartera SET cantidad = cantidad - $1 WHERE id_usuario = (SELECT id_usuario FROM usuarios WHERE nombre_usuario = $2) AND simbolo_activo = $3"
+            await connection.execute(query, cantidad, username, activo)
+            #si se queda sin acciones de este activo lo eliminamos de la base de datos
+            query = "DELETE FROM cartera WHERE id_usuario = (SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1) AND simbolo_activo = $2 AND cantidad <= 0"
+            await connection.execute(query, username, activo)
+    except Exception as e:
+        print(f"Error al eliminar acciones: {e}")
+        raise
