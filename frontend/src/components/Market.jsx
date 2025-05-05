@@ -181,8 +181,8 @@ const Market = () => {
   };
 const confirmarCompra = async () => {
     const cantidadCompra = document.getElementById('cantidad-compra').value;
-    const stopLoss = document.getElementById('stop-loss').value || 0;
-    const takeProfit = document.getElementById('take-profit').value || 0;
+    const stopLoss = parseFloat(document.getElementById('stop-loss').value) || 0;
+    const takeProfit = parseFloat(document.getElementById('take-profit').value) || 0;
 
     try {
         const response = await fetch('http://localhost:8000/comprar-acciones', {
@@ -228,7 +228,7 @@ const confirmarCompra = async () => {
 
   const confirmarVenta = async () => {
     const cantidadVenta = document.getElementById('cantidad-venta').value;
-    const response = await fetch(`http://localhost:8000/vender-acciones?activo=${tickerSeleccionado}&cantidad=${cantidadVenta}`, {credentials: 'include', method: 'POST'});
+    const response = await fetch(`http://localhost:8000/vender-acciones?activo=${tickerSeleccionado}& cantidad=${cantidadVenta}`, {credentials: 'include', method: 'POST'});
     if (!response.ok) throw new Error(`Error: ${response.status}`);
     cerrarModalVenta();
   }
@@ -276,7 +276,7 @@ const confirmarCompra = async () => {
                     <h2 title='El precio de la acción podría variar si se tarda en realizar la compra'>Vas a comprar acciones de {accionSeleccionada} a ${precioActivo} &#9432;</h2>
                     <h4>¿Cuánto dinero quieres gastarte? ($)</h4>
                     <input type='number' placeholder='0' id='cantidad-compra' step = "0.5" max = {saldoDisponible} onBlur={() => ajustarMaximo('cantidad-compra', saldoDisponible)} ></input>
-                    <h5 title='Stop loss y take profit: % que tiene que BAJAR o SUBIR un activo para ser vendido automáticamente'>Configura tu stop loss y tu take profit (%) &#9432;</h5>
+                    <h5 title='Stop loss y take profit: % que tiene que BAJAR o SUBIR un activo para ser vendido automáticamente. Si ya tenías un activo se sobreescribirá el stop loss y el take profit con los últimos valores que se reciban'>Configura tu stop loss y tu take profit (%) &#9432;</h5>
                     <h6>Stop loss</h6>
                     <input title='Si lo dejas vacío o en 0 no se ejecutarán acciones automáticas' type='number' step = "0.5" min = "0" id='stop-loss' placeholder='0' className='me-2'></input>
                     <h6>Take profit</h6>

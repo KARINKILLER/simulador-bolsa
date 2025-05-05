@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Body, Request, Depends
+from fastapi_utils.tasks import repeat_every
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from contextlib import asynccontextmanager
@@ -6,10 +7,13 @@ from dbHelper import *
 from priceConsultor import *
 
 
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
         await init_db()
+        await acciones_automaticas()
         yield
     finally:
         await close_db()
@@ -31,8 +35,19 @@ app.add_middleware(
     session_cookie="session_cookie",
     same_site="lax",
     https_only=False,
-    # domain="localhost"  
 )
+
+@repeat_every(seconds=10) 
+async def acciones_automaticas():
+    # Aquí puedes implementar la lógica para las acciones automáticas
+    print("Ejecutando acciones automáticas...")
+    # Por ejemplo, podrías consultar precios o realizar operaciones en la base de datos
+    transacciones = await transacciones_automaticas()
+    verificar_compraventa_automaticas(transacciones)
+    print("Acciones automáticas completadas.")
+
+
+
 
 
 # Dependencia para obtener usuario actual
@@ -132,18 +147,24 @@ def consultar_precio_actual(activo: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/comprar-acciones")
-async def comprar_acciones(activo: str,cantidad: float,stopLoss: float,takeProfit: float,usuario: str = Depends(get_current_user)):
+async def comprar_acciones(activo: str = Body(...), cantidad: float = Body(...), stopLoss: float = Body(0), takeProfit: float = Body(0), usuario: str = Depends(get_current_user)):
     try:
+        print (activo)
+        print (cantidad)
+        print (stopLoss)
+        print (takeProfit)
+        
         precio = await obtener_valor_actual(activo)
         saldo = await consultar_saldo_disponible(usuario)
-        
+        print("Estamos comprando acciones")
         if saldo < cantidad:
             raise HTTPException(400, "Saldo insuficiente")
             
+        await actualizar_cartera(usuario, activo, cantidad, precio, stopLoss, takeProfit)
         await actualizar_saldo(usuario, cantidad)
         await registrar_compra(usuario, activo, cantidad, precio)
-        await actualizar_cartera(usuario, activo, cantidad, precio, stopLoss, takeProfit)
-        
+
+
         return {"message": "Compra realizada exitosamente"}
     except ValueError as e:
         raise HTTPException(404, str(e))
@@ -223,3 +244,4 @@ async def vender_acciones(activo: str,cantidad: float,usuario: str = Depends(get
         raise HTTPException(404, str(e))
     except Exception as e:
         raise HTTPException(500, f"Error interno: {str(e)}")
+

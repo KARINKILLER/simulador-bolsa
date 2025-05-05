@@ -110,8 +110,7 @@ async def actualizar_cartera(username: str, activo: str, cantidad: float, precio
 
     try:
         async with connection_pool.acquire() as connection:
-            async with connection.transaction():  # Transacción atómica
-                # Obtener ID de usuario
+            async with connection.transaction(): 
                 query = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1"
                 idUsuario = await connection.fetchval(query, username)
                 
@@ -122,8 +121,8 @@ async def actualizar_cartera(username: str, activo: str, cantidad: float, precio
                     cantidad_actual = registro_actual['cantidad']
                     precio_actual = registro_actual['precio_promedio_compra']
                     
-                    nueva_cantidad_total = cantidad_actual + cantidad
-                    nuevo_precio_promedio = ((cantidad_actual * precio_actual) +(cantidad * precio)) / nueva_cantidad_total
+                    nueva_cantidad_total = float(cantidad_actual) + float(cantidad)
+                    nuevo_precio_promedio = (float((cantidad_actual * precio_actual)) + float((cantidad * precio))) / nueva_cantidad_total
                     
                     query_actualizar = "UPDATE cartera SET cantidad = $1, precio_promedio_compra = $2, stop_loss = $3, take_profit = $4 WHERE id_usuario = $5 AND simbolo_activo = $6"
                     await connection.execute(query_actualizar, nueva_cantidad_total, nuevo_precio_promedio, stopLoss, takeProfit, idUsuario, activo)
@@ -310,3 +309,22 @@ async def eliminar_acciones(username: str, activo: str, cantidad: float):
     except Exception as e:
         print(f"Error al eliminar acciones: {e}")
         raise
+#función que se ejecuta cada 5 minutos para comprobar si hay que vender acciones con stop loss o take profit mayor que 0
+async def transacciones_automaticas():
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            query = """
+                SELECT simbolo_activo, cantidad, precio_promedio_compra, stop_loss, take_profit FROM cartera
+                WHERE (stop_loss IS NOT NULL AND stop_loss > 0) OR (take_profit IS NOT NULL AND take_profit > 0)
+            """
+            resultados = await connection.fetch(query)
+            #transformar los resultados a una lista de listas
+            resultados = [list(resultado) for resultado in resultados]
+            print(resultados)
+            return resultados
+    except Exception as e:
+        print(f"Error en transacciones automáticas: {e}")
+        raise    

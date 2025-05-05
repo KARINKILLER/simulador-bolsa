@@ -58,6 +58,9 @@ async def obtener_valor_actual(ticker):
 
     return precio_actual
 
+# async def verificar_compraventa_automaticas(transacciones):
+    # Verificar si hay transacciones de compra o venta automáticas
+    
 # Ejemplo de uso
 # ticker = 'AAPL'
 # ultimo_valor = obtener_valor_actual(ticker)
