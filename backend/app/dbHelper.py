@@ -1,6 +1,7 @@
 import asyncpg
 from pwEncrypt import *
 from priceConsultor import *
+from decimal import Decimal
 
 
 DATABASE_CONFIG = {
@@ -288,9 +289,12 @@ async def registrar_venta(username: str, activo: str, cantidad: float, precio: f
 
     try:
         async with connection_pool.acquire() as connection:
+            cantidad_decimal = Decimal.from_float(cantidad)
+            precio_decimal =  Decimal.from_float(precio)
+            num_acciones = float(cantidad_decimal/precio_decimal)
             idUsuario = await connection.fetchval("SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1", username)
             query = "INSERT INTO transacciones (id_usuario, simbolo_activo, tipo_transaccion, cantidad, precio, monto_total) VALUES ($1, $2, 'venta', $3, $4, $5)"
-            await connection.execute(query, idUsuario, activo, cantidad, precio, cantidad/precio)
+            await connection.execute(query, idUsuario, activo, cantidad, precio, num_acciones)
 
     except Exception as e:
         print(f"Error al registrar venta: {e}")

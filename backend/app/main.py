@@ -42,7 +42,6 @@ async def acciones_automaticas():
     # Aquí puedes implementar la lógica para las acciones automáticas
     print("Ejecutando acciones automáticas...")
     transacciones = await transacciones_automaticas()
-    print("Transacciones extraídas")
     ventas_a_realizar = await verificar_ventas_automaticas(transacciones)
     await realizar_ventas_automaticas(ventas_a_realizar)
     print("Acciones automáticas completadas.")
@@ -53,10 +52,16 @@ async def realizar_ventas_automaticas(ventas_a_realizar):
         usuario = venta[0]
         activo = venta[1]
         cantidad = venta[2]
-        await actualizar_saldo(usuario, -cantidad)  # Vender implica sumar al saldo
-        precio = await obtener_valor_actual(activo)
-        await registrar_venta(usuario, activo, cantidad, precio)
-        await eliminar_acciones(usuario, activo, cantidad)
+        try:
+            # Realizar la venta
+            await actualizar_saldo(usuario, -cantidad) 
+            precio = await obtener_valor_actual(activo)
+            await registrar_venta(usuario, activo, float(cantidad), precio)
+            await eliminar_acciones(usuario, activo, cantidad)
+            print(f"Venta automática realizada para {usuario} de {cantidad} acciones de {activo}.")
+        except Exception as e:
+            print(f"Error al realizar la venta automática para {usuario} de {cantidad} acciones de {activo}: {e}")
+
 
 
 # Dependencia para obtener usuario actual

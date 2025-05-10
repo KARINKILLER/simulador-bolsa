@@ -62,9 +62,7 @@ async def obtener_valor_actual(ticker):
 
 async def verificar_ventas_automaticas(transacciones):
     ventas = []
-    print("Verificando ventas automáticas...")
     for transaccion in transacciones:
-        print("Entramos en el bucle de transacciones")
         # Asignar variables por índice para mayor claridad
         username = transaccion[0]
         simbolo_activo = transaccion[1]
@@ -75,9 +73,7 @@ async def verificar_ventas_automaticas(transacciones):
         precio_actual = await obtener_valor_actual(simbolo_activo)
         precio_actual = Decimal.from_float(precio_actual).quantize(Decimal('0.0001'))
         precio_promedio = (precio_promedio).quantize(Decimal('0.0001'))
-
         porcentaje_variacion = ((precio_actual - precio_promedio) / precio_promedio * 100).quantize(Decimal('0.0001'))
-        print(porcentaje_variacion)
         print(f"Activo: {simbolo_activo}, Porcentaje de variación: {porcentaje_variacion}%")
 
         # Comprobar si se cumplen las condiciones de venta
@@ -91,7 +87,7 @@ async def verificar_ventas_automaticas(transacciones):
             ventas.append(transaccion)
         else:
             print(f"No se cumplen las condiciones para venta automática de {simbolo_activo}")
-    print("Las ventas son las siguientes:")
+    print("Las ventas automáticas son las siguientes:")
     print(ventas)
     return ventas
             
