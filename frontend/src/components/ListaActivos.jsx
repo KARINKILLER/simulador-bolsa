@@ -17,14 +17,19 @@ const TarjetaActivo = ({ activo }) => {
             ${activo.precio_actual.toFixed(2)}
           </span>
         </p>
+        <p>Take profit: {activo.take_profit.toFixed(2)}%  </p>
+
+        <p>Stop Loss:  {activo.stop_loss.toFixed(2)}%</p>
+   
         <p className={ diferencia >= 0
               ? 'text-success d-flex align-items-center justify-content-center'
               : 'text-danger d-flex align-items-center justify-content-center'
           }
->
-          {diferencia >= 0 ? "↑" : "↓"}
+>Cambio: 
+          {diferencia >= 0 ? " ↑" : " ↓"}
           <span className="ms-2">{porcentaje}%</span>
         </p>
+
       </div>
     </div>
   );

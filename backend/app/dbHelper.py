@@ -176,7 +176,7 @@ async def cargarPerfil(username: str):
             
             # Modificamos la consulta para incluir el precio_promedio_compra
             query_activos = """
-                SELECT simbolo_activo, cantidad, precio_promedio_compra 
+                SELECT simbolo_activo, cantidad, precio_promedio_compra, stop_loss, take_profit
                 FROM cartera 
                 WHERE id_usuario = $1
             """
@@ -184,7 +184,7 @@ async def cargarPerfil(username: str):
             
             # Inicializamos con el saldo disponible
             datos_activos = [
-                {"activo": "Saldo", "valor": float(saldo['saldo_virtual'])}
+                {"activo": "Saldo", "valor": float(saldo['saldo_virtual']), "stop_loss": 0, "take_profit": 0}
             ]
             
             # Para cada activo, calculamos su valor actual total
@@ -206,7 +206,9 @@ async def cargarPerfil(username: str):
                     "activo": simbolo,
                     "valor": valor_total_actual,
                     "precio_actual": precio_actual,
-                    "precio_inicial": activo['precio_promedio_compra']
+                    "precio_inicial": precio_promedio,
+                    "stop_loss": activo['stop_loss'],
+                    "take_profit": activo['take_profit']
                 })
             
             return datos_activos
