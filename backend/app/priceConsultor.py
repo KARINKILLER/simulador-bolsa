@@ -1,6 +1,8 @@
 import os
 import polars as pl
 from datetime import datetime, timedelta
+import dbHelper
+from decimal import Decimal
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 csv_path = os.path.join(current_dir, "..", "..", "World-Stock-Prices-Dataset.csv")
@@ -58,8 +60,41 @@ async def obtener_valor_actual(ticker):
 
     return precio_actual
 
-# async def verificar_compraventa_automaticas(transacciones):
-    # Verificar si hay transacciones de compra o venta automáticas
+async def verificar_ventas_automaticas(transacciones):
+    ventas = []
+    print("Verificando ventas automáticas...")
+    for transaccion in transacciones:
+        print("Entramos en el bucle de transacciones")
+        # Asignar variables por índice para mayor claridad
+        username = transaccion[0]
+        simbolo_activo = transaccion[1]
+        cantidad = transaccion[2]
+        precio_promedio = transaccion[3]
+        stop_loss = transaccion[4]
+        take_profit = transaccion[5]
+        precio_actual = await obtener_valor_actual(simbolo_activo)
+        precio_actual = Decimal.from_float(precio_actual).quantize(Decimal('0.0001'))
+        precio_promedio = (precio_promedio).quantize(Decimal('0.0001'))
+
+        porcentaje_variacion = ((precio_actual - precio_promedio) / precio_promedio * 100).quantize(Decimal('0.0001'))
+        print(porcentaje_variacion)
+        print(f"Activo: {simbolo_activo}, Porcentaje de variación: {porcentaje_variacion}%")
+
+        # Comprobar si se cumplen las condiciones de venta
+        cumple_tp = porcentaje_variacion >= take_profit
+        cumple_sl = porcentaje_variacion <= -stop_loss
+
+
+        print(f"Cumple TP: {cumple_tp}, Cumple SL: {cumple_sl}")
+
+        if cumple_tp or cumple_sl:
+            ventas.append(transaccion)
+        else:
+            print(f"No se cumplen las condiciones para venta automática de {simbolo_activo}")
+    print("Las ventas son las siguientes:")
+    print(ventas)
+    return ventas
+            
     
 # Ejemplo de uso
 # ticker = 'AAPL'

@@ -316,10 +316,12 @@ async def transacciones_automaticas():
 
     try:
         async with connection_pool.acquire() as connection:
-            query = """
-                SELECT simbolo_activo, cantidad, precio_promedio_compra, stop_loss, take_profit FROM cartera
-                WHERE (stop_loss IS NOT NULL AND stop_loss > 0) OR (take_profit IS NOT NULL AND take_profit > 0)
+            query = """SELECT usuarios.nombre_usuario, cartera.simbolo_activo, cartera.cantidad, cartera.precio_promedio_compra, cartera.stop_loss, cartera.take_profit
+            FROM cartera JOIN usuarios ON cartera.id_usuario = usuarios.id_usuario
+            WHERE  (cartera.stop_loss IS NOT NULL AND cartera.stop_loss > 0) 
+            OR (cartera.take_profit IS NOT NULL AND cartera.take_profit > 0)
             """
+
             resultados = await connection.fetch(query)
             #transformar los resultados a una lista de listas
             resultados = [list(resultado) for resultado in resultados]
@@ -328,3 +330,21 @@ async def transacciones_automaticas():
     except Exception as e:
         print(f"Error en transacciones automáticas: {e}")
         raise    
+
+async def venta_automatica(id_cartera: int, simbolo_activo: str):
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            # Obtener el precio actual del activo
+            precio_actual = await obtener_valor_actual(simbolo_activo)
+            
+            # Aquí iría la lógica para ejecutar la venta automática
+            query = "DELETE FROM cartera WHERE id_cartera = $1"
+            await connection.execute(query, id_cartera)
+            
+            return True
+    except Exception as e:
+        print(f"Error en venta automática: {e}")
+        raise

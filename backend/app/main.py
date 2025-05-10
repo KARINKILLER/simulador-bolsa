@@ -41,13 +41,22 @@ app.add_middleware(
 async def acciones_automaticas():
     # Aquí puedes implementar la lógica para las acciones automáticas
     print("Ejecutando acciones automáticas...")
-    # Por ejemplo, podrías consultar precios o realizar operaciones en la base de datos
     transacciones = await transacciones_automaticas()
-    verificar_compraventa_automaticas(transacciones)
+    print("Transacciones extraídas")
+    ventas_a_realizar = await verificar_ventas_automaticas(transacciones)
+    await realizar_ventas_automaticas(ventas_a_realizar)
     print("Acciones automáticas completadas.")
 
 
-
+async def realizar_ventas_automaticas(ventas_a_realizar):
+    for venta in ventas_a_realizar:
+        usuario = venta[0]
+        activo = venta[1]
+        cantidad = venta[2]
+        await actualizar_saldo(usuario, -cantidad)  # Vender implica sumar al saldo
+        precio = await obtener_valor_actual(activo)
+        await registrar_venta(usuario, activo, cantidad, precio)
+        await eliminar_acciones(usuario, activo, cantidad)
 
 
 # Dependencia para obtener usuario actual
