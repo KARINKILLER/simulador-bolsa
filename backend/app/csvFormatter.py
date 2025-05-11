@@ -70,8 +70,8 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 current_dir = os.path.dirname(os.path.abspath(__file__))
 csv_path = os.path.join(current_dir, "..", "..", "Stocks_Final.csv")
 df = pl.read_csv(csv_path)
-# Suponiendo que df es tu DataFrame ya cargado
 
+#Primero quitar las marcas de zona horaria
 df = df.with_columns(
     pl.when(pl.col("Date").str.len_chars() > 19)
       .then(pl.col("Date").str.slice(0, 19))
