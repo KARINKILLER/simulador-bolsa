@@ -80,7 +80,13 @@ const Market = () => {
     { value: 34, label: 'Nintendo (NTDOY)', ticker: 'NTDOY' },
     { value: 35, label: 'American Eagle Outfitters (AEO)', ticker: 'AEO' },
     { value: 36, label: 'Foot Locker (FL)', ticker: 'FL' },
-    { value: 37, label: 'Nordstrom (JWN)', ticker: 'JWN' }
+    { value: 37, label: 'Nordstrom (JWN)', ticker: 'JWN' },
+    //añadir con el mismo formato bitcoin, doge, monero, cardano, ethereum 
+    { value: 38, label: 'Bitcoin (BTC)', ticker: 'BTC' },
+    { value: 39, label: 'Ethereum (ETH)', ticker: 'ETH' },
+    { value: 40, label: 'Dogecoin (DOGE)', ticker: 'DOGE' },
+    { value: 41, label: 'Cardano (ADA)', ticker: 'ADA' },
+    { value: 42, label: 'Monero (XMR)', ticker: 'XMR' }
     ]
   
 
@@ -133,9 +139,9 @@ const Market = () => {
         default:
           periodoTiempo = '';
       }
-      setOpcion(`Acciones de ${accion} ${periodoTiempo}`);
+      setOpcion(`Valores de ${accion} ${periodoTiempo}`);
     } else if (accion) {
-      setOpcion(`Acciones de ${accion}`);
+      setOpcion(`Valores de ${accion}`);
     } else {
       setOpcion('');
     }
@@ -176,7 +182,7 @@ const Market = () => {
     setPrecioActivo(datosPreCompra.precioActivo)
     setSaldoDisponible(datosPreCompra.saldoDisponible)
 
-    console.log("Se van a comprar acciones de " + tickerSeleccionado);
+    console.log("Se va a comprar el siguiente activo:  " + tickerSeleccionado);
     setModalCompraOpen(true);
   };
 const confirmarCompra = async () => {
@@ -210,10 +216,6 @@ const confirmarCompra = async () => {
 };
 
 
-  // const preVenta = async () => {
-  //   //Petición para saber cuantas acciones se tienen y cuanto vale una acción
-  //   const response = await fetch(`http://localhost:8000/datos-pre-transaccion-venta?activo=${tickerSeleccionado}`, {credentials: 'include'}));
-  // }
   const preVenta = async () => {
     console.log("Mirar si se tienen acciones y cuanto valen")
     const response = await fetch(`http://localhost:8000/datos-pre-transaccion-venta?activo=${tickerSeleccionado}`, {credentials: 'include'});
@@ -254,7 +256,7 @@ const confirmarCompra = async () => {
 
           { (numAcciones>0) && (<div>
             <h2>Vas a vender acciones de {accionSeleccionada}</h2>
-          <h4 info ='Cuando vendes una acción se transforma en saldo virtual'>¿Cuánto dinero de esta acción quieres vender?</h4>
+          <h4 info ='Cuando vendes un activo se transforma en saldo virtual'>¿Cuánto dinero de este activo quieres vender?</h4>
           <h5>Cantidad disponible: ${cantidadDisponible}</h5>
           <input placeholder = "0"  type='number' id='cantidad-venta' step = "1" max = {cantidadDisponible} onBlur={() => ajustarMaximo('cantidad-venta', cantidadDisponible)} ></input>
           <button className='mt-2 mb-2 ms-2' onClick={confirmarVenta}>Confirmar</button>
@@ -262,7 +264,7 @@ const confirmarCompra = async () => {
           <br></br></div>
           )}
           { (numAcciones<=0) && (<div className='text-center'>
-            <h2>No tienes acciones de {accionSeleccionada}</h2>
+            <h2>No dispones del activo: {accionSeleccionada}</h2>
             <button className='mb-2 mt-2' onClick={cerrarModalVenta}>Aceptar</button>
             <br></br></div>)
           
@@ -273,7 +275,7 @@ const confirmarCompra = async () => {
 
 
         <Modal isOpen={modalCompraOpen}>
-                    <h2 title='El precio de la acción podría variar si se tarda en realizar la compra'>Vas a comprar acciones de {accionSeleccionada} a ${precioActivo} &#9432;</h2>
+                    <h2 title='El precio de la acción podría variar si se tarda en realizar la compra'>Vas a comprar el activo {accionSeleccionada} a ${precioActivo} &#9432;</h2>
                     <h4>¿Cuánto dinero quieres gastarte? ($)</h4>
                     <input type='number' placeholder='0' id='cantidad-compra' step = "0.5" max = {saldoDisponible} onBlur={() => ajustarMaximo('cantidad-compra', saldoDisponible)} ></input>
                     <h5 title='Stop loss y take profit: % que tiene que BAJAR o SUBIR un activo para ser vendido automáticamente. Si ya tenías un activo se sobreescribirá el stop loss y el take profit con los últimos valores que se reciban'>Configura tu stop loss y tu take profit (%) &#9432;</h5>

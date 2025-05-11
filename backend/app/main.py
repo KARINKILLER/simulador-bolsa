@@ -163,10 +163,6 @@ def consultar_precio_actual(activo: str):
 @app.post("/comprar-acciones")
 async def comprar_acciones(activo: str = Body(...), cantidad: float = Body(...), stopLoss: float = Body(0), takeProfit: float = Body(0), usuario: str = Depends(get_current_user)):
     try:
-        print (activo)
-        print (cantidad)
-        print (stopLoss)
-        print (takeProfit)
         
         precio = await obtener_valor_actual(activo)
         saldo = await consultar_saldo_disponible(usuario)

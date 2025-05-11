@@ -38,7 +38,12 @@ const TransactionList = ({ transacciones }) => {
         {nombre: 'Nintendo (NTDOY)', ticker: 'NTDOY' },
         {nombre: 'American Eagle Outfitters (AEO)', ticker: 'AEO' },
         {nombre: 'Foot Locker (FL)', ticker: 'FL' },
-        {nombre: 'Nordstrom (JWN)', ticker: 'JWN' }
+        {nombre: 'Nordstrom (JWN)', ticker: 'JWN' },
+        {nombre: 'Bitcoin (BTC)', ticker: 'BTC' },
+        {nombre: 'Ethereum (ETH)', ticker: 'ETH' },
+        {nombre: 'Dogecoin (DOGE)', ticker: 'DOGE' },
+        {nombre: 'Cardano (ADA)', ticker: 'ADA' },
+        {nombre: 'Monero (XMR)', ticker: 'XMR' }
     ];
 
     // Renderizar las transacciones

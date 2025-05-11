@@ -5,18 +5,19 @@ import dbHelper
 from decimal import Decimal
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-csv_path = os.path.join(current_dir, "..", "..", "World-Stock-Prices-Dataset.csv")
+csv_path = os.path.join(current_dir, "..", "..", "Stocks_Prueba.csv")
 print("Cargando csv...")
 df = pl.read_csv(csv_path)
 
 def obtener_datos_activo(ticker, periodo):
     fecha_actual = datetime.now()
-    fecha_simulada = fecha_actual - timedelta(days=365.25 * 20) 
-    fecha_simulada_str = fecha_simulada.strftime("%Y-%m-%d")
+    # fecha_simulada = fecha_actual - timedelta(days=365.25 * 20) 
+    # fecha_simulada_str = fecha_simulada.strftime("%Y-%m-%d")
+    fecha_actual_str = fecha_actual.strftime("%Y-%m-%d")
     # print(fecha_simulada_str)
     base_query = (
         df.filter(pl.col("Ticker") == ticker)
-        .filter(pl.col("Date") <= fecha_simulada_str)
+        .filter(pl.col("Date") <= fecha_actual_str)
         .sort("Date", descending=True)
     )
 
@@ -41,20 +42,18 @@ def obtener_datos_activo(ticker, periodo):
 
 async def obtener_valor_actual(ticker):
     fecha_actual = datetime.now()
-    fecha_simulada = fecha_actual - timedelta(days=365.25 * 20) 
-    fecha_simulada_str = fecha_simulada.strftime("%Y-%m-%d")
-    # print(fecha_simulada_str)
+    # fecha_simulada = fecha_actual - timedelta(days=365.25 * 20) 
+    # fecha_simulada_str = fecha_simulada.strftime("%Y-%m-%d")
+    fecha_actual_str = fecha_actual.strftime("%Y-%m-%d")
     base_query = (
         df.filter(pl.col("Ticker") == ticker)
-        .filter(pl.col("Date") <= fecha_simulada_str)
+        .filter(pl.col("Date") <= fecha_actual_str)
     )
 
     ticker_data = base_query.head(1)
 
-    precio_actual = ticker_data.select([
-        pl.col("Close").alias("precio")
-    ])
-    #extraer el precio actual a una variable guardando solo el valor del precio de manera más sencilla 
+    precio_actual = ticker_data.select([pl.col("Close").alias("precio")])
+
     precio_actual = precio_actual.to_dict()['precio'][0]
     precio_actual = round(precio_actual, 4)
 
@@ -63,7 +62,6 @@ async def obtener_valor_actual(ticker):
 async def verificar_ventas_automaticas(transacciones):
     ventas = []
     for transaccion in transacciones:
-        # Asignar variables por índice para mayor claridad
         username = transaccion[0]
         simbolo_activo = transaccion[1]
         cantidad = transaccion[2]

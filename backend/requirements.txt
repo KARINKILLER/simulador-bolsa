@@ -9,3 +9,4 @@ polars
 itsdangerous #De cuando se ponen las sesiones
 fastapi_utils
 typing_inspect
+xlsxwriter #Formateo de excels
