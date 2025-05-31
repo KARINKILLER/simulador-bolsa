@@ -13,7 +13,7 @@ from priceConsultor import *
 async def lifespan(app: FastAPI):
     try:
         await init_db()
-        await acciones_automaticas()
+        # await acciones_automaticas()
         yield
     finally:
         await close_db()
@@ -37,14 +37,14 @@ app.add_middleware(
     https_only=False,
 )
 
-@repeat_every(seconds=600) 
-async def acciones_automaticas():
-    # Aquí puedes implementar la lógica para las acciones automáticas
-    print("Ejecutando acciones automáticas...")
-    transacciones = await transacciones_automaticas()
-    ventas_a_realizar = await verificar_ventas_automaticas(transacciones)
-    await realizar_ventas_automaticas(ventas_a_realizar)
-    print("Acciones automáticas completadas.")
+# @repeat_every(seconds=600) 
+# async def acciones_automaticas():
+#     # Aquí puedes implementar la lógica para las acciones automáticas
+#     print("Ejecutando acciones automáticas...")
+#     transacciones = await transacciones_automaticas()
+#     ventas_a_realizar = await verificar_ventas_automaticas(transacciones)
+#     await realizar_ventas_automaticas(ventas_a_realizar)
+#     print("Acciones automáticas completadas.")
 
 
 async def realizar_ventas_automaticas(ventas_a_realizar):
@@ -249,7 +249,7 @@ async def vender_acciones(activo: str,cantidad: float,usuario: str = Depends(get
         numAcciones = await consultar_cantidad_acciones(usuario, activo)
         numAcciones = float(numAcciones)  # Asegurarse de que sea un número flotante
         cantidadDisponible = round(numAcciones * precio_activo, 4)
-        
+
         if cantidadDisponible < cantidad:
             raise HTTPException(400, "No tienes suficientes acciones para vender")
             

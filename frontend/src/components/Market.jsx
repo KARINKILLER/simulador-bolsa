@@ -276,7 +276,7 @@ const confirmarCompra = async () => {
         <Modal isOpen={modalCompraOpen}>
                     <h2 title='El precio de la acción podría variar si se tarda en realizar la compra'>Vas a comprar el activo {accionSeleccionada} a ${precioActivo} &#9432;</h2>
                     <h4>¿Cuánto dinero quieres gastarte? ($)</h4>
-                    <input type='number' placeholder='0' id='cantidad-compra' step = "0.5" max = {saldoDisponible} onBlur={() => ajustarMaximo('cantidad-compra', saldoDisponible)} ></input>
+                    <input type='number' min = '0' placeholder='0' id='cantidad-compra' step = "0.5" max = {saldoDisponible} onBlur={() => ajustarMaximo('cantidad-compra', saldoDisponible)} ></input>
                     <h5 title='Stop loss y take profit: % que tiene que BAJAR o SUBIR un activo para ser vendido automáticamente. Si ya tenías un activo se sobreescribirá el stop loss y el take profit con los últimos valores que se reciban'>Configura tu stop loss y tu take profit (%) &#9432;</h5>
                     <h6>Stop loss</h6>
                     <input title='Si lo dejas vacío o en 0 no se ejecutarán acciones automáticas' type='number' step = "0.5" min = "0" id='stop-loss' placeholder='0' className='me-2'></input>
