@@ -81,7 +81,7 @@ const TransactionList = ({ transacciones }) => {
             // Crear el elemento para mostrar
             elementos.push(
                 <p key={i}>
-                    {fecha} - {tipoTransaccion} {transaction.numero_acciones.toString()} acciones de {nombreActivo} por valor de {parseFloat(transaction.dinero_gastado).toFixed(2)} $
+                    {fecha} - {tipoTransaccion} {transaction.numero_acciones.toString()} acciones de {nombreActivo} por valor de {parseFloat(transaction.dinero_movido).toFixed(2)} $
                 </p>
             );
         }

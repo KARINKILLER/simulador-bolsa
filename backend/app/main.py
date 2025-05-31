@@ -31,7 +31,7 @@ app.add_middleware(
 
 app.add_middleware(
     SessionMiddleware, 
-    secret_key="tu_clave_secreta_muy_larga_y_compleja",
+    secret_key=";vsW9t-G,ca@_!00m!LNmlVw",
     session_cookie="session_cookie",
     same_site="lax",
     https_only=False,
@@ -121,7 +121,7 @@ async def register(email: str = Body(...), username: str = Body(...), password: 
 async def consult(activo: str, periodo: str):
     print("Entramos en el endpoint de consult")
     try:
-        datos_activo = obtener_datos_activo(activo, periodo)
+        datos_activo = await obtener_datos_activo(activo, periodo)
         return {"datos": datos_activo}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

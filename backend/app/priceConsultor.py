@@ -3,6 +3,7 @@ import polars as pl
 from datetime import datetime, timedelta
 import dbHelper
 from decimal import Decimal
+import asyncio
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 csv_path = os.path.join(current_dir, "..", "..", "Stocks_Prueba.csv")
@@ -92,8 +93,13 @@ async def verificar_ventas_automaticas(transacciones):
     return ventas
             
     
-# Ejemplo de uso
+# # Ejemplo de uso
 # ticker = 'BTC'
-# ultimo_valor =  obtener_valor_actual(ticker)
+# ultimo_valor =  asyncio.run(obtener_valor_actual(ticker))
 
 # print(f"Último valor de {ticker}: {ultimo_valor}")
+
+# # Obtener datos del activo
+# periodo = 'anno'  # Puede ser 'anno', 'mes' o 'semana'
+# datos_activo = asyncio.run(obtener_datos_activo(ticker, periodo))
+# print(f"Datos de {ticker} en el periodo '{periodo}': {datos_activo}")

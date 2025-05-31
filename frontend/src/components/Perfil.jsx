@@ -69,10 +69,11 @@ const Perfil = () => {
     };
 
     const reinicio = async () => {
-        const response = await fetch('http://localhost:8000/reinicio', {credentials: 'include'});
+        const response = await fetch('http://localhost:8000/reinicio', {method: 'POST', credentials: 'include'});
         if (!response.ok) throw new Error(`Error: ${response.status}`);
         alert('Cuenta reiniciada con éxito');
-        setModalOpen(false);  
+        setModalOpen(false); 
+        window.location.reload();
     }
 
     const calcularSumaTotal = (activos) => {
@@ -142,7 +143,7 @@ const Perfil = () => {
 
             <Link to ="/transacciones">Consultar historial de transacciones</Link>
             <br></br>
-            <button className='btn btn-danger mt-4' onClick={preReinicio}>Reiniciar cuenta</button>
+            <button className='btn btn-danger mt-4 mb-4' onClick={preReinicio}>Reiniciar cuenta</button>
 
         </div>
         </div>

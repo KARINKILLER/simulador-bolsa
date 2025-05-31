@@ -98,7 +98,7 @@ async def registrar_compra(username: str, activo: str, cantidad: float, precio: 
     try:
         async with connection_pool.acquire() as connection:
             idUsuario = await connection.fetchval("SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1", username)
-            query = "INSERT INTO transacciones (id_usuario, simbolo_activo, tipo_transaccion, dinero_gastado, precio, numero_acciones) VALUES ($1, $2, 'compra', $3, $4, $5)"
+            query = "INSERT INTO transacciones (id_usuario, simbolo_activo, tipo_transaccion, dinero_movido, precio, numero_acciones) VALUES ($1, $2, 'compra', $3, $4, $5)"
             await connection.execute(query, idUsuario, activo, cantidad, precio, cantidad/precio)
 
     except Exception as e:
@@ -114,7 +114,7 @@ async def actualizar_cartera(username: str, activo: str, cantidad: float, precio
                 query = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1"
                 idUsuario = await connection.fetchval(query, username)
                 
-                numAcciones = Decimal.from_float(cantidad / precio)
+                numAcciones = Decimal.from_float(cantidad / precio).quantize(Decimal('0.00001'))  # Redondear a 4 decimales
                 # Verificamos si el usuario ya tiene un registro para este activo
                 query_registro = "SELECT numero_acciones, precio_promedio_compra FROM cartera WHERE id_usuario = $1 AND simbolo_activo = $2"
                 registro_actual = await connection.fetchrow(query_registro, idUsuario, activo)
@@ -127,7 +127,7 @@ async def actualizar_cartera(username: str, activo: str, cantidad: float, precio
                     nuevo_num_acciones_total = float(numAcciones) + float(num_acciones_actual)
                     nuevo_precio_promedio = (float(num_acciones_actual * precio_actual) + float(numAcciones * precio)) / nuevo_num_acciones_total
                     
-                    nuevo_num_acciones_total = Decimal.from_float(nuevo_num_acciones_total).quantize(Decimal('0.0001'))
+                    nuevo_num_acciones_total = Decimal.from_float(nuevo_num_acciones_total).quantize(Decimal('0.00001'))
                     query_actualizar = "UPDATE cartera SET numero_acciones = $1, precio_promedio_compra = $2, stop_loss = $3, take_profit = $4 WHERE id_usuario = $5 AND simbolo_activo = $6"
                     await connection.execute(query_actualizar, nuevo_num_acciones_total, nuevo_precio_promedio, stopLoss, takeProfit, idUsuario, activo)
                 else:
@@ -228,7 +228,7 @@ async def cargarTransaccionesPerfil(username: str):
         async with connection_pool.acquire() as connection:
             query_id = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1"
             id_usuario = await connection.fetchval(query_id, username)
-            query = "SELECT simbolo_activo, tipo_transaccion, dinero_gastado, precio, numero_acciones, creado_en FROM transacciones WHERE id_usuario = $1 ORDER BY creado_en DESC LIMIT 3"
+            query = "SELECT simbolo_activo, tipo_transaccion, dinero_movido, precio, numero_acciones, creado_en FROM transacciones WHERE id_usuario = $1 ORDER BY creado_en DESC LIMIT 3"
             transacciones = await connection.fetch(query, id_usuario)
             lista_transacciones = [dict(transaccion) for transaccion in transacciones]
             return lista_transacciones
@@ -244,7 +244,7 @@ async def cargarTodasLasTransacciones(username: str):
         async with connection_pool.acquire() as connection:
             query_id = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1"
             id_usuario = await connection.fetchval(query_id, username)
-            query = "SELECT simbolo_activo, tipo_transaccion, dinero_gastado, precio, numero_acciones, creado_en FROM transacciones WHERE id_usuario = $1 ORDER BY creado_en DESC LIMIT 3"
+            query = "SELECT simbolo_activo, tipo_transaccion, dinero_movido, precio, numero_acciones, creado_en FROM transacciones WHERE id_usuario = $1 ORDER BY creado_en DESC LIMIT 3"
             transacciones = await connection.fetch(query, id_usuario)
             lista_transacciones = [dict(transaccion) for transaccion in transacciones]
             return lista_transacciones
@@ -258,12 +258,12 @@ async def consultar_cantidad_acciones(username: str, activo: str) -> float:
 
     try:
         async with connection_pool.acquire() as connection:
-            query = "SELECT cantidad, precio_promedio_compra FROM cartera WHERE id_usuario = (SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1) AND simbolo_activo = $2"
+            query = "SELECT numero_acciones FROM cartera WHERE id_usuario = (SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1) AND simbolo_activo = $2"
             #dividir cantidad entre precio promedio para obtener el número real de acciones
             resultado = await connection.fetchrow(query, username, activo)
             if resultado is None:
                 return -1
-            numAcciones = round(resultado['cantidad']/resultado['precio_promedio_compra'],4)
+            numAcciones = resultado['numero_acciones']
             
             return numAcciones
     except Exception as e:
@@ -297,7 +297,7 @@ async def registrar_venta(username: str, activo: str, cantidad: float, precio: f
             precio_decimal =  Decimal.from_float(precio)
             num_acciones = float(cantidad_decimal/precio_decimal)
             idUsuario = await connection.fetchval("SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1", username)
-            query = "INSERT INTO transacciones (id_usuario, simbolo_activo, tipo_transaccion, cantidad, precio, monto_total) VALUES ($1, $2, 'venta', $3, $4, $5)"
+            query = "INSERT INTO transacciones (id_usuario, simbolo_activo, tipo_transaccion, dinero_movido, precio, numero_acciones) VALUES ($1, $2, 'venta', $3, $4, $5)"
             await connection.execute(query, idUsuario, activo, cantidad, precio, num_acciones)
 
     except Exception as e:
@@ -308,11 +308,19 @@ async def eliminar_acciones(username: str, activo: str, cantidad: float):
         raise Exception("La conexión a la base de datos no ha sido inicializada")
 
     try:
+        # Primero, obtenemos la cantidad actual de acciones del usuario para el activo
+
+        numero_acciones = await consultar_cantidad_acciones(username, activo)
+        numero_acciones = float(numero_acciones)  # Asegurarse de que sea un número flotante
+        precio = await obtener_valor_actual(activo)
+        porcentaje_venta = round(cantidad/(numero_acciones * precio), 4)
+        print("El porcentaje de venta es: " + str(porcentaje_venta))
+        acciones_restantes = numero_acciones - (numero_acciones * porcentaje_venta)
         async with connection_pool.acquire() as connection:
-            query = "UPDATE cartera SET cantidad = cantidad - $1 WHERE id_usuario = (SELECT id_usuario FROM usuarios WHERE nombre_usuario = $2) AND simbolo_activo = $3"
-            await connection.execute(query, cantidad, username, activo)
+            query = "UPDATE cartera SET numero_acciones = $1 WHERE id_usuario = (SELECT id_usuario FROM usuarios WHERE nombre_usuario = $2) AND simbolo_activo = $3"
+            await connection.execute(query, acciones_restantes, username, activo)
             #si se queda sin acciones de este activo lo eliminamos de la base de datos
-            query = "DELETE FROM cartera WHERE id_usuario = (SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1) AND simbolo_activo = $2 AND cantidad <= 0"
+            query = "DELETE FROM cartera WHERE id_usuario = (SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1) AND simbolo_activo = $2 AND numero_acciones <= 0"
             await connection.execute(query, username, activo)
     except Exception as e:
         print(f"Error al eliminar acciones: {e}")
