@@ -37,7 +37,7 @@ app.add_middleware(
     https_only=False,
 )
 
-@repeat_every(seconds=10) 
+@repeat_every(seconds=600) 
 async def acciones_automaticas():
     # Aquí puedes implementar la lógica para las acciones automáticas
     print("Ejecutando acciones automáticas...")
@@ -218,12 +218,15 @@ async def datos_pre_transaccion_venta(
 ):
     try:
         precio_activo = await obtener_valor_actual(activo)
-        print(precio_activo)
+        print("el precio del activo es: "+ str(precio_activo))
+        print (type(precio_activo))
         #Consultar cuantas acciones tiene el usuario de este activo y devolver 
         numAcciones = await consultar_cantidad_acciones(usuario, activo)
-        print(numAcciones)
-        cantidadDisponible = await consultar_cantidad_disponible(usuario, activo)
-        print(cantidadDisponible)
+        print("El numero de acciones es " + str(numAcciones))
+        print(type(numAcciones))    
+        numAcciones = float(numAcciones)  # Asegurarse de que sea un número flotante
+        cantidadDisponible = round(numAcciones * precio_activo, 4)
+        print("La multiplicación es el saldo total del activo, que es: " + str(cantidadDisponible))
         return {
             "precioActivo": precio_activo,
             "numAcciones": numAcciones,
@@ -241,7 +244,12 @@ async def vender_acciones(activo: str,cantidad: float,usuario: str = Depends(get
             raise HTTPException(400, "Cantidad no válida")
             
         # Comprobar si el usuario tiene suficientes acciones para vender
-        cantidadDisponible = await consultar_cantidad_disponible(usuario, activo)
+        precio_activo = await obtener_valor_actual(activo)
+        #Consultar cuantas acciones tiene el usuario de este activo y devolver 
+        numAcciones = await consultar_cantidad_acciones(usuario, activo)
+        numAcciones = float(numAcciones)  # Asegurarse de que sea un número flotante
+        cantidadDisponible = round(numAcciones * precio_activo, 4)
+        
         if cantidadDisponible < cantidad:
             raise HTTPException(400, "No tienes suficientes acciones para vender")
             

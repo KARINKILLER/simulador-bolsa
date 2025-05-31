@@ -81,7 +81,6 @@ const Market = () => {
     { value: 35, label: 'American Eagle Outfitters (AEO)', ticker: 'AEO' },
     { value: 36, label: 'Foot Locker (FL)', ticker: 'FL' },
     { value: 37, label: 'Nordstrom (JWN)', ticker: 'JWN' },
-    //añadir con el mismo formato bitcoin, doge, monero, cardano, ethereum 
     { value: 38, label: 'Bitcoin (BTC)', ticker: 'BTC' },
     { value: 39, label: 'Ethereum (ETH)', ticker: 'ETH' },
     { value: 40, label: 'Dogecoin (DOGE)', ticker: 'DOGE' },
