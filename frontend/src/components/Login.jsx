@@ -6,61 +6,75 @@ const Login = () => {
   const navigate = useNavigate();
 
   const enviarFormulario = async (e) => {
-    e.preventDefault();
-    try {
-      console.log("Intentamos iniciar sesión");
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      const response = await fetch('http://localhost:8000/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-        credentials: 'include' 
-      });
+  e.preventDefault();
+  setError(''); 
+  try {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    
+    const response = await fetch('http://localhost:8000/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+      credentials: 'include' 
+    });
 
+    if (response.ok) {
       const data = await response.json();
-
-      if (response.ok) {
-        navigate('/market'); 
-      } else {
-        setError(data.detail || 'Error al iniciar sesión');
+      navigate('/market'); 
+    } else {
+      try {
+        const errorData = await response.json();
+        setError(errorData.detail || `Error ${response.status}: ${response.statusText}`);
+      } catch (jsonError) {
+        setError(`Error ${response.status}: ${response.statusText}`);
       }
-    } catch (err) {
-      setError('Error de conexión con el servidor');
     }
+  } catch (err) {
+    console.error('Error de conexión:', err);
+    setError('Error de conexión con el servidor');
+  }
+};
+
+
+  const irARegistro = () => {
+    navigate('/register');
   };
 
-
- return (
- <div className="container mt-5">
-     <div className="row justify-content-center">
-         <div className="col-md-6">
-             <div className="card">
-                 <div className="card-body">
-                     <h2 className="card-title text-center">Inicio de sesión</h2>
-                     {error && <div className="alert alert-danger">{error}</div>}
-                     <form onSubmit={enviarFormulario}>
-                         <div className="mb-3">
-                             <label htmlFor="username" className="form-label">Nombre de usuario:</label>
-                             <input type="username" className="form-control" id="username" required />
-                         </div>
-                         <div className="mb-3">
-                             <label htmlFor="password" className="form-label">Contraseña:</label>
-                             <input type="password" className="form-control" id="password" required />
-                         </div>
-                         <div className="text-center">
-                             <button type="submit" className="btn btn-primary">Iniciar sesión</button>
-                         </div>
-                     </form>
-                     <div className="text-center mt-2">
-                         <Link to="/register">Crea tu cuenta ya!</Link>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
- </div>
- );
+  return (
+    <div className="container bg-app d-flex align-items-center justify-content-center min-vh-100">
+      <div className="col-12 col-md-6 col-lg-4">
+        <div className="card card-app p-4">
+          <h2 className="text-center mb-4">Inicio de sesión</h2>
+          {error && (
+            <div className="alert alert-danger py-2 px-3" style={{backgroundColor: "#FF4D4D", color: "#fff", border: "none"}}>
+              {error}
+            </div>
+          )}
+          <form onSubmit={enviarFormulario}>
+            <div className="mb-3">
+              <label htmlFor="username" className="form-label">Nombre de usuario:</label>
+              <input type="text" className="form-control input-app" id="username" placeholder='Usuario'required autocomplete="off"/>
+            </div>
+            <div className="mb-4">
+              <label htmlFor="password" className="form-label">Contraseña:</label>
+              <input type="password" className="form-control input-app" id="password" placeholder='Contraseña' required autocomplete="off"/>
+            </div>
+            <div className="text-center mb-2">
+              <button type="submit" className="btn btn-app-primary w-100">
+                Iniciar sesión
+              </button>
+            </div>
+          </form>
+          <div className="text-center mt-3">
+            <button type="button" className="btn btn-app-secondary w-100" onClick={irARegistro}>
+              ¡Crea tu cuenta ya!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Login;

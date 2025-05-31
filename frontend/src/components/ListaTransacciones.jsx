@@ -46,50 +46,70 @@ const TransactionList = ({ transacciones }) => {
         {nombre: 'Monero (XMR)', ticker: 'XMR' }
     ];
 
-    // Renderizar las transacciones
+    const obtenerNombreActivo = (ticker) => {
+        const activo = opcionesAcciones.find(opcion => opcion.ticker === ticker);
+        return activo ? activo.nombre : ticker;
+    };
+
+    const formatearFecha = (fecha) => {
+        return new Date(fecha).toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
     const renderTransactions = () => {
-        // Verificar si transacciones existe y tiene elementos
         if (!transacciones || transacciones.length === 0) {
-            return <p>No hay transacciones disponibles</p>;
-        }
-
-        const elementos = [];
-
-        for (let i = 0; i < transacciones.length; i++) {
-            const transaction = transacciones[i];
-            let nombreActivo = transaction.simbolo_activo;
-
-            // Buscar el nombre completo del activo
-            for (let j = 0; j < opcionesAcciones.length; j++) {
-                if (opcionesAcciones[j].ticker === transaction.simbolo_activo) {
-                    nombreActivo = opcionesAcciones[j].nombre;
-                    break;
-                }
-            }
-
-            // Formatear la fecha (usando creado_en en lugar de fecha)
-            const fecha = new Date(transaction.creado_en).toLocaleDateString('es-ES');
-
-            // Determinar el tipo de transacción
-            let tipoTransaccion = '';
-            if (transaction.tipo_transaccion === 'compra') {
-                tipoTransaccion = 'Compraste';
-            } else if (transaction.tipo_transaccion === 'venta') {
-                tipoTransaccion = 'Vendiste';
-            }
-
-            // Crear el elemento para mostrar
-            elementos.push(
-                <p key={i}>
-                    {fecha} - {tipoTransaccion} {transaction.numero_acciones.toString()} acciones de {nombreActivo} por valor de {parseFloat(transaction.dinero_movido).toFixed(2)} $
-                </p>
+            return (
+                <div className="transacciones-vacio">
+                    <p>No hay transacciones disponibles</p>
+                </div>
             );
         }
 
-        return elementos;
+        return transacciones.map((transaction, index) => {
+            const nombreActivo = obtenerNombreActivo(transaction.simbolo_activo);
+            const fecha = formatearFecha(transaction.creado_en);
+            const esCompra = transaction.tipo_transaccion === 'compra';
+            
+            return (
+                <div key={index} className={`transaccion-item ${esCompra ? 'transaccion-compra' : 'transaccion-venta'}`}>
+                    <div className="transaccion-main">
+                        <div className="transaccion-info">
+                            <div className="transaccion-activo">
+                                <span className="activo-nombre">{nombreActivo}</span>
+                                <span className="activo-ticker">({transaction.simbolo_activo})</span>
+                            </div>
+                            <div className="transaccion-fecha">{fecha}</div>
+                        </div>
+                        
+                        <div className="transaccion-datos">
+                            <div className="transaccion-tipo">
+                                <span className={esCompra ? 'tipo-compra' : 'tipo-venta'}>
+                                    {esCompra ? 'COMPRA' : 'VENTA'}
+                                </span>
+                            </div>
+                            <div className="transaccion-cantidad">
+                                {transaction.numero_acciones} acciones
+                            </div>
+                            <div className={`transaccion-valor ${esCompra ? 'valor-compra' : 'valor-venta'}`}>
+                                ${parseFloat(transaction.dinero_movido).toFixed(2)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        });
     };
 
-    return <div>{renderTransactions()}</div>;
+    return (
+        <div className="transacciones-lista">
+            {renderTransactions()}
+        </div>
+    );
 };
 
 export default TransactionList;

@@ -1,41 +1,328 @@
-body{
-  background-color: #1A1A1A;
-}
-.dropdown-acciones{
-  width: 40vh !important;
-  background-color: white;
-  border-radius: 5px !important;
-}
-.dropdown-acciones .react-dropdown-select-input {
-  color: black; /* Cambia el color del texto de búsqueda */
+/* Fondo general de la app */
+body, .bg-app {
+  background-color: #1A1A1A !important;
+  color: #FFFFFF !important;
 }
 
-.dropdown-acciones .react-dropdown-select-dropdown {
-  background-color: #f0f0f0; /* Cambia el color de fondo del menú desplegable */
+/* Tarjetas principales */
+.card-app {
+  background-color: #232323 !important;
+  border: 1px solid #757575 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  color: #FFFFFF !important;
 }
 
-.dropdown-acciones .react-dropdown-select-item {
-  color: #333; /* Cambia el color del texto de las opciones */
+/* Inputs de formularios */
+.input-app {
+  background-color: #1A1A1A !important;
+  color: #FFFFFF !important;
+  border: 1px solid #757575 !important;
+  border-radius: 6px !important;
+  transition: border 0.2s;
+}
+.input-app:focus {
+  border-color: #4CAF50 !important;
+  box-shadow: 0 0 0 0.2rem rgba(76,175,80,.25);
 }
 
-.dropdown-acciones .react-dropdown-select-item:hover {
-  background-color: #e0e0e0; /* Cambia el color de fondo al pasar el mouse */
+/* Botón principal */
+.btn-app-primary {
+  background-color: #4CAF50 !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 6px !important;
+  transition: background 0.2s;
+}
+.btn-app-primary:hover, .btn-app-primary:focus {
+  background-color: #43a047 !important;
 }
 
+/* Botón de peligro */
+.btn-app-danger {
+  background-color: #FF4D4D !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 6px !important;
+  transition: background 0.2s;
+}
+.btn-app-danger:hover, .btn-app-danger:focus {
+  background-color: #d32f2f !important;
+}
 
-.grafica-donut{
-  width: 75vh;
-  height: 75vh;
-  margin: 0 auto;
+/* Botón secundario */
+.btn-app-secondary {
+  background-color: transparent !important;
+  color: #FFFFFF !important;
+  border: 1px solid #757575 !important;
+  border-radius: 6px !important;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-app-secondary:hover, .btn-app-secondary:focus {
+  background-color: #222 !important;
+  color: #4CAF50 !important;
+}
+
+/* Alerta de error personalizada */
+.alert-error {
+  background-color: #FF4D4D !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 6px !important;
+  margin-bottom: 1rem;
+}
+
+/* Textos de ganancias y pérdidas */
+.text-gain {
+  color: #4CAF50 !important;
+}
+.text-loss {
+  color: #FF4D4D !important;
+}
+
+/* Enlaces */
+.link-app {
+  color: #4CAF50 !important;
+  text-decoration: none;
+}
+.link-app:hover {
+  text-decoration: underline;
+  color: #388e3c !important;
+}
+
+/* Modal personalizado */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 9999;
 }
 
-.grafica-valores {
-  width: 90vh;
-  height: 90vh;
+.modal-container {
+  background-color: #232323;
+  border-radius: 10px;
+  border: 1px solid #757575;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+}
+
+/* Contenido de modales personalizado */
+.modal-content-app {
+  background-color: #232323 !important;
+  color: #FFFFFF !important;
+  border-radius: 10px !important;
+  border: none !important;
+}
+/* Contenedor grande para la gráfica donut */
+.grafica-donut-container-large {
+  height: 70vh;
+  max-height: 700px;
+  min-height: 500px;
+  width: 100%;
   margin: 0 auto;
-  display: flex; 
-  justify-content: center;
+  position: relative;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Forzar color blanco en la leyenda */
+.grafica-donut-wrapper .chartjs-legend,
+.grafica-donut-wrapper .chartjs-legend-item,
+.grafica-donut-wrapper .chartjs-legend-item-text {
+  color: #FFFFFF !important;
+}
+
+/* Asegurar que todos los textos de Chart.js sean blancos */
+.grafica-donut-wrapper canvas + div {
+  color: #FFFFFF !important;
+}
+
+/* Información adicional debajo de la gráfica */
+.grafica-info {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.info-text {
+  font-size: 0.85rem;
+  color: #B0B0B0;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Mejorar el wrapper de la gráfica */
+.grafica-donut-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Asegurar que el canvas tenga el espacio correcto */
+.grafica-donut-wrapper > div:first-child {
+  flex: 1;
+  position: relative;
+}
+
+.grafica-donut-wrapper canvas {
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+/* Responsive para leyendas largas */
+@media (max-width: 768px) {
+  .grafica-info .info-text {
+    font-size: 0.8rem;
+  }
+}
+
+
+
+/* Estilos para las tarjetas de activos */
+.activos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Tarjeta individual de activo */
+.activo-card {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+  border: 1px solid #757575;
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.activo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  border-color: #4CAF50;
+}
+
+.activo-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4CAF50, #45a049);
+}
+
+.activo-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding-top: 0.5rem;
+}
+
+.activo-nombre {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 0.5rem;
+}
+
+.activo-ticker {
+  font-size: 0.9rem;
+  color: #B0B0B0;
+  font-weight: 500;
+}
+
+.activo-precios {
+  margin-bottom: 1.5rem;
+}
+
+.precio-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.precio-label {
+  font-size: 0.9rem;
+  color: #E0E0E0;
+}
+
+.precio-valor {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.activo-configuracion {
+  margin-bottom: 1.5rem;
+}
+
+.config-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.config-label {
+  font-size: 0.85rem;
+  color: #B0B0B0;
+}
+
+.config-valor {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.activo-cambio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-weight: 600;
+  gap: 0.5rem;
+}
+
+.cambio-positivo {
+  background-color: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  color: #4CAF50;
+}
+
+.cambio-negativo {
+  background-color: rgba(255, 77, 77, 0.1);
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  color: #FF4D4D;
+}
+
+.cambio-icono {
+  font-size: 1.2rem;
+}
+
+.cambio-porcentaje {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.cambio-texto {
+  font-size: 0.9rem;
+  font-weight: 500;
 }

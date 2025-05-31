@@ -5,50 +5,57 @@ const TarjetaActivo = ({ activo }) => {
   const porcentaje = ((diferencia / activo.precio_inicial) * 100).toFixed(2);
 
   return (
-    <div className="card text-center mb-3" style={{ width: '18rem' }}>
-      <div className="card-body">
-        <h5 className="card-title">{activo.activo}</h5>
-        <p className="card-text">
-          <strong>Precio de compra:</strong> ${activo.precio_inicial.toFixed(2)}
-        </p>
-        <p className="card-text">
-          <strong>Precio actual:</strong>{' '}
-          <span className={diferencia >= 0 ? 'text-success fw-bold' : 'text-danger fw-bold'}>
+    <div className="activo-card">
+      <div className="activo-header">
+        <h5 className="activo-nombre">{activo.activo}</h5>
+        <div className="activo-ticker">#{activo.activo}</div>
+      </div>
+      
+      <div className="activo-precios">
+        <div className="precio-item">
+          <span className="precio-label">Precio de compra:</span>
+          <span className="precio-valor">${activo.precio_inicial.toFixed(2)}</span>
+        </div>
+        
+        <div className="precio-item">
+          <span className="precio-label">Precio actual:</span>
+          <span className={`precio-valor ${diferencia >= 0 ? 'text-gain' : 'text-loss'}`}>
             ${activo.precio_actual.toFixed(2)}
           </span>
-        </p>
-        <p>Take profit: {activo.take_profit.toFixed(2)}%  </p>
+        </div>
+      </div>
 
-        <p>Stop Loss:  {activo.stop_loss.toFixed(2)}%</p>
-   
-        <p className={ diferencia >= 0
-              ? 'text-success d-flex align-items-center justify-content-center'
-              : 'text-danger d-flex align-items-center justify-content-center'
-          }
->Cambio: 
-          {diferencia >= 0 ? " ↑" : " ↓"}
-          <span className="ms-2">{porcentaje}%</span>
-        </p>
+      <div className="activo-configuracion">
+        <div className="config-item">
+          <span className="config-label">Take Profit:</span>
+          <span className="config-valor text-gain">{activo.take_profit.toFixed(2)}%</span>
+        </div>
+        
+        <div className="config-item">
+          <span className="config-label">Stop Loss:</span>
+          <span className="config-valor text-loss">{activo.stop_loss.toFixed(2)}%</span>
+        </div>
+      </div>
 
+      <div className={`activo-cambio ${diferencia >= 0 ? 'cambio-positivo' : 'cambio-negativo'}`}>
+        <span className="cambio-icono">{diferencia >= 0 ? "↗" : "↘"}</span>
+        <span className="cambio-porcentaje">{Math.abs(porcentaje)}%</span>
+        <span className="cambio-texto">{diferencia >= 0 ? 'Ganancia' : 'Pérdida'}</span>
       </div>
     </div>
   );
 };
 
-const listaActivos = ({ data }) => {
+const ListaActivos = ({ data }) => {
   const activos = data.filter((item) => item.activo !== 'Saldo');
 
   return (
-    <div className="container mt-4">
-      <div className="row justify-content-center">
-        {activos.map((activo, index) => (
-          <div key={index} className="col-md-4 d-flex justify-content-center">
-            <TarjetaActivo activo={activo} />
-          </div>
-        ))}
-      </div>
+    <div className="activos-grid">
+      {activos.map((activo, index) => (
+        <TarjetaActivo key={index} activo={activo} />
+      ))}
     </div>
   );
 };
 
-export default listaActivos;
+export default ListaActivos;

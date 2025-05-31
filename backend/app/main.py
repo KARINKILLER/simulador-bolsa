@@ -85,10 +85,14 @@ async def login(request: Request, username: str = Body(...), password: str = Bod
             request.session["username"] = username
             print(request.session["username"])
             return {"message": "Inicio de sesión exitoso"}
-        raise HTTPException(401, "Credenciales incorrectas")
+        else:
+            raise HTTPException(status_code=401, detail="Credenciales incorrectas")
+    except HTTPException:
+        # Re-lanzar HTTPExceptions para que mantengan su status code
+        raise
     except Exception as e:
         print(f"Error en login: {e}")
-        raise HTTPException(500, e)
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
 
 @app.post("/logout")
 async def logout(request: Request):
@@ -109,13 +113,23 @@ async def session_status(request: Request):
 
 @app.post("/register")
 async def register(email: str = Body(...), username: str = Body(...), password: str = Body(...)):
-    print("Hemos entrado en la función register!!")
     try:
-        registrado = await registrarUsuario(email, username, password)
+        await registrarUsuario(email, username, password)
         return {"message": "Usuario registrado correctamente", "username": username}
+    except asyncpg.UniqueViolationError:
+        raise HTTPException(status_code=409, detail="El nombre de usuario o correo electrónico ya están en uso")
     except Exception as e:
         print(f"Error en la ruta /register: {e}")
         raise HTTPException(status_code=500, detail="Error interno del servidor")
+
+            
+    except HTTPException:
+        # Re-lanzar HTTPExceptions para mantener el status code
+        raise
+    except Exception as e:
+        print(f"Error en la ruta /register: {e}")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
+
     
 @app.get("/consult")
 async def consult(activo: str, periodo: str):

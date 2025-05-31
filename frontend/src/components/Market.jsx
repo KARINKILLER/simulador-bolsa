@@ -4,7 +4,6 @@ import Select from 'react-dropdown-select';
 import Grafica from './Grafica';
 import Modal from './Modal';
 
-
 const Market = () => {
   const navigate = useNavigate();
 
@@ -14,15 +13,13 @@ const Market = () => {
       .then(data => {
         console.log(data);
         if (!data.authenticated) {
-          navigate("/error"); // Redirige si no hay sesión
+          navigate("/error");
         }
       })
       .catch(error => {
-        // En caso de error de red, también redirige
         navigate("/error");
       });
   }, [navigate]);
-
 
   const [opcion, setOpcion] = useState('');
   const [seleccion, setSeleccion] = useState(false);
@@ -40,8 +37,6 @@ const Market = () => {
   const [cantidadDisponible, setCantidadDisponible] = useState(0);
   const [numAcciones, setNumAcciones] = useState(0);
   const [accionDisponible, setAccionDisponible] = useState(false);
-  
-
 
   const opcionesAcciones = [
     { value: 1, label: 'Apple (AAPL)', ticker: 'AAPL' },
@@ -86,27 +81,55 @@ const Market = () => {
     { value: 40, label: 'Dogecoin (DOGE)', ticker: 'DOGE' },
     { value: 41, label: 'Cardano (ADA)', ticker: 'ADA' },
     { value: 42, label: 'Monero (XMR)', ticker: 'XMR' }
-    ]
-  
+  ]
 
   const opcionesTiempo = [
     { value: 1, label: '1 año', codigo:'anno'},
     { value: 2, label: '1 mes', codigo:'mes'},
     { value: 3, label: '1 semana', codigo:'semana'}]
 
-    
-    
+  const pedirDatos = async (ticker, codigoTiempo) => {
+    if (!ticker || !codigoTiempo) return;
+    setDatosCargando(true);
+    setDatosListos(false);
+
+    try {
+      const response = await fetch(`http://localhost:8000/consult?activo=${ticker}&periodo=${codigoTiempo}`);
+      
+      if (!response.ok) throw new Error(`Error: ${response.status}`);
+
+      const datosBackend = await response.json();
+      console.log("Petición correcta!")
+      console.log(typeof datosBackend)
+      console.log(datosBackend)
+      setDatosListos(true)
+      
+      setDatos(datosBackend);
+      setDatosCargando(false);
+
+    } catch (error) {
+      console.error("Error al obtener datos:", error);
+      setDatosCargando(false);
+    }
+  };
+
   const cambioAcciones = (values) => {
     if (values && values.length > 0) {
       setAccionSeleccionada(values[0].label);
       setTickerSeleccionado(values[0].ticker);
       actualizarOpcion(values[0].label, tiempoSeleccionado);
       setSeleccion(true);
+      
+      // Si ya hay un tiempo seleccionado, cargar datos automáticamente
+      if (codigoTiempoSeleccionado) {
+        pedirDatos(values[0].ticker, codigoTiempoSeleccionado);
+      }
     } else {
       setAccionSeleccionada('');
       setTickerSeleccionado('');
       actualizarOpcion('', tiempoSeleccionado);
       setSeleccion(false);
+      setDatosListos(false);
     }
   };
 
@@ -115,10 +138,16 @@ const Market = () => {
       setTiempoSeleccionado(values[0].label);
       setCodigoTiempoSeleccionado(values[0].codigo);
       actualizarOpcion(accionSeleccionada, values[0].label);
+      
+      // Si ya hay un activo seleccionado, cargar datos automáticamente
+      if (tickerSeleccionado) {
+        pedirDatos(tickerSeleccionado, values[0].codigo);
+      }
     } else {
       setTiempoSeleccionado('');
       setCodigoTiempoSeleccionado('');
       actualizarOpcion(accionSeleccionada, '');
+      setDatosListos(false);
     }
   };
 
@@ -146,33 +175,7 @@ const Market = () => {
     }
   };
 
-
-  const pedirDatos = async () => {
-    if (!tickerSeleccionado || !codigoTiempoSeleccionado) return;
-    setDatosCargando(true);
-
-    try {
-      const response = await fetch(`http://localhost:8000/consult?activo=${tickerSeleccionado}&periodo=${codigoTiempoSeleccionado}`);
-      
-      if (!response.ok) throw new Error(`Error: ${response.status}`);
-
-      const datosBackend = await response.json();
-      console.log("Petición correcta!")
-      console.log(typeof datosBackend)
-      console.log(datosBackend)
-      setDatosListos(true)
-      
-      setDatos(datosBackend);
-      setDatosCargando(false);
-
-    } catch (error) {
-      console.error("Error al obtener datos:", error);
-    }
-  };
-
-
   const preCompra = async () => {
-    //Petición para saber de cuánto dinero se dispone y cuanto vale una acción
     const response = await fetch(`http://localhost:8000/datos-pre-transaccion-compra?activo=${tickerSeleccionado}`, {credentials: 'include'});    
     if (!response.ok) throw new Error(`Error: ${response.status}`);
     const datosPreCompra = await response.json();
@@ -184,7 +187,8 @@ const Market = () => {
     console.log("Se va a comprar el siguiente activo:  " + tickerSeleccionado);
     setModalCompraOpen(true);
   };
-const confirmarCompra = async () => {
+
+  const confirmarCompra = async () => {
     const cantidadCompra = document.getElementById('cantidad-compra').value;
     const stopLoss = parseFloat(document.getElementById('stop-loss').value) || 0;
     const takeProfit = parseFloat(document.getElementById('take-profit').value) || 0;
@@ -212,8 +216,7 @@ const confirmarCompra = async () => {
     } catch (error) {
         console.error('Error:', error);
     }
-};
-
+  };
 
   const preVenta = async () => {
     console.log("Mirar si se tienen acciones y cuanto valen")
@@ -224,7 +227,6 @@ const confirmarCompra = async () => {
     setCantidadDisponible(datosPreVenta.cantidadDisponible);
     setNumAcciones(datosPreVenta.numAcciones);
     setModalVentaOpen(true);
-  
   }
 
   const confirmarVenta = async () => {
@@ -248,96 +250,103 @@ const confirmarCompra = async () => {
       document.getElementById(id).value = maximo;
     }
   }
+
+  const irAPerfil = () => {
+    navigate('/perfil');
+  };
+
   return (
-      <div className='container'>
+    <div className='container bg-app min-vh-100'>
 
-        <Modal isOpen = {modalVentaOpen}>
+      <Modal isOpen={modalVentaOpen}>
+        { (numAcciones>0) && (
+          <div className='modal-content-app p-4'>
+            <h2 className='mb-3'>Vas a vender acciones de {accionSeleccionada}</h2>
+            <h4 className='mb-3'>¿Cuánto dinero de este activo quieres vender?</h4>
+            <h5 className='mb-3'>Cantidad disponible: <span className='text-gain'>${cantidadDisponible}</span></h5>
+            <input placeholder="0" type='number' className='form-control input-app mb-3' id='cantidad-venta' step="1" max={cantidadDisponible} onBlur={() => ajustarMaximo('cantidad-venta', cantidadDisponible)} />
+            <div className='text-center'>
+              <button className='btn btn-app-primary me-2' onClick={confirmarVenta}>Confirmar</button>
+              <button className='btn btn-app-secondary' onClick={cerrarModalVenta}>Cancelar</button>
+            </div>
+          </div>
+        )}
+        { (numAcciones<=0) && (
+          <div className='modal-content-app p-4 text-center'>
+            <h2 className='mb-3'>No dispones del activo: {accionSeleccionada}</h2>
+            <button className='btn btn-app-secondary' onClick={cerrarModalVenta}>Aceptar</button>
+          </div>
+        )}
+      </Modal>
 
-          { (numAcciones>0) && (<div>
-            <h2>Vas a vender acciones de {accionSeleccionada}</h2>
-          <h4 info ='Cuando vendes un activo se transforma en saldo virtual'>¿Cuánto dinero de este activo quieres vender?</h4>
-          <h5>Cantidad disponible: ${cantidadDisponible}</h5>
-          <input placeholder = "0"  type='number' id='cantidad-venta' step = "1" max = {cantidadDisponible} onBlur={() => ajustarMaximo('cantidad-venta', cantidadDisponible)} ></input>
-          <button className='mt-2 mb-2 ms-2' onClick={confirmarVenta}>Confirmar</button>
-          <button className='mb-2 ms-2' onClick={cerrarModalVenta}>Cancelar</button>
-          <br></br></div>
-          )}
-          { (numAcciones<=0) && (<div className='text-center'>
-            <h2>No dispones del activo: {accionSeleccionada}</h2>
-            <button className='mb-2 mt-2' onClick={cerrarModalVenta}>Aceptar</button>
-            <br></br></div>)
-          
-          }
-         
-        
-        </Modal>
-
-
-        <Modal isOpen={modalCompraOpen}>
-                    <h2 title='El precio de la acción podría variar si se tarda en realizar la compra'>Vas a comprar el activo {accionSeleccionada} a ${precioActivo} &#9432;</h2>
-                    <h4>¿Cuánto dinero quieres gastarte? ($)</h4>
-                    <input type='number' min = '0' placeholder='0' id='cantidad-compra' step = "0.5" max = {saldoDisponible} onBlur={() => ajustarMaximo('cantidad-compra', saldoDisponible)} ></input>
-                    <h5 title='Stop loss y take profit: % que tiene que BAJAR o SUBIR un activo para ser vendido automáticamente. Si ya tenías un activo se sobreescribirá el stop loss y el take profit con los últimos valores que se reciban'>Configura tu stop loss y tu take profit (%) &#9432;</h5>
-                    <h6>Stop loss</h6>
-                    <input title='Si lo dejas vacío o en 0 no se ejecutarán acciones automáticas' type='number' step = "0.5" min = "0" id='stop-loss' placeholder='0' className='me-2'></input>
-                    <h6>Take profit</h6>
-                    <input title='Si lo dejas vacío o en 0 no se ejecutarán acciones automáticas' type='number' step = "0.5" min = "0" id='take-profit' placeholder='0'></input>
-                    <br></br>
-                    <button className='mt-2 mb-2 ms-2' onClick={confirmarCompra}>Confirmar</button>
-                    <button className='mb-2 ms-2' onClick={cerrarModalCompra}>Cancelar</button>
-                    <br></br>
-         </Modal>
-
-
-        <div className="mt-3 text-end display-box">
-          <Link to="/perfil">Ver Perfil</Link>
+      <Modal isOpen={modalCompraOpen}>
+        <div className='modal-content-app p-4'>
+          <h2 className='mb-3'>Vas a comprar el activo {accionSeleccionada} a <span className='text-gain'>${precioActivo}</span></h2>
+          <h4 className='mb-3'>¿Cuánto dinero quieres gastarte? ($)</h4>
+          <input type='number' min='0' placeholder='0' className='form-control input-app mb-3' id='cantidad-compra' step="0.5" max={saldoDisponible} onBlur={() => ajustarMaximo('cantidad-compra', saldoDisponible)} />
+          <h5 className='mb-3'>Configura tu stop loss y tu take profit (%)</h5>
+          <div className='row mb-3'>
+            <div className='col-6'>
+              <h6>Stop loss</h6>
+              <input type='number' step="0.5" min="0" className='form-control input-app' id='stop-loss' placeholder='0' />
+            </div>
+            <div className='col-6'>
+              <h6>Take profit</h6>
+              <input type='number' step="0.5" min="0" className='form-control input-app' id='take-profit' placeholder='0' />
+            </div>
+          </div>
+          <div className='text-center'>
+            <button className='btn btn-app-primary me-2' onClick={confirmarCompra}>Confirmar</button>
+            <button className='btn btn-app-secondary' onClick={cerrarModalCompra}>Cancelar</button>
+          </div>
         </div>
-        <div className='mt-3 row text-center'>
-          <div className='col'>
-            <Select
-              options={opcionesAcciones}
-              onChange={cambioAcciones}
-              placeholder="Selecciona un activo"
-              className="dropdown-acciones"
-              noDataRenderer={() => "No se han encontrado resultados"}        
-              />
-          </div>
-          <div className='col'>
-            <Select
-              options={opcionesTiempo}
-              onChange={cambioTiempo}
-              placeholder="Selecciona un lapso de tiempo"
-              className="dropdown-acciones"
-              noDataRenderer={() => "No se han encontrado resultados"}        
-              />
-          </div>
+      </Modal>
+
+      <div className="mt-3 text-end">
+        <button className='btn btn-app-primary' onClick={irAPerfil}>Ver tu perfil</button>
       </div>
+
+      <div className='mt-3 row text-center'>
+        <div className='col'>
+          <Select
+            options={opcionesAcciones}
+            onChange={cambioAcciones}
+            placeholder="Selecciona un activo"
+            className="dropdown-app"
+            noDataRenderer={() => "No se han encontrado resultados"}        
+          />
+        </div>
+        <div className='col'>
+          <Select
+            options={opcionesTiempo}
+            onChange={cambioTiempo}
+            placeholder="Selecciona un lapso de tiempo"
+            className="dropdown-app"
+            noDataRenderer={() => "No se han encontrado resultados"}        
+          />
+        </div>
+      </div>
+
       <div className='text-center mt-3'>
-      {(opcion) && (tiempoSeleccionado) && <button className = 'btn btn-primary' onClick={pedirDatos}>Consultar valores</button>}
-      {(opcion && <div className="mt-2 text-white">{opcion}</div>)}
-     </div>
-     <div className='text-center text-white'>
-     {datosListos && 
-      // <div className='grafica-valores'>
-        <Grafica datos={datos} />
-      // </div>
-      }
-      {datosCargando && <p>Cargando datos...</p>}
+        {opcion && <div className="mt-2 text-white">{opcion}</div>}
       </div>
-        <div className='row'>
-        <div id = 'placeholder' className='col-10'></div>
 
-
-          <div className='col-1 text-end mb-3 mt-2'>
-            {seleccion && <button className = 'btn btn-success' onClick={preCompra}>Comprar</button>}
-          </div>
-          {<div className='col-1 text-end mb-3 mt-2'>
-            {seleccion && <button className = 'btn btn-danger' onClick={preVenta}>Vender</button>}
-          </div>}
+      <div className='text-center'>
+        {datosListos && <Grafica datos={datos} />}
+        {datosCargando && <p className="text-white">Cargando datos...</p>}
       </div>
-     </div>
-   );
+
+      <div className='row'>
+        <div className='col-10'></div>
+        <div className='col-1 text-end mb-3 mt-2'>
+          {seleccion && <button className='btn btn-app-primary' onClick={preCompra}>Comprar</button>}
+        </div>
+        <div className='col-1 text-end mb-3 mt-2'>
+          {seleccion && <button className='btn btn-app-danger' onClick={preVenta}>Vender</button>}
+        </div>
+      </div>
+    </div>
+  );
 }
   
-  export default Market;
-  
+export default Market;

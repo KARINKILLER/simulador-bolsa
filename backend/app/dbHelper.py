@@ -46,22 +46,14 @@ async def validarLogin(username: str, password: str) -> bool:
         print(f"Error en loginValidation: {e}")
         return False
 
-async def registrarUsuario(email: str, username: str, password: str) -> str:
+async def registrarUsuario(email: str, username: str, password: str):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
 
-    try:
-        async with connection_pool.acquire() as connection:
-            query = "INSERT INTO usuarios (nombre_usuario, correo_electronico, contrasenna, saldo_virtual) VALUES ($1, $2, $3, 1000)"
-            password_hash = hash_password(password)
-            await connection.execute(query, username, email, password_hash)
-            return "Usuario registrado exitosamente"
-    except asyncpg.UniqueViolationError:
-        #Si ya existe ese correo o nombre de usuario en la base de datos devolvemos un error
-        return "No se pudo crear el usuario. El nombre de usuario o correo electrónico ya está en uso."
-    except Exception as e:
-        print(f"Error al registrar usuario: {e}")
-        return f"Error al registrar usuario: {str(e)}"
+    async with connection_pool.acquire() as connection:
+        query = "INSERT INTO usuarios (nombre_usuario, correo_electronico, contrasenna, saldo_virtual) VALUES ($1, $2, $3, 1000)"
+        password_hash = hash_password(password)
+        await connection.execute(query, username, email, password_hash)
     
 async def consultar_saldo_disponible(username: str) -> float:
     if not connection_pool:
@@ -244,7 +236,7 @@ async def cargarTodasLasTransacciones(username: str):
         async with connection_pool.acquire() as connection:
             query_id = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1"
             id_usuario = await connection.fetchval(query_id, username)
-            query = "SELECT simbolo_activo, tipo_transaccion, dinero_movido, precio, numero_acciones, creado_en FROM transacciones WHERE id_usuario = $1 ORDER BY creado_en DESC LIMIT 3"
+            query = "SELECT simbolo_activo, tipo_transaccion, dinero_movido, precio, numero_acciones, creado_en FROM transacciones WHERE id_usuario = $1 ORDER BY creado_en DESC"
             transacciones = await connection.fetch(query, id_usuario)
             lista_transacciones = [dict(transaccion) for transaccion in transacciones]
             return lista_transacciones

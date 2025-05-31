@@ -59,7 +59,6 @@ const Perfil = () => {
         cargarPerfil();
     }, [navigate]);
 
-    
     const preReinicio = () => {
         setModalOpen(true);
     }
@@ -85,6 +84,10 @@ const Perfil = () => {
     const irAMarket = () => {
         navigate('/market');
     };
+
+    const irATransacciones = () => {
+        navigate('/transacciones');
+    };
     
     const logout = async () => {
         try {
@@ -94,7 +97,7 @@ const Perfil = () => {
                 credentials: 'include' 
             });
             if (response.ok) {
-                window.location.href = '/'; // Redirigir a la página de inicio de sesión
+                window.location.href = '/';
             } else {
                 console.error('Error al cerrar sesión');
             }
@@ -103,53 +106,89 @@ const Perfil = () => {
         }
     }
 
-
     return (
-        <div className='container'>
+        <div className='container bg-app min-vh-100'>
+            <Modal isOpen={modalOpen}>
+                <div className='modal-content-app p-4 text-center'>
+                    <h2 className='mb-3'>¿Estás seguro de que quieres reiniciar tu cuenta?</h2>
+                    <p className='mb-4'>Si reinicias tu cuenta, perderás todo tu progreso y no podrás recuperarlo.</p>
+                    <button className='btn btn-app-primary me-2' onClick={reinicio}>Confirmar</button>
+                    <button className='btn btn-app-secondary' onClick={cerrarModal}>Cancelar</button>
+                </div>
+            </Modal>
 
-        <Modal isOpen={modalOpen}>
-                    <div className='text-center'>
-                        <h2>¿Estás seguro de que quieres reiniciar tu cuenta?</h2>
-                        <p>Si reinicias tu cuenta, perderás todo tu progreso y no podrás recuperarlo.</p>
-                        <button className='mt-2 mb-2 ms-2' onClick={reinicio}>Confirmar</button>
-                        <button className='mb-2 ms-2' onClick={cerrarModal}>Cancelar</button>
-                    </div>
-         </Modal>
-
-        <div className='container'>
-        <div className='mt-3 row'>
-        <button className='col-2 btn btn-primary' onClick={irAMarket}>
-                Volver al mercado
-            </button>
-        <p className='col-8'></p>
-        <button className='col-2 btn btn-danger' onClick={logout}>Cerrar sesión</button>
-        <div className='text-center text-white'>
-            <p>Nombre de usuario</p>
-            <h3>Fondos</h3>
-            <div className='grafica-donut'>
-                <GraficaDonut activos={datosActivos} options={{maintainAspectRatio: false}}/>
+            <div className='mt-3 row'>
+                <div className='col-12 col-md-6'>
+                    <button className='btn btn-app-primary' onClick={irAMarket}>
+                        Volver al mercado
+                    </button>
+                </div>
+                <div className='col-12 col-md-6 text-end'>
+                    <button className='btn btn-app-danger' onClick={logout}>Cerrar sesión</button>
+                </div>
             </div>
-            <h3 className='mt-2'>Saldo total</h3>
-            {datosActivos && (<p className='mt-2'> ${calcularSumaTotal(datosActivos)}</p>)}
-            <h3 className='mt-2'>Activos</h3>
-                {datosActivos && (
-                    <div className="mt-4">
-                        <ListaActivos data={datosActivos} />
+
+            <div className='text-center text-white mt-4'>
+                <h2 className='mb-4'>Mi Perfil</h2>
+                
+                <div className='row justify-content-center mb-4'>
+                    <div className='col-12'>
+                        <div className='card card-app p-4'>
+                            <h3 className='mb-3'>Fondos</h3>
+                            <div className='grafica-donut-container-large'>
+                                <GraficaDonut activos={datosActivos} />
+                            </div>
+                        </div>
                     </div>
-                )}
-            <p className='mt-2'>Últimas transacciones:</p>
-            {transaccionesDisponibles && <ListaTransacciones transacciones={datosTransacciones} />}
-            {!transaccionesDisponibles && <p>Cargando transacciones...</p>}
+                </div>
 
-            <Link to ="/transacciones">Consultar historial de transacciones</Link>
-            <br></br>
-            <button className='btn btn-danger mt-4 mb-4' onClick={preReinicio}>Reiniciar cuenta</button>
+                <div className='row justify-content-center mb-4'>
+                    <div className='col-12 col-md-8 col-lg-6'>
+                        <div className='card card-app p-4'>
+                            <h3 className='mb-3'>Saldo total</h3>
+                            {datosActivos && (
+                                <h4 className='text-gain'>${calcularSumaTotal(datosActivos)}</h4>
+                            )}
+                        </div>
+                    </div>
+                </div>
 
-        </div>
-        </div>
-        </div>
-        </div>
+                <div className='row justify-content-center mb-4'>
+                    <div className='col-12'>
+                        <div className='card card-app p-4'>
+                            <h3 className='mb-3'>Activos</h3>
+                            {datosActivos && (
+                                <div className="mt-3">
+                                    <ListaActivos data={datosActivos} />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
 
+                <div className='row justify-content-center mb-4'>
+                    <div className='col-12'>
+                        <div className='card card-app p-4'>
+                            <h3 className='mb-3'>Últimas transacciones</h3>
+                            {transaccionesDisponibles && <ListaTransacciones transacciones={datosTransacciones} />}
+                            {!transaccionesDisponibles && <p>Cargando transacciones...</p>}
+                            
+                            <div className='mt-3'>
+                                <button className='btn btn-app-primary' onClick={irATransacciones}>
+                                    Ver historial completo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className='text-center mb-4'>
+                    <button className='btn btn-app-danger' onClick={preReinicio}>
+                        Reiniciar cuenta
+                    </button>
+                </div>
+            </div>
+        </div>
     );
 }
 
