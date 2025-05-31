@@ -11,7 +11,7 @@ const Error = () => {
     return (
         <div className='text-center mt-5'>
             <p className='text-white'>Parece que ha habido un error, si el error persiste contacta a un administrador</p>
-            <button  onClick={irALogin}>
+            <button className='btn btn-primary' onClick={irALogin}>
                 Ir a Login
             </button>
         </div>

@@ -80,6 +80,10 @@ const Perfil = () => {
           .reduce((total, activo) => total + activo.valor, 0)
           .toFixed(2);
       };
+
+    const irAMarket = () => {
+        navigate('/market');
+    };
     
     const logout = async () => {
         try {
@@ -98,6 +102,7 @@ const Perfil = () => {
         }
     }
 
+
     return (
         <div className='container'>
 
@@ -112,8 +117,10 @@ const Perfil = () => {
 
         <div className='container'>
         <div className='mt-3 row'>
-        <Link className='col' to="/market">Volver</Link>
-        <p className='col-9'></p>
+        <button className='col-2 btn btn-primary' onClick={irAMarket}>
+                Volver al mercado
+            </button>
+        <p className='col-8'></p>
         <button className='col-2 btn btn-danger' onClick={logout}>Cerrar sesión</button>
         <div className='text-center text-white'>
             <p>Nombre de usuario</p>

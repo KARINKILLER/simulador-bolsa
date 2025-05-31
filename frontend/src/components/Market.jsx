@@ -225,12 +225,12 @@ const confirmarCompra = async () => {
     setCantidadDisponible(datosPreVenta.cantidadDisponible);
     setNumAcciones(datosPreVenta.numAcciones);
     setModalVentaOpen(true);
-    
+  
   }
 
   const confirmarVenta = async () => {
     const cantidadVenta = document.getElementById('cantidad-venta').value;
-    const response = await fetch(`http://localhost:8000/vender-acciones?activo=${tickerSeleccionado}& cantidad=${cantidadVenta}`, {credentials: 'include', method: 'POST'});
+    const response = await fetch(`http://localhost:8000/vender-acciones?activo=${tickerSeleccionado}&cantidad=${cantidadVenta}`, {credentials: 'include', method: 'POST'});
     if (!response.ok) throw new Error(`Error: ${response.status}`);
     cerrarModalVenta();
   }
@@ -291,7 +291,7 @@ const confirmarCompra = async () => {
 
 
         <div className="mt-3 text-end display-box">
-          <Link to="/perfil">Perfil</Link>
+          <Link to="/perfil">Ver Perfil</Link>
         </div>
         <div className='mt-3 row text-center'>
           <div className='col'>
@@ -314,8 +314,8 @@ const confirmarCompra = async () => {
           </div>
       </div>
       <div className='text-center mt-3'>
-      {(opcion) && (tiempoSeleccionado) && <button onClick={pedirDatos}>Consultar valores</button>}
-      {(opcion && <div className="text-white">{opcion}</div>)}
+      {(opcion) && (tiempoSeleccionado) && <button className = 'btn btn-primary' onClick={pedirDatos}>Consultar valores</button>}
+      {(opcion && <div className="mt-2 text-white">{opcion}</div>)}
      </div>
      <div className='text-center text-white'>
      {datosListos && 
