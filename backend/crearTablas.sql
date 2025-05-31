@@ -30,7 +30,7 @@ CREATE TABLE transacciones (
     id_usuario INT REFERENCES usuarios(id_usuario) ON DELETE CASCADE,  
     simbolo_activo VARCHAR(10) NOT NULL,     
     tipo_transaccion VARCHAR(10) NOT NULL CHECK (tipo_transaccion IN ('compra', 'venta')), 
-    dinero_gastado NUMERIC(15, 4) NOT NULL,       
+    dinero_movido NUMERIC(15, 4) NOT NULL,       
     precio NUMERIC(15, 4) NOT NULL,          
     numero_acciones NUMERIC(15, 4) NOT NULL,     
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
