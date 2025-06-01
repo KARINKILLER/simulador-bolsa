@@ -9,11 +9,24 @@ const Error = () => {
     };
 
     return (
-        <div className='text-center mt-5'>
-            <p className='text-white'>Parece que ha habido un error, si el error persiste contacta a un administrador</p>
-            <button className='btn btn-primary' onClick={irALogin}>
-                Ir a Login
-            </button>
+        <div className='container bg-app min-vh-100 d-flex align-items-center justify-content-center'>
+            <div className='error-container-simple'>
+                <div className='card card-app p-4 text-center'>
+                    <div className='mb-3'>
+                       <h1>:(</h1>
+                    </div>
+                    
+                    <h2 className='mb-3'>Algo salió mal</h2>
+                    
+                    <p className='error-message-simple mb-4'>
+                        Ha ocurrido un error. Por favor, inicia sesión nuevamente.
+                    </p>
+                    
+                    <button className='btn btn-app-primary' onClick={irALogin}>
+                        Ir al Login
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };

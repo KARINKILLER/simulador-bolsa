@@ -1,7 +1,6 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend} from 'chart.js';
-import plugin from 'eslint-plugin-react';
 
 ChartJS.register(
   CategoryScale,
@@ -17,7 +16,11 @@ function Grafica({ datos }) {
   const datosArray = datos.datos || [];
 
   if (datosArray.length === 0) {
-    return <div>No hay datos disponibles para graficar</div>;
+    return (
+      <div className="grafica-sin-datos">
+        <p>No hay datos disponibles para graficar</p>
+      </div>
+    );
   }
 
   const labels = datosArray.map(d => d.fecha);
@@ -38,12 +41,12 @@ function Grafica({ datos }) {
       pointHitRadius: 20,     
       showLine: true,         
       borderWidth: 2          
-
     }]
   };
   
   const options = {
-    // maintainAspectRatio: false,
+    responsive: true,
+    maintainAspectRatio: false, 
     interaction:{
       mode: 'index',
       intersect: false,
@@ -53,14 +56,25 @@ function Grafica({ datos }) {
       y: {
         beginAtZero: false,
         ticks: {
+          color: '#FFFFFF', // Color blanco para los ticks
           callback: (value) => {
             return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
           }
-        }
-      }
+        },
+      },
     },
     plugins: {
+      legend: {
+        labels: {
+          color: '#FFFFFF' // Color blanco para la leyenda
+        }
+      },
       tooltip: {
+        backgroundColor: '#232323',
+        titleColor: '#FFFFFF',
+        bodyColor: '#FFFFFF',
+        borderColor: '#757575',
+        borderWidth: 1,
         callbacks: {
           label: (context) => {
             let label;
@@ -74,9 +88,8 @@ function Grafica({ datos }) {
     }
   };
   
-
   return (
-    <div>
+    <div className="grafica-line-container">
       <Line data={data} options={options} />
     </div>
   );
