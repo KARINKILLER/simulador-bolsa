@@ -113,11 +113,11 @@ async def actualizar_cartera(username: str, activo: str, cantidad: float, precio
                 
                 # Si ya existe un registro para este activo, actualizamos la cantidad y el precio promedio
                 if registro_actual:
-                    num_acciones_actual = registro_actual['numero_acciones']
-                    precio_actual = registro_actual['precio_promedio_compra']
+                    num_acciones_actual = float(registro_actual['numero_acciones'])
+                    precio_actual = float(registro_actual['precio_promedio_compra'])
                     
                     nuevo_num_acciones_total = float(numAcciones) + float(num_acciones_actual)
-                    nuevo_precio_promedio = (float(num_acciones_actual * precio_actual) + float(numAcciones * precio)) / nuevo_num_acciones_total
+                    nuevo_precio_promedio = (float(num_acciones_actual * precio_actual) + float(float(numAcciones) * precio)) / nuevo_num_acciones_total
                     
                     nuevo_num_acciones_total = Decimal.from_float(nuevo_num_acciones_total).quantize(Decimal('0.00001'))
                     query_actualizar = "UPDATE cartera SET numero_acciones = $1, precio_promedio_compra = $2, stop_loss = $3, take_profit = $4 WHERE id_usuario = $5 AND simbolo_activo = $6"
