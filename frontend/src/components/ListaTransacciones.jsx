@@ -86,7 +86,7 @@ const ListaTransacciones = ({ transacciones }) => {
                             {nombreActivo} ({transaction.simbolo_activo})
                         </div>
                         
-                        <div className={`transaccion-dinero ${esCompra ? 'dinero-compra' : 'dinero-venta'}`}>
+                        <div className={`transaccion-dinero ${esCompra ? 'tipo-compra' : 'tipo-venta'}`}>
                             ${parseFloat(transaction.dinero_movido).toFixed(2)}
                         </div>
                         

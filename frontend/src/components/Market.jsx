@@ -308,22 +308,10 @@ const Market = () => {
 
       <div className='mt-3 row text-center'>
         <div className='col'>
-          <Select
-            options={opcionesAcciones}
-            onChange={cambioAcciones}
-            placeholder="Selecciona un activo"
-            className="dropdown-app"
-            noDataRenderer={() => "No se han encontrado resultados"}        
-          />
+          <Select options={opcionesAcciones} onChange={cambioAcciones} placeholder="Selecciona un activo" className="dropdown-app" noDataRenderer={() => "No se han encontrado resultados"} />
         </div>
         <div className='col'>
-          <Select
-            options={opcionesTiempo}
-            onChange={cambioTiempo}
-            placeholder="Selecciona un lapso de tiempo"
-            className="dropdown-app"
-            noDataRenderer={() => "No se han encontrado resultados"}        
-          />
+          <Select options={opcionesTiempo} onChange={cambioTiempo} placeholder="Selecciona un lapso de tiempo" className="dropdown-app" noDataRenderer={() => "No se han encontrado resultados"}/>
         </div>
       </div>
 

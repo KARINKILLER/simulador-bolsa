@@ -148,11 +148,6 @@ function GraficaDonut({ activos }) {
   return (
     <div className="grafica-donut-wrapper">
       <Doughnut data={data} options={opciones} />
-      <div className="grafica-info">
-        <p className="info-text">
-          Mostrando {activosOrdenados.length} elementos en la distribución de activos.
-        </p>
-      </div>
     </div>
   );
 }

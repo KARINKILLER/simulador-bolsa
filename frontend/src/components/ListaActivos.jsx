@@ -59,7 +59,7 @@ const TarjetaActivo = ({ activo }) => {
 
 
   return (
-    <div className="activo-card">
+    <div className={`activo-card ${diferencia >= 0 ? 'activo-ganancia' : 'activo-perdida'}`}>
       <div className="activo-header">
         <h5 className="activo-nombre">{nombreActivo}</h5>
       </div>

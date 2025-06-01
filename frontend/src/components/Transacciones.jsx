@@ -64,7 +64,7 @@ const Transacciones = () => {
                 
                 <div className='row justify-content-center'>
                     <div className='col-12 col-lg-10'>
-                        <div className='card card-app p-4'>
+                        <div className='card card-app p-4 mb-3'>
                             {transaccionesDisponibles && <ListaTransacciones transacciones={datosTransacciones} />}
                             {!transaccionesDisponibles && <p>Cargando transacciones...</p>}
                         </div>

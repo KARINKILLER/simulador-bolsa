@@ -1,21 +1,18 @@
-/* Fondo general de la app */
 body, .bg-app {
   background-color: #1A1A1A !important;
   color: #FFFFFF !important;
-    overflow-y: auto !important; 
-
+  overflow-y: auto !important; 
 }
 
-/* Tarjetas principales */
+ 
 .card-app {
   background-color: #232323 !important;
   border: 1px solid #757575 !important;
   border-radius: 12px !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   color: #FFFFFF !important;
 }
 
-/* Inputs de formularios */
+ 
 .input-app {
   background-color: #1A1A1A !important;
   color: #FFFFFF !important;
@@ -25,30 +22,29 @@ body, .bg-app {
 }
 .input-app:focus {
   border-color: #4CAF50 !important;
-  box-shadow: 0 0 0 0.2rem rgba(76,175,80,.25);
 }
 
 .input-app::placeholder {
   color: #B0B0B0 !important;
 }
 
-/* Botón principal */
+ 
+/* BOTONES */
+
 .btn-app-primary {
   background-color: #4CAF50 !important;
   color: #FFFFFF !important;
-  border: none !important;
   border-radius: 6px !important;
   transition: background 0.2s;
 }
+
 .btn-app-primary:hover, .btn-app-primary:focus {
   background-color: #43a047 !important;
 }
-
-/* Botón de peligro */
+ 
 .btn-app-danger {
   background-color: #FF4D4D !important;
   color: #FFFFFF !important;
-  border: none !important;
   border-radius: 6px !important;
   transition: background 0.2s;
 }
@@ -56,7 +52,7 @@ body, .bg-app {
   background-color: #d32f2f !important;
 }
 
-/* Botón secundario */
+ 
 .btn-app-secondary {
   background-color: transparent !important;
   color: #FFFFFF !important;
@@ -69,7 +65,9 @@ body, .bg-app {
   color: #4CAF50 !important;
 }
 
-/* Alerta de error personalizada */
+/* END OF BOTONES */
+
+ 
 .alert-error {
   background-color: #FF4D4D !important;
   color: #FFFFFF !important;
@@ -78,7 +76,7 @@ body, .bg-app {
   margin-bottom: 1rem;
 }
 
-/* Textos de ganancias y pérdidas */
+ 
 .text-gain {
   color: #4CAF50 !important;
 }
@@ -86,23 +84,23 @@ body, .bg-app {
   color: #FF4D4D !important;
 }
 
-/* Enlaces */
 .link-app {
   color: #4CAF50 !important;
   text-decoration: none;
 }
+
 .link-app:hover {
   text-decoration: underline;
   color: #388e3c !important;
 }
 
-/* Contenedor simple de error */
+ 
 .error-container-simple {
   max-width: 400px;
   width: 100%;
 }
 
-/* Mensaje simple de error */
+ 
 .error-message-simple {
   color: #B0B0B0;
   font-size: 1rem;
@@ -110,14 +108,13 @@ body, .bg-app {
 }
 
 
-/* Modal personalizado */
+ /* MODALES */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.7);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   display: flex;
@@ -130,20 +127,22 @@ body, .bg-app {
   background-color: #232323;
   border-radius: 10px;
   border: 1px solid #757575;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
   max-width: 90%;
   max-height: 90%;
   overflow-y: auto;
 }
 
-/* Contenido de modales personalizado */
+ 
 .modal-content-app {
   background-color: #232323 !important;
   color: #FFFFFF !important;
   border-radius: 10px !important;
-  border: none !important;
 }
-/* Contenedor grande para la gráfica donut */
+
+ /* END OF MODALES */
+
+  /* GRÁFICA DONUT */
+ 
 .grafica-donut-container-large {
   height: 70vh;
   max-height: 700px;
@@ -157,32 +156,18 @@ body, .bg-app {
   padding: 1rem;
 }
 
-/* Forzar color blanco en la leyenda */
 .grafica-donut-wrapper .chartjs-legend,
 .grafica-donut-wrapper .chartjs-legend-item,
 .grafica-donut-wrapper .chartjs-legend-item-text {
   color: #FFFFFF !important;
 }
 
-/* Asegurar que todos los textos de Chart.js sean blancos */
+ 
 .grafica-donut-wrapper canvas + div {
   color: #FFFFFF !important;
 }
 
-/* Información adicional debajo de la gráfica */
-.grafica-info {
-  margin-top: 1rem;
-  text-align: center;
-}
-
-.info-text {
-  font-size: 0.85rem;
-  color: #B0B0B0;
-  margin: 0;
-  font-style: italic;
-}
-
-/* Mejorar el wrapper de la gráfica */
+ 
 .grafica-donut-wrapper {
   width: 100%;
   height: 100%;
@@ -191,7 +176,7 @@ body, .bg-app {
   flex-direction: column;
 }
 
-/* Asegurar que el canvas tenga el espacio correcto */
+ 
 .grafica-donut-wrapper > div:first-child {
   flex: 1;
   position: relative;
@@ -202,16 +187,15 @@ body, .bg-app {
   max-height: 100% !important;
 }
 
-/* Responsive para leyendas largas */
-@media (max-width: 768px) {
-  .grafica-info .info-text {
-    font-size: 0.8rem;
-  }
-}
 
-/* Contenedor de la gráfica de línea - más pequeño */
+ /* END OF GRÁFICA DONUT */
+
+  /* GRÁFICA NORMAL */
+
+
+ 
 .grafica-line-container {
-  height: 100vh; /* Cambia este valor para ajustar el tamaño */
+  height: 100vh;  
   max-height: 65vh;
   min-height: 250px;
   width: 100%;
@@ -219,7 +203,7 @@ body, .bg-app {
   position: relative;
 }
 
-/* Estado sin datos para gráfica de línea */
+ 
 .grafica-sin-datos {
   display: flex;
   align-items: center;
@@ -229,25 +213,10 @@ body, .bg-app {
   font-size: 1rem;
 }
 
-/* Responsive para gráfica de línea */
-@media (max-width: 768px) {
-  .grafica-line-container {
-    height: 35vh;
-    min-height: 200px;
-  }
-}
+  /* END OF GRÁFICA NORMAL */
 
-@media (max-width: 576px) {
-  .grafica-line-container {
-    height: 30vh;
-    min-height: 180px;
-  }
-}
-
-
-
-
-/* Estilos para las tarjetas de activos */
+  /* TARJETAS DE ACTIVO */
+ 
 .activos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -255,24 +224,26 @@ body, .bg-app {
   margin-top: 1rem;
 }
 
-/* Tarjeta individual de activo */
+ 
 .activo-card {
-  background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+  background: #1e1e1e;
   border: 1px solid #757575;
   border-radius: 16px;
   padding: 1.5rem;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   position: relative;
   overflow: hidden;
 }
 
-.activo-card:hover {
+.activo-ganancia:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   border-color: #4CAF50;
 }
 
+.activo-perdida:hover {
+  transform: translateY(-4px);
+  border-color: #FF4D4D;
+}
 
 
 .activo-header {
@@ -375,44 +346,10 @@ body, .bg-app {
   font-weight: 500;
 }
 
-/* Estilos para transacciones */
-.transaccion-item {
-  background-color: #2a2a2a;
-  border: 1px solid #757575;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 0.5rem;
-  transition: all 0.2s ease;
-}
+  /* END OF TARJETAS DE ACTIVO */
+ 
 
-.transaccion-item:hover {
-  background-color: #2f2f2f;
-  border-color: #4CAF50;
-}
-
-.transaccion-tipo-compra {
-  border-left: 4px solid #4CAF50;
-}
-
-.transaccion-tipo-venta {
-  border-left: 4px solid #FF4D4D;
-}
-
-.transaccion-fecha {
-  font-size: 0.85rem;
-  color: #B0B0B0;
-}
-
-.transaccion-activo {
-  font-weight: 600;
-  color: #FFFFFF;
-}
-
-.transaccion-cantidad {
-  color: #E0E0E0;
-}
-
-/* Estilos para react-dropdown-select */
+ 
 .dropdown-app .react-dropdown-select {
   background-color: #232323 !important;
   border: 1px solid #757575 !important;
@@ -432,14 +369,6 @@ body, .bg-app {
   padding: 8px 12px;
 }
 
-.dropdown-app .react-dropdown-select-option:hover {
-  background-color: #4CAF50 !important;
-}
-
-.dropdown-app .react-dropdown-select-option.react-dropdown-select-option-selected {
-  background-color: #4CAF50 !important;
-}
-
 .dropdown-app .react-dropdown-select-input {
   color: #FFFFFF !important;
 }
@@ -449,33 +378,6 @@ body, .bg-app {
   color: #757575 !important;
 }
 
-.dropdown-app .react-dropdown-select-clear:hover,
-.dropdown-app .react-dropdown-select-dropdown-handle:hover {
-  color: #4CAF50 !important;
-}
-
-/* Asegurar que todos los textos sean blancos */
-.text-white {
-  color: #FFFFFF !important;
-}
-
-/* Responsive para tarjetas de activos */
-@media (max-width: 768px) {
-  .activos-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .activo-card {
-    padding: 1rem;
-  }
-  
-  .activo-nombre {
-    font-size: 1.1rem;
-  }
-}
-
-/* Grid de transacciones - una por fila */
 .transacciones-grid {
   display: flex;
   flex-direction: column;
@@ -483,8 +385,8 @@ body, .bg-app {
   width: 100%;
 }
 
-/* Tarjeta compacta de transacción - fila completa */
 .transaccion-card-compacta {
+  background: #1e1e1e;
   border: 1px solid #757575;
   border-radius: 8px;
   padding: 1rem;
@@ -496,7 +398,6 @@ body, .bg-app {
 }
 
 
-
 .transaccion-compra {
   border-left: 4px solid #4CAF50;
 }
@@ -505,19 +406,18 @@ body, .bg-app {
 .transaccion-compra:hover {
   border-color: #4CAF50 !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+
+.transaccion-venta {
+  border-left: 4px solid #FF4D4D;
 }
 
 .transaccion-venta:hover {
   border-color: #FF4D4D !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-}
-.transaccion-venta {
-  border-left: 4px solid #FF4D4D;
 }
 
-/* Contenido centrado */
+ 
 .transaccion-contenido {
   max-width: 300px;
   text-align: center;
@@ -526,13 +426,9 @@ body, .bg-app {
   gap: 0.4rem;
 }
 
-/* Tipo de transacción */
 .transaccion-tipo {
   font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 0.1rem;
 }
 
 .tipo-compra {
@@ -543,82 +439,36 @@ body, .bg-app {
   color: #FF4D4D;
 }
 
-/* Activo */
+
 .transaccion-activo {
   font-size: 0.9rem;
   font-weight: 600;
   color: #FFFFFF;
   line-height: 1.2;
-  margin-bottom: 0.1rem;
 }
 
-/* Dinero */
+
 .transaccion-dinero {
   font-size: 1.1rem;
   font-weight: 700;
-  margin-bottom: 0.1rem;
 }
 
-.dinero-compra {
-  color: #4CAF50;
-}
-
-.dinero-venta {
-  color: #FF4D4D;
-}
-
-/* Acciones */
 .transaccion-acciones {
   font-size: 0.85rem;
   color: #E0E0E0;
   font-weight: 500;
-  margin-bottom: 0.1rem;
 }
 
-/* Fecha */
+
 .transaccion-fecha {
   font-size: 0.75rem;
   color: #B0B0B0;
   font-weight: 400;
 }
 
-/* Estado vacío */
+ 
 .transacciones-vacio {
   text-align: center;
   padding: 3rem 1rem;
   color: #B0B0B0;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .transaccion-card-compacta {
-    padding: 0.8rem;
-  }
-  
-  .transaccion-contenido {
-    max-width: 250px;
-    gap: 0.3rem;
-  }
-  
-  .transaccion-activo {
-    font-size: 0.8rem;
-  }
-  
-  .transaccion-dinero {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .transaccion-contenido {
-    max-width: 200px;
-  }
-  
-  .transaccion-tipo {
-    font-size: 0.75rem;
-  }
-  
-  .transaccion-activo {
-    font-size: 0.85rem;
-  }
 }
