@@ -169,7 +169,6 @@ async def cargarPerfil(username: str):
             query_id = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1"
             id_usuario = await connection.fetchval(query_id, username)
             
-            # Modificamos la consulta para incluir el precio_promedio_compra
             query_activos = """
                 SELECT simbolo_activo, numero_acciones, precio_promedio_compra, stop_loss, take_profit
                 FROM cartera 
@@ -177,7 +176,6 @@ async def cargarPerfil(username: str):
             """
             activos = await connection.fetch(query_activos, id_usuario)
             
-            # Inicializamos con el saldo disponible
             datos_activos = [
                 {"activo": "Saldo", "valor": float(saldo['saldo_virtual']), "stop_loss": 0, "take_profit": 0}
             ]
@@ -186,6 +184,7 @@ async def cargarPerfil(username: str):
             for activo in activos:
                 simbolo = activo['simbolo_activo']
                 cantidad_invertida = float(activo['numero_acciones'] * activo['precio_promedio_compra'])
+                cantidad_invertida = round(cantidad_invertida,4)
                 precio_promedio = float(activo['precio_promedio_compra'])
                 
                 num_acciones = float(activo['numero_acciones'])
@@ -195,10 +194,13 @@ async def cargarPerfil(username: str):
                 
                 # Calculamos el valor total actual (num_acciones * precio_actual)
                 valor_total_actual = round(num_acciones * precio_actual,4)
+
+                
                 
                 datos_activos.append({
                     "activo": simbolo,
                     "valor": valor_total_actual,
+                    "cantidad_invertida": cantidad_invertida,
                     "precio_actual": precio_actual,
                     "precio_inicial": precio_promedio,
                     "stop_loss": activo['stop_loss'],

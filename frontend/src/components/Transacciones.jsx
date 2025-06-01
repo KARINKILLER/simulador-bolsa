@@ -47,9 +47,13 @@ const Transacciones = () => {
         cargarTransacciones();
     }, [navigate]);
 
+    const irAPerfil = () => {
+        navigate("/perfil");
+    }
     return (
         <div className='container mt-3'>
-            <Link className='text-start' to="/perfil">Volver al perfil</Link>
+            <button className='btn btn-app-primary' onClick={irAPerfil}> Volver al perfil</button>
+
             <div className='text-center text-white'>
                 <h1>Historial de transacciones</h1>
                 {transaccionesDisponibles && <ListaTransacciones transacciones={datosTransacciones} />}
