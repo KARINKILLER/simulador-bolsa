@@ -73,6 +73,15 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <div className="fixed-bottom py-3">
+        <div className="container text-center">
+          © 2025 UAH   
+          <Link to="/terms" className="ms-3 link-app">
+            Términos y Condiciones
+          </Link>
+        </div>
+</div>
+
     </div>
   );
 };

@@ -7,6 +7,7 @@ import Perfil from './components/Perfil';
 import Transacciones from './components/Transacciones';
 import Help from './components/Help';
 import Error from './components/Error';
+import Terms from './components/Terms';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/help" element={<Help />} />
         <Route path="/transacciones" element={<Transacciones />} />
         <Route path="/error" element={<Error />} />
+        <Route path="/terms" element={<Terms />} />
       </Routes>
     </Router>
   );
