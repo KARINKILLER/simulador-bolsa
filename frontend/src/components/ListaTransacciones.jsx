@@ -76,28 +76,26 @@ const ListaTransacciones = ({ transacciones }) => {
             const esCompra = transaction.tipo_transaccion === 'compra';
             
             return (
-                <div key={index} className={`transaccion-item ${esCompra ? 'transaccion-compra' : 'transaccion-venta'}`}>
-                    <div className="transaccion-main">
-                        <div className="transaccion-info">
-                            <div className="transaccion-activo">
-                                <span className="activo-nombre">{nombreActivo}</span>
-                                <span className="activo-ticker">({transaction.simbolo_activo})</span>
-                            </div>
-                            <div className="transaccion-fecha">{fecha}</div>
+                <div key={index} className={`transaccion-card-compacta ${esCompra ? 'transaccion-compra' : 'transaccion-venta'}`}>
+                    <div className="transaccion-contenido">
+                        <div className={`transaccion-tipo ${esCompra ? 'tipo-compra' : 'tipo-venta'}`}>
+                            {esCompra ? 'COMPRA' : 'VENTA'}
                         </div>
                         
-                        <div className="transaccion-datos">
-                            <div className="transaccion-tipo">
-                                <span className= {esCompra ? 'tipo-compra' : 'tipo-venta'}>
-                                    {esCompra ? 'COMPRA' : 'VENTA'}
-                                </span>
-                            </div>
-                            <div className="transaccion-cantidad">
-                                {transaction.numero_acciones} acciones
-                            </div>
-                            <div className={`transaccion-valor ${esCompra ? 'valor-compra' : 'valor-venta'}`}>
-                                ${parseFloat(transaction.dinero_movido).toFixed(2)}
-                            </div>
+                        <div className="transaccion-activo">
+                            {nombreActivo} ({transaction.simbolo_activo})
+                        </div>
+                        
+                        <div className={`transaccion-dinero ${esCompra ? 'dinero-compra' : 'dinero-venta'}`}>
+                            ${parseFloat(transaction.dinero_movido).toFixed(2)}
+                        </div>
+                        
+                        <div className="transaccion-acciones">
+                            {transaction.numero_acciones} acciones
+                        </div>
+                        
+                        <div className="transaccion-fecha">
+                            {fecha}
                         </div>
                     </div>
                 </div>
@@ -106,7 +104,7 @@ const ListaTransacciones = ({ transacciones }) => {
     };
 
     return (
-        <div className="transacciones-lista">
+        <div className="transacciones-grid">
             {crearLista()}
         </div>
     );

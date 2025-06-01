@@ -475,225 +475,150 @@ body, .bg-app {
   }
 }
 
-
-/* Contenedor de transacciones */
-.transacciones-container {
+/* Grid de transacciones - una por fila */
+.transacciones-grid {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-height: 60vh;
-  overflow-y: auto;
-  padding-right: 0.5rem;
+  width: 100%;
 }
 
-/* Scrollbar personalizado */
-.transacciones-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.transacciones-container::-webkit-scrollbar-track {
-  background: #1A1A1A;
-  border-radius: 3px;
-}
-
-.transacciones-container::-webkit-scrollbar-thumb {
-  background: #757575;
-  border-radius: 3px;
-}
-
-.transacciones-container::-webkit-scrollbar-thumb:hover {
-  background: #4CAF50;
-}
-
-/* Tarjeta de transacción */
-.transaccion-card {
-  background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
-  border-radius: 12px;
+/* Tarjeta compacta de transacción - fila completa */
+.transaccion-card-compacta {
+  border: 1px solid #757575;
+  border-radius: 8px;
   padding: 1rem;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  border-left: 4px solid transparent;
-  position: relative;
-  overflow: hidden;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.transaccion-card:hover {
-  transform: translateX(4px);
+
+
+.transaccion-compra {
+  border-left: 4px solid #4CAF50;
+}
+
+
+.transaccion-compra:hover {
+  border-color: #4CAF50 !important;
+  transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(0,0,0,0.25);
 }
 
-.transaccion-compra {
-  border-left-color: #4CAF50;
+.transaccion-venta:hover {
+  border-color: #FF4D4D !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
 }
-
 .transaccion-venta {
-  border-left-color: #FF4D4D;
+  border-left: 4px solid #FF4D4D;
 }
 
-
-/* Header de la transacción */
-.transaccion-header {
+/* Contenido centrado */
+.transaccion-contenido {
+  max-width: 300px;
+  text-align: center;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.8rem;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
+/* Tipo de transacción */
 .transaccion-tipo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.tipo-icono {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  font-weight: bold;
-}
-
-.icono-compra {
-  background-color: rgba(76, 175, 80, 0.2);
-  color: #4CAF50;
-  border: 1px solid rgba(76, 175, 80, 0.3);
-}
-
-.icono-venta {
-  background-color: rgba(255, 77, 77, 0.2);
-  color: #FF4D4D;
-  border: 1px solid rgba(255, 77, 77, 0.3);
-}
-
-.tipo-texto {
   font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 0.1rem;
 }
 
-.transaccion-compra .tipo-texto {
+.tipo-compra {
   color: #4CAF50;
 }
 
-.transaccion-venta .tipo-texto {
+.tipo-venta {
   color: #FF4D4D;
 }
 
-.transaccion-fecha {
-  font-size: 0.8rem;
-  color: #B0B0B0;
-  font-weight: 500;
-}
-
-/* Body de la transacción */
-.transaccion-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-
+/* Activo */
 .transaccion-activo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.activo-nombre {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #FFFFFF;
   line-height: 1.2;
+  margin-bottom: 0.1rem;
 }
 
-.activo-ticker {
+/* Dinero */
+.transaccion-dinero {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.1rem;
+}
+
+.dinero-compra {
+  color: #4CAF50;
+}
+
+.dinero-venta {
+  color: #FF4D4D;
+}
+
+/* Acciones */
+.transaccion-acciones {
   font-size: 0.85rem;
-  color: #B0B0B0;
+  color: #E0E0E0;
   font-weight: 500;
+  margin-bottom: 0.1rem;
 }
 
-.transaccion-detalles {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.detalle-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 1;
-}
-
-.detalle-label {
+/* Fecha */
+.transaccion-fecha {
   font-size: 0.75rem;
   color: #B0B0B0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 500;
-}
-
-.detalle-valor {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #E0E0E0;
-}
-
-.valor-compra {
-  color: #4CAF50 !important;
-}
-
-.valor-venta {
-  color: #FF4D4D !important;
+  font-weight: 400;
 }
 
 /* Estado vacío */
 .transacciones-vacio {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 1rem;
   text-align: center;
-}
-
-.vacio-icono {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  opacity: 0.5;
-}
-
-.vacio-texto {
+  padding: 3rem 1rem;
   color: #B0B0B0;
-  font-size: 1rem;
-  margin: 0;
 }
 
-  .detalle-item {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+/* Responsive */
+@media (max-width: 768px) {
+  .transaccion-card-compacta {
+    padding: 0.8rem;
   }
   
-  .activo-nombre {
-    font-size: 0.9rem;
+  .transaccion-contenido {
+    max-width: 250px;
+    gap: 0.3rem;
   }
   
-  .transacciones-container {
-    max-height: 50vh;
+  .transaccion-activo {
+    font-size: 0.8rem;
   }
-
+  
+  .transaccion-dinero {
+    font-size: 1rem;
+  }
+}
 
 @media (max-width: 576px) {
-  .transaccion-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+  .transaccion-contenido {
+    max-width: 200px;
   }
   
-  .transaccion-fecha {
-    align-self: flex-end;
+  .transaccion-tipo {
+    font-size: 0.75rem;
+  }
+  
+  .transaccion-activo {
+    font-size: 0.85rem;
   }
 }

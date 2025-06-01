@@ -50,15 +50,26 @@ const Transacciones = () => {
     const irAPerfil = () => {
         navigate("/perfil");
     }
+
     return (
-        <div className='container mt-3'>
-            <button className='btn btn-app-primary' onClick={irAPerfil}> Volver al perfil</button>
+        <div className='container bg-app min-vh-100'>
+            <div className='mt-3 mb-4'>
+                <button className='btn btn-app-primary' onClick={irAPerfil}>
+                    Volver al perfil
+                </button>
+            </div>
 
             <div className='text-center text-white'>
-                <h1>Historial de transacciones</h1>
-                {transaccionesDisponibles && <ListaTransacciones transacciones={datosTransacciones} />}
-                {!transaccionesDisponibles && <p>Cargando transacciones...</p>}
+                <h1 className='mb-4'>Historial de transacciones</h1>
                 
+                <div className='row justify-content-center'>
+                    <div className='col-12 col-lg-10'>
+                        <div className='card card-app p-4'>
+                            {transaccionesDisponibles && <ListaTransacciones transacciones={datosTransacciones} />}
+                            {!transaccionesDisponibles && <p>Cargando transacciones...</p>}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
