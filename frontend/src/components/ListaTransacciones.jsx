@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TransactionList = ({ transacciones }) => {
+const ListaTransacciones = ({ transacciones }) => {
     const opcionesAcciones = [
         {nombre: 'Apple (AAPL)', ticker: 'AAPL' },
         {nombre: 'Microsoft (MSFT)', ticker: 'MSFT' },
@@ -61,7 +61,7 @@ const TransactionList = ({ transacciones }) => {
         });
     };
 
-    const renderTransactions = () => {
+    const crearLista = () => {
         if (!transacciones || transacciones.length === 0) {
             return (
                 <div className="transacciones-vacio">
@@ -88,7 +88,7 @@ const TransactionList = ({ transacciones }) => {
                         
                         <div className="transaccion-datos">
                             <div className="transaccion-tipo">
-                                <span className={esCompra ? 'tipo-compra' : 'tipo-venta'}>
+                                <span className= {esCompra ? 'tipo-compra' : 'tipo-venta'}>
                                     {esCompra ? 'COMPRA' : 'VENTA'}
                                 </span>
                             </div>
@@ -107,9 +107,9 @@ const TransactionList = ({ transacciones }) => {
 
     return (
         <div className="transacciones-lista">
-            {renderTransactions()}
+            {crearLista()}
         </div>
     );
 };
 
-export default TransactionList;
+export default ListaTransacciones;

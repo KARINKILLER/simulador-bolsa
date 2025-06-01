@@ -38,7 +38,7 @@ const TarjetaActivo = ({ activo }) => {
       </div>
 
       <div className={`activo-cambio ${diferencia >= 0 ? 'cambio-positivo' : 'cambio-negativo'}`}>
-        <span className="cambio-icono">{diferencia >= 0 ? "↗" : "↘"}</span>
+        <span className="cambio-icono">{diferencia >= 0 ? "\u2197\uFE0E" : "\u2198\uFE0E"}</span>
         <span className="cambio-porcentaje">{Math.abs(porcentaje)}%</span>
         <span className="cambio-texto">{diferencia >= 0 ? 'Ganancia' : 'Pérdida'}</span>
       </div>

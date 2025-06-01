@@ -21,14 +21,14 @@ function GraficaDonut({ activos }) {
   // Función para generar colores dinámicamente
   const generarColoresDinamicos = (cantidad) => {
     const coloresBase = [
-      '#4CAF50', // Verde principal
-      '#FF4D4D', // Rojo principal
-      '#36A2EB', // Azul
-      '#FFCE56', // Amarillo
-      '#9966FF', // Púrpura
-      '#FF9F40', // Naranja
-      '#4BC0C0', // Cian
-      '#8DD17F'  // Verde claro
+      '#4CAF50', 
+      '#FF4D4D', 
+      '#36A2EB', 
+      '#FFCE56', 
+      '#9966FF', 
+      '#FF9F40', 
+      '#4BC0C0', 
+      '#8DD17F'  
     ];
     
     if (cantidad <= coloresBase.length) {
@@ -37,6 +37,9 @@ function GraficaDonut({ activos }) {
     
     const colores = [...coloresBase];
     const coloresAdicionales = cantidad - coloresBase.length;
+    //HSL es Hue, Saturation, Lightness,
+    // donde Hue es el color (0-360 grados), Saturation es la intensidad del color (0-100%),
+    // y Lightness es el brillo del color (0-100%).
     const step = 360 / coloresAdicionales;
     
     for (let i = 0; i < coloresAdicionales; i++) {
