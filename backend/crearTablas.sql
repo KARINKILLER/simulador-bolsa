@@ -11,6 +11,7 @@ CREATE TABLE usuarios (
     nombre_usuario VARCHAR(50) UNIQUE NOT NULL,  
     correo_electronico VARCHAR(100) UNIQUE NOT NULL, 
     contrasenna VARCHAR(255) NOT NULL,   
+    es_admin BOOLEAN DEFAULT FALSE,
     saldo_virtual NUMERIC(15, 2)
 );
 

@@ -4,9 +4,23 @@ import { useNavigate } from 'react-router-dom';
 const Error = () => {
     const navigate = useNavigate();
 
-    const irALogin = () => {
-        navigate('/');
-    };
+    const logout = async () => {
+    try {
+        const response = await fetch('http://localhost:8000/logout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include' 
+        });
+        if (response.ok) {
+            window.location.href = '/';
+        } else {
+            console.error('Error al cerrar sesión');
+        }
+    } catch (error) {
+        console.error('Error de conexión con el servidor', error);
+    }
+
+}
 
     return (
         <div className='container bg-app min-vh-100 d-flex align-items-center justify-content-center'>
@@ -22,7 +36,7 @@ const Error = () => {
                         Ha ocurrido un error. Por favor, inicia sesión nuevamente.
                     </p>
                     
-                    <button className='btn btn-app-primary' onClick={irALogin}>
+                    <button className='btn btn-app-primary' onClick={logout}>
                         Ir al Login
                     </button>
                 </div>

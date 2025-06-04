@@ -82,7 +82,7 @@ async def obtener_valor_actual(simbolo: str)-> float:
         return float(current_price)
     else:
         print("Error al obtener datos:", data)
-        return 69.69
+        return -1
 
 
     # Ejemplo uso:

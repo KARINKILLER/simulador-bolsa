@@ -30,7 +30,7 @@ const Register = () => {
 
       if (response.ok) {
         const data = await response.json();
-        // Opcional: mostrar mensaje de éxito antes de navegar
+        alert('Cuenta registrada con éxito');
         navigate('/'); 
       } else {
         try {

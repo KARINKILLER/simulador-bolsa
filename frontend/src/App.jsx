@@ -8,6 +8,7 @@ import Transacciones from './components/Transacciones';
 import Help from './components/Help';
 import Error from './components/Error';
 import Terms from './components/Terms';
+import AdminPanel from './components/AdminPanel';
 
 
 function App() {
@@ -22,6 +23,8 @@ function App() {
         <Route path="/transacciones" element={<Transacciones />} />
         <Route path="/error" element={<Error />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/adminPanel" element={<AdminPanel />} />
+
       </Routes>
     </Router>
   );

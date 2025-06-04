@@ -21,7 +21,8 @@ const Login = () => {
 
     if (response.ok) {
       const data = await response.json();
-      navigate('/market'); 
+
+      navigate(data.ruta); 
     } else {
       try {
         const errorData = await response.json();

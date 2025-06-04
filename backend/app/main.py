@@ -64,31 +64,31 @@ async def realizar_ventas_automaticas(ventas_a_realizar):
 
 
 
-# Dependencia para obtener usuario actual
 async def get_current_user(request: Request):
     username = request.session.get("username")
     if not username:
         raise HTTPException(status_code=401, detail="No autenticado")
     return username
 
-# Dependencia para verificar admin
-# async def check_admin(username: str = Depends(get_current_user)):
-#     if not await es_admin_en_bd(username):  # Implementar esta función en dbHelper
-#         raise HTTPException(403, "Requiere privilegios de administrador")
-#     return username
+async def check_admin(username: str = Depends(get_current_user)):
+    if await es_admin(username):
+        return True
+    else:
+        return False
 
-# Endpoints de autenticación
 @app.post("/login")
 async def login(request: Request, username: str = Body(...), password: str = Body(...)):
     try:
         if await validarLogin(username, password):
             request.session["username"] = username
             print(request.session["username"])
-            return {"message": "Inicio de sesión exitoso"}
+            if await check_admin(username):
+                return {"ruta": "/adminPanel"}
+            else:
+                return {"ruta": "/market"}
         else:
             raise HTTPException(status_code=401, detail="Credenciales incorrectas")
     except HTTPException:
-        # Re-lanzar HTTPExceptions para que mantengan su status code
         raise
     except Exception as e:
         print(f"Error en login: {e}")
@@ -105,10 +105,20 @@ async def session_status(request: Request):
     username = request.session.get("username")
     return {
         "authenticated": bool(username),
-        "username": username,
-        "session_id": request.session.get("_session_id")
+        "username": username
     }
 
+@app.get("/session-status-admin")
+async def session_status(request: Request):
+    username = request.session.get("username")
+    if await es_admin(username):
+        return{
+            "es_admin": "True",
+        }
+    else:
+        return{
+            "es_admin": "False",
+        }
 
 
 @app.post("/register")
@@ -277,3 +287,18 @@ async def vender_acciones(activo: str,cantidad: float,usuario: str = Depends(get
     except Exception as e:
         raise HTTPException(500, f"Error interno: {str(e)}")
 
+@app.get('/cargar-pagina-admin')
+async def cargar_pagina_admin(usuario: str = Depends(get_current_user)):
+    try:
+        if await es_admin(usuario):
+            #Pedir lista de usuarios y sus saldos
+            usuariosYSaldos = await cargar_usuarios()
+            print("Usuarios y Saldos cargados correctamente")
+            print(usuariosYSaldos)
+            return {"usuariosYSaldos" : usuariosYSaldos}
+
+            
+        else:
+            raise HTTPException(status_code=403, detail="Acceso denegado")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

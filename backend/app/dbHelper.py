@@ -55,6 +55,19 @@ async def registrarUsuario(email: str, username: str, password: str):
         password_hash = hash_password(password)
         await connection.execute(query, username, email, password_hash)
     
+async def es_admin(username: str) -> bool:
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            query = "SELECT es_admin FROM usuarios WHERE nombre_usuario = $1"
+            es_admin = await connection.fetchval(query, username)
+            return es_admin
+    except Exception as e:
+        print(f"Error al verificar si es admin: {e}")
+        raise
+
 async def consultar_saldo_disponible(username: str) -> float:
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -357,4 +370,18 @@ async def venta_automatica(id_cartera: int, simbolo_activo: str):
             return True
     except Exception as e:
         print(f"Error en venta automática: {e}")
+        raise
+
+async def cargar_usuarios():
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            query = "SELECT nombre_usuario, saldo_virtual FROM usuarios WHERE es_admin = false ORDER BY saldo_virtual DESC"
+            usuarios = await connection.fetch(query)
+            lista_usuarios = [dict(usuario) for usuario in usuarios]
+            return lista_usuarios
+    except Exception as e:
+        print(f"Error al cargar usuarios: {e}")
         raise

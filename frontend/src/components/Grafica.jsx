@@ -27,7 +27,7 @@ function Grafica({ datos }) {
   const valores = datosArray.map(d => d.precio);
   const primerValor = datosArray[0].precio;
   const ultimoValor = datosArray[datosArray.length - 1].precio;
-  const colorLinea = primerValor < ultimoValor ? 'rgb(5, 225, 78)' : 'rgb(255, 0, 0)';
+  const colorLinea = primerValor < ultimoValor ? '#05FF4E' : '#FF4D4D';
 
   const data = {
     labels,
@@ -56,7 +56,7 @@ function Grafica({ datos }) {
       y: {
         beginAtZero: false,
         ticks: {
-          color: '#FFFFFF', // Color blanco para los ticks
+          color: '#FFFFFF', 
           callback: (value) => {
             return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
           }
