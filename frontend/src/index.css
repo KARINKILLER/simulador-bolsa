@@ -216,13 +216,23 @@ body, .bg-app {
   /* END OF GRÁFICA NORMAL */
 
   /* TARJETAS DE ACTIVO */
- 
+
 .activos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
   margin-top: 1rem;
+  max-width: 1050px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
 }
+
+.activos-grid > * {
+  flex: 0 0 317px;
+}
+
 
  
 .activo-card {

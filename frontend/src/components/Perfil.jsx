@@ -61,7 +61,7 @@ const Perfil = () => {
 
     const preReinicio = () => {
         setModalOpen(true);
-    }
+    };
     
     const cerrarModal = () => {
         setModalOpen(false);  
@@ -156,9 +156,9 @@ const Perfil = () => {
                 <div className='row justify-content-center mb-4'>
                     <div className='col-12'>
                         <div className='card card-app p-4'>
-                            <h3 className='mb-3'>Activos</h3>
+                            <h3 className='mb-2'>Activos</h3>
                             {datosActivos && (
-                                <div className="mt-3">
+                                <div className="mt-2">
                                     <ListaActivos data={datosActivos} />
                                 </div>
                             )}
