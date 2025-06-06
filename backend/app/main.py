@@ -302,3 +302,14 @@ async def cargar_pagina_admin(usuario: str = Depends(get_current_user)):
             raise HTTPException(status_code=403, detail="Acceso denegado")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post('/reiniciar-forzado')
+async def reiniciar_forzado(admin: str = Depends(get_current_user), nombre_usuario: str = Body(...)):
+    try:
+        if await es_admin(admin):
+            await reiniciar(nombre_usuario)
+            return {"message": "Cartera del usuario " + nombre_usuario + " reiniciada correctamente"}
+        else:
+            raise HTTPException(status_code=403, detail="Acceso denegado")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

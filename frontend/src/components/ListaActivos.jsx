@@ -109,6 +109,13 @@ const TarjetaActivo = ({ activo }) => {
 const ListaActivos = ({ data }) => {
 
   const activos = data.filter((item) => item.activo !== 'Saldo');
+  if (!activos || activos.length === 0) {
+      return (
+          <div className="transacciones-vacio">
+              <p>No hay activos disponibles</p>
+          </div>
+      );
+  }
 
   return (
     <div className="activos-grid">

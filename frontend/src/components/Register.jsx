@@ -7,7 +7,7 @@ const Register = () => {
 
   const crearCuenta = async (e) => {
     e.preventDefault();
-    setError(''); // Limpiar errores previos
+    setError(''); 
     
     const email = document.getElementById("email").value;
     const username = document.getElementById("username").value;
@@ -63,11 +63,11 @@ const Register = () => {
           <form onSubmit={crearCuenta}>
             <div className="mb-3">
               <label htmlFor="email" className="form-label">Email:</label>
-              <input type="email" className="form-control input-app" id="email" placeholder="Correo electrónico" required autocomplete="off"/>
+              <input type="email" className="form-control input-app" id="email" placeholder="Correo electrónico" required autoComplete="off"/>
             </div>
             <div className="mb-3">
               <label htmlFor="username" className="form-label">Nombre de usuario:</label>
-              <input type="text" className="form-control input-app" id="username" placeholder="Usuario" required autocomplete="off"/>
+              <input type="text" className="form-control input-app" id="username" placeholder="Usuario" required autoComplete="off"/>
             </div>
             <div className="mb-3">
               <label htmlFor="password" className="form-label">Contraseña:</label>

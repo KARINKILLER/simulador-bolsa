@@ -195,7 +195,7 @@ const Market = () => {
 
     try {
         const response = await fetch('http://localhost:8000/comprar-acciones', {
-            method: 'POST',
+            method: 'POST',credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -204,8 +204,7 @@ const Market = () => {
                 cantidad: cantidadCompra,
                 stopLoss: stopLoss,
                 takeProfit: takeProfit
-            }),
-            credentials: 'include'
+            })
         });
 
         if (!response.ok) throw new Error('Error en la compra');

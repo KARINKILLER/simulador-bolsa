@@ -55,11 +55,11 @@ const Login = () => {
           <form onSubmit={enviarFormulario}>
             <div className="mb-3">
               <label htmlFor="username" className="form-label">Nombre de usuario:</label>
-              <input type="text" className="form-control input-app" id="username" placeholder='Usuario'required autocomplete="off"/>
+              <input type="text" className="form-control input-app" id="username" placeholder='Usuario'required autoComplete="off"/>
             </div>
             <div className="mb-4">
               <label htmlFor="password" className="form-label">Contraseña:</label>
-              <input type="password" className="form-control input-app" id="password" placeholder='Contraseña' required autocomplete="off"/>
+              <input type="password" className="form-control input-app" id="password" placeholder='Contraseña' required autoComplete="off"/>
             </div>
             <div className="text-center mb-2">
               <button type="submit" className="btn btn-app-primary w-100">

@@ -22,7 +22,7 @@ const Terms = () => {
                                 <h3>Simulación Financiera</h3>
                                 <p>
                                     Esta aplicación es una <strong>simulación educativa</strong> de inversión en bolsa. 
-                                    Todo el dinero utilizado en la plataforma es completamente <strong>ficticio</strong> 
+                                    Todo el dinero utilizado en la plataforma es completamente <strong>ficticio </strong> 
                                     y no tiene ningún valor real.
                                 </p>
                             </div>

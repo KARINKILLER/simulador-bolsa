@@ -359,7 +359,7 @@ body, .bg-app {
   /* END OF TARJETAS DE ACTIVO */
  
 
- 
+ /* DROPDOWN */
 .dropdown-app .react-dropdown-select {
   background-color: #232323 !important;
   border: 1px solid #757575 !important;
@@ -387,6 +387,9 @@ body, .bg-app {
 .dropdown-app .react-dropdown-select-dropdown-handle {
   color: #757575 !important;
 }
+
+ /* END OF DROPDOWN */
+
 
 .transacciones-grid {
   display: flex;
@@ -437,7 +440,7 @@ body, .bg-app {
 }
 
 .transaccion-tipo {
-  font-size: 0.8rem;
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
@@ -451,7 +454,7 @@ body, .bg-app {
 
 
 .transaccion-activo {
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #FFFFFF;
   line-height: 1.2;
@@ -464,7 +467,7 @@ body, .bg-app {
 }
 
 .transaccion-acciones {
-  font-size: 0.85rem;
+  font-size: 1.1rem;
   color: #E0E0E0;
   font-weight: 500;
 }
@@ -473,7 +476,6 @@ body, .bg-app {
 .transaccion-fecha {
   font-size: 0.75rem;
   color: #B0B0B0;
-  font-weight: 400;
 }
 
  
@@ -481,4 +483,14 @@ body, .bg-app {
   text-align: center;
   padding: 3rem 1rem;
   color: #B0B0B0;
+}
+
+
+.usuario-card-compacta {
+  background: #1e1e1e;
+  border: 1px solid #757575;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
 }
