@@ -25,7 +25,6 @@ CREATE TABLE cartera (
     precio_promedio_compra NUMERIC(15, 4) NOT NULL
 );
 
-
 CREATE TABLE transacciones (
     id_transaccion SERIAL PRIMARY KEY,  
     id_usuario INT REFERENCES usuarios(id_usuario) ON DELETE CASCADE,  
