@@ -66,7 +66,7 @@ async def verificar_ventas_automaticas(transacciones):
     for transaccion in transacciones:
         username = transaccion[0]
         simbolo_activo = transaccion[1]
-        cantidad = transaccion[2]
+        num_acciones = transaccion[2]
         precio_promedio = transaccion[3]
         stop_loss = transaccion[4]
         take_profit = transaccion[5]
@@ -77,13 +77,21 @@ async def verificar_ventas_automaticas(transacciones):
         print(f"Activo: {simbolo_activo}, Porcentaje de variación: {porcentaje_variacion}%")
 
         # Comprobar si se cumplen las condiciones de venta
-        cumple_tp = porcentaje_variacion >= take_profit
-        cumple_sl = porcentaje_variacion <= -stop_loss
+        if take_profit<=0:
+            cumple_tp = False
+        else:
+             cumple_tp = porcentaje_variacion >= take_profit
+        if stop_loss<=0:
+            cumple_sl = False
+        else:
+            cumple_sl = porcentaje_variacion <= -stop_loss
 
 
         print(f"Cumple TP: {cumple_tp}, Cumple SL: {cumple_sl}")
 
         if cumple_tp or cumple_sl:
+            cantidad_vendida = num_acciones * precio_actual
+            transaccion.append(cantidad_vendida)
             ventas.append(transaccion)
         else:
             print(f"No se cumplen las condiciones para venta automática de {simbolo_activo}")

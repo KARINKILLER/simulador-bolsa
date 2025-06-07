@@ -13,7 +13,7 @@ from priceConsultor import *
 async def lifespan(app: FastAPI):
     try:
         await init_db()
-        # await acciones_automaticas()
+        await acciones_automaticas()
         yield
     finally:
         await close_db()
@@ -37,30 +37,29 @@ app.add_middleware(
     https_only=False,
 )
 
-# @repeat_every(seconds=600) 
-# async def acciones_automaticas():
-#     # Aquí puedes implementar la lógica para las acciones automáticas
-#     print("Ejecutando acciones automáticas...")
-#     transacciones = await transacciones_automaticas()
-#     ventas_a_realizar = await verificar_ventas_automaticas(transacciones)
-#     await realizar_ventas_automaticas(ventas_a_realizar)
-#     print("Acciones automáticas completadas.")
+@repeat_every(seconds=6) 
+async def acciones_automaticas():
+    print("Ejecutando acciones automáticas...")
+    transacciones = await transacciones_automaticas()
+    ventas_a_realizar = await verificar_ventas_automaticas(transacciones)
+    await realizar_ventas_automaticas(ventas_a_realizar)
+    print("Acciones automáticas completadas.")
 
 
 async def realizar_ventas_automaticas(ventas_a_realizar):
     for venta in ventas_a_realizar:
         usuario = venta[0]
         activo = venta[1]
-        cantidad = venta[2]
+        num_acciones = venta[2]
+        cantidad = venta[6]
         try:
-            # Realizar la venta
             await actualizar_saldo(usuario, -cantidad) 
             precio = await obtener_valor_actual(activo)
             await registrar_venta(usuario, activo, float(cantidad), precio)
-            await eliminar_acciones(usuario, activo, cantidad)
-            print(f"Venta automática realizada para {usuario} de {cantidad} acciones de {activo}.")
+            await eliminar_todas_acciones(usuario, activo)
+            print(f"Venta automática realizada para {usuario} de {num_acciones} acciones de {activo}.")
         except Exception as e:
-            print(f"Error al realizar la venta automática para {usuario} de {cantidad} acciones de {activo}: {e}")
+            print(f"Error al realizar la venta automática para {usuario} de {num_acciones} acciones de {activo}: {e}")
 
 
 

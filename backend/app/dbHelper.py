@@ -150,7 +150,6 @@ async def reiniciar(username: str):
     try:
         async with connection_pool.acquire() as connection:
             async with connection.transaction():
-                # Obtener ID de usuario
                 query_usuario = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1"
                 id_usuario = await connection.fetchval(query_usuario,username)
                 
@@ -320,6 +319,7 @@ async def eliminar_acciones(username: str, activo: str, cantidad: float):
         numero_acciones = await consultar_cantidad_acciones(username, activo)
         numero_acciones = float(numero_acciones)  # Asegurarse de que sea un número flotante
         precio = await obtener_valor_actual(activo)
+        cantidad = float(cantidad)  # Asegurarse de que sea un número flotante
         porcentaje_venta = round(cantidad/(numero_acciones * precio), 4)
         print("El porcentaje de venta es: " + str(porcentaje_venta))
         acciones_restantes = numero_acciones - (numero_acciones * porcentaje_venta)
@@ -339,7 +339,7 @@ async def transacciones_automaticas():
 
     try:
         async with connection_pool.acquire() as connection:
-            query = """SELECT usuarios.nombre_usuario, cartera.simbolo_activo, cartera.cantidad, cartera.precio_promedio_compra, cartera.stop_loss, cartera.take_profit
+            query = """SELECT usuarios.nombre_usuario, cartera.simbolo_activo, cartera.numero_acciones, cartera.precio_promedio_compra, cartera.stop_loss, cartera.take_profit
             FROM cartera JOIN usuarios ON cartera.id_usuario = usuarios.id_usuario
             WHERE  (cartera.stop_loss IS NOT NULL AND cartera.stop_loss > 0) 
             OR (cartera.take_profit IS NOT NULL AND cartera.take_profit > 0)
@@ -370,6 +370,18 @@ async def venta_automatica(id_cartera: int, simbolo_activo: str):
             return True
     except Exception as e:
         print(f"Error en venta automática: {e}")
+        raise
+
+async def eliminar_todas_acciones(usuario: str, activo: str):
+    if not connection_pool:
+        raise Exception("La conexión a la base de datos no ha sido inicializada")
+
+    try:
+        async with connection_pool.acquire() as connection:
+            query = "DELETE FROM cartera WHERE id_usuario = (SELECT id_usuario FROM usuarios WHERE nombre_usuario = $1) AND simbolo_activo = $2"
+            await connection.execute(query, usuario, activo)
+    except Exception as e:
+        print(f"Error al eliminar todas las acciones: {e}")
         raise
 
 async def cargar_usuarios():
