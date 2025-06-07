@@ -87,11 +87,11 @@ const ListaTransacciones = ({ transacciones }) => {
                         </div>
                         
                         <div className={`transaccion-dinero ${esCompra ? 'tipo-compra' : 'tipo-venta'}`}>
-                            ${parseFloat(transaction.dinero_movido).toFixed(2)}
+                            ${parseFloat(transaction.monto_total).toFixed(2)}
                         </div>
                         
                         <div className="transaccion-acciones">
-                            {transaction.numero_acciones} acciones
+                            ${parseFloat(transaction.numero_acciones).toFixed(4)} acciones
                         </div>
                         
                         <div className="transaccion-fecha">

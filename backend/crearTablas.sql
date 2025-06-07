@@ -21,8 +21,8 @@ CREATE TABLE cartera (
     simbolo_activo VARCHAR(10) NOT NULL,    
     stop_loss NUMERIC(15, 4),
     take_profit NUMERIC(15,4), 
-    numero_acciones NUMERIC(15, 4) NOT NULL,        
-    precio_promedio_compra NUMERIC(15, 4) NOT NULL
+    numero_acciones NUMERIC(30, 15) NOT NULL,        
+    precio_promedio_compra NUMERIC(30, 15) NOT NULL
 );
 
 CREATE TABLE transacciones (
@@ -30,8 +30,8 @@ CREATE TABLE transacciones (
     id_usuario INT REFERENCES usuarios(id_usuario) ON DELETE CASCADE,  
     simbolo_activo VARCHAR(10) NOT NULL,     
     tipo_transaccion VARCHAR(10) NOT NULL CHECK (tipo_transaccion IN ('compra', 'venta')), 
-    dinero_movido NUMERIC(15, 4) NOT NULL,       
-    precio NUMERIC(15, 4) NOT NULL,          
-    numero_acciones NUMERIC(15, 4) NOT NULL,     
+    monto_total NUMERIC(15, 4) NOT NULL,       
+    precio NUMERIC(30, 15) NOT NULL,          
+    numero_acciones NUMERIC(30, 15)NOT NULL,     
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
 );
