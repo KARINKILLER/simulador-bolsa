@@ -32,6 +32,10 @@ const Market = () => {
   const [datosCargando, setDatosCargando] = useState(false);
   const [modalCompraOpen, setModalCompraOpen] = useState(false);
   const [modalVentaOpen, setModalVentaOpen] = useState(false);
+  const [modalCompraRealizadaOpen, setModalCompraRealizadaOpen] = useState(false);
+  const [modalVentaRealizadaOpen, setModalVentaRealizadaOpen] = useState(false);
+  const [cantidadCompra, setCantidadCompra] = useState(0);
+  const [cantidadVenta, setCantidadVenta] = useState(0);
   const [precioActivo, setPrecioActivo] = useState(0);
   const [saldoDisponible, setSaldoDisponible] = useState(0);
   const [cantidadDisponible, setCantidadDisponible] = useState(0);
@@ -189,7 +193,9 @@ const Market = () => {
   };
 
   const confirmarCompra = async () => {
-    const cantidadCompra = document.getElementById('cantidad-compra').value;
+    setCantidadCompra(document.getElementById('cantidad-compra').value);
+    const cantidadComprada = document.getElementById('cantidad-compra').value;
+    console.log("Cantidad a comprar: " + cantidadComprada);
     const stopLoss = parseFloat(document.getElementById('stop-loss').value) || 0;
     const takeProfit = parseFloat(document.getElementById('take-profit').value) || 0;
 
@@ -201,7 +207,7 @@ const Market = () => {
             },
             body: JSON.stringify({
                 activo: tickerSeleccionado,
-                cantidad: cantidadCompra,
+                cantidad: cantidadComprada,
                 stopLoss: stopLoss,
                 takeProfit: takeProfit
             })
@@ -212,6 +218,7 @@ const Market = () => {
         const data = await response.json();
         console.log(data);
         setModalCompraOpen(false);
+        setModalCompraRealizadaOpen(true);
     } catch (error) {
         console.error('Error:', error);
     }
@@ -229,10 +236,12 @@ const Market = () => {
   }
 
   const confirmarVenta = async () => {
-    const cantidadVenta = document.getElementById('cantidad-venta').value;
-    const response = await fetch(`http://localhost:8000/vender-acciones?activo=${tickerSeleccionado}&cantidad=${cantidadVenta}`, {credentials: 'include', method: 'POST'});
+    setCantidadVenta(document.getElementById('cantidad-venta').value);
+    const cantidadVendida = document.getElementById('cantidad-venta').value;
+    const response = await fetch(`http://localhost:8000/vender-acciones?activo=${tickerSeleccionado}&cantidad=${cantidadVendida}`, {credentials: 'include', method: 'POST'});
     if (!response.ok) throw new Error(`Error: ${response.status}`);
     cerrarModalVenta();
+    setModalVentaRealizadaOpen(true);
   }
 
   const cerrarModalCompra = () => {
@@ -242,6 +251,14 @@ const Market = () => {
   const cerrarModalVenta = () => {
     setModalVentaOpen(false);
   };
+
+  const cerrarModalCompraRealizada = () => {
+    setModalCompraRealizadaOpen(false);
+  };
+  const cerrarModalVentaRealizada = () => {
+    setModalVentaRealizadaOpen(false);
+  };
+
 
   const ajustarMaximo = (id, maximo) => {
     const cantidad = document.getElementById(id).value;
@@ -283,7 +300,7 @@ const Market = () => {
           <h2 className='mb-3'>Vas a comprar el activo {accionSeleccionada} a <span className='text-gain'>${precioActivo}</span></h2>
           <h4 className='mb-3'>¿Cuánto dinero quieres gastarte? ($)</h4>
           <input type='number' min='0' placeholder='0' className='form-control input-app mb-3' id='cantidad-compra' step="0.5" max={saldoDisponible} onBlur={() => ajustarMaximo('cantidad-compra', saldoDisponible)} />
-          <h5 className='mb-3'>Configura tu stop loss y tu take profit (%)</h5>
+          <h5 className='mb-3' title = 'Stop Loss y Take Profit son los % que deberá bajar o subir el activo respectivamente antes de realizar una venta automática, dejar en 0 si no se desea venta automática'>Configura tu stop loss y tu take profit (%) ⓘ</h5>
           <div className='row mb-3'>
             <div className='col-6'>
               <h6>Stop loss</h6>
@@ -298,6 +315,22 @@ const Market = () => {
             <button className='btn btn-app-primary me-2' onClick={confirmarCompra}>Confirmar</button>
             <button className='btn btn-app-secondary' onClick={cerrarModalCompra}>Cancelar</button>
           </div>
+        </div>
+      </Modal>
+
+      <Modal isOpen={modalCompraRealizadaOpen}>
+        <div className='modal-content-app p-4 text-center'>
+          <h2 className='mb-3'>Compra realizada con éxito</h2>
+          <p className='mb-3'>Has comprado acciones de {accionSeleccionada} por un total de ${cantidadCompra}</p>
+          <button className='btn btn-app-primary' onClick={cerrarModalCompraRealizada}>Aceptar</button>
+        </div>
+      </Modal>
+      
+      <Modal isOpen={modalVentaRealizadaOpen}>
+        <div className='modal-content-app p-4 text-center'>
+          <h2 className='mb-3'>Venta realizada con éxito</h2>
+          <p className='mb-3'>Has vendido acciones de {accionSeleccionada} por un total de ${cantidadVenta}</p>
+          <button className='btn btn-app-primary' onClick={cerrarModalVentaRealizada}>Aceptar</button>
         </div>
       </Modal>
 

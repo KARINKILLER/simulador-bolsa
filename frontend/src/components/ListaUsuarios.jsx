@@ -7,10 +7,17 @@ import Modal from './Modal';
 const ListaUsuarios = ({ usuarios }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+  const [modalCuentaReiniciada, setModalCuentaReiniciada] = useState(false);
+
 
 
   const cerrarModal = () => {
     setModalOpen(false);
+  };
+
+  const cerrarModalCuentaReiniciada = () => {
+    setModalCuentaReiniciada(false);
+    window.location.reload();
   };
 
   const preReinicio = (usuario) => {
@@ -30,7 +37,7 @@ const ListaUsuarios = ({ usuarios }) => {
       .then(data => {
         console.log('Cuenta reiniciada:', data);
         cerrarModal(); 
-        window.location.reload();
+        setModalCuentaReiniciada(true);
       })
       .catch(error => {
         console.error('Error al reiniciar la cuenta:', error);
@@ -49,7 +56,15 @@ const ListaUsuarios = ({ usuarios }) => {
               <button className='btn btn-app-secondary' onClick={cerrarModal}>Cancelar</button>
           </div>
       </Modal>
-        {/* Modal para confirmar borrar el usuario */}
+
+      <Modal isOpen={modalCuentaReiniciada}>
+          <div className='modal-content-app p-4 text-center'>
+          <h2 className='mb-3'>Cuenta reiniciada con éxito</h2>
+          <p className='mb-3'>Se han borrado las transacciones y los activos de esta cuenta. La cuenta vuelve a tener $1000 de saldo virtual.</p>
+          <button className='btn btn-app-primary' onClick={cerrarModalCuentaReiniciada}>Aceptar</button>
+          </div>
+      </Modal>
+
         
             {usuarios.map((usuario, index) => (
               <div className='usuario-card-compacta mb-3' key={index}>

@@ -12,9 +12,10 @@ const Terms = () => {
         <div className='container bg-app min-vh-100'>
             <div className='row justify-content-center'>
                 <div className='col-12 col-lg-8'>
+                    <h1 className='mt-2 text-center'>Web app para la simulación de inversiones en bolsa y en criptomonedas</h1>
                     <div className='card card-app p-4 mt-4 mb-4'>
                         <div className='text-center mb-4'>
-                            <h1>Términos y Condiciones</h1>
+                            <h2>Términos y Condiciones</h2>
                         </div>
                         
                         <div>

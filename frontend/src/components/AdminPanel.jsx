@@ -60,10 +60,7 @@ const AdminPanel = () => {
                 navigate("/error");
             });
 
-        fetch("http://localhost:8000/cargar-pagina-admin", {
-            method: "GET",
-            credentials: "include"
-        })
+        fetch("http://localhost:8000/cargar-pagina-admin", {method: "GET", credentials: "include"})
             .then(response => response.json())
             .then(data => {
                 console.log(data);

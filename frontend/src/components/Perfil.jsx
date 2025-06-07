@@ -11,6 +11,8 @@ const Perfil = () => {
     const [transaccionesDisponibles, setTransaccionesDisponibles] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate();
+    const [modalCuentaReiniciada, setModalCuentaReiniciada] = useState(false);
+
 
     useEffect(() => {
         const verificarSesion = async () => {
@@ -67,12 +69,16 @@ const Perfil = () => {
         setModalOpen(false);  
     };
 
+    const cerrarModalCuentaReiniciada = () => {
+        setModalCuentaReiniciada(false);
+        window.location.reload();
+    };
+
     const reinicio = async () => {
         const response = await fetch('http://localhost:8000/reinicio', {method: 'POST', credentials: 'include'});
         if (!response.ok) throw new Error(`Error: ${response.status}`);
-        alert('Cuenta reiniciada con éxito');
         setModalOpen(false); 
-        window.location.reload();
+        setModalCuentaReiniciada(true);
     }
 
     const calcularSumaTotal = (activos) => {
@@ -108,6 +114,15 @@ const Perfil = () => {
 
     return (
         <div className='container bg-app min-vh-100'>
+
+            <Modal isOpen={modalCuentaReiniciada}>
+                <div className='modal-content-app p-4 text-center'>
+                <h2 className='mb-3'>Cuenta reiniciada con éxito</h2>
+                <p className='mb-3'>Se han borrado las transacciones y sus activos. La cuenta vuelve a tener $1000 de saldo virtual.</p>
+                <button className='btn btn-app-primary' onClick={cerrarModalCuentaReiniciada}>Aceptar</button>
+                </div>
+            </Modal>
+
             <Modal isOpen={modalOpen}>
                 <div className='modal-content-app p-4 text-center'>
                     <h2 className='mb-3'>¿Estás seguro de que quieres reiniciar tu cuenta?</h2>

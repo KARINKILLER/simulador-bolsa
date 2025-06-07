@@ -66,7 +66,7 @@ function Grafica({ datos }) {
     plugins: {
       legend: {
         labels: {
-          color: '#FFFFFF' // Color blanco para la leyenda
+          color: '#FFFFFF' 
         }
       },
       tooltip: {

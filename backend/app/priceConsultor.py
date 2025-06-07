@@ -6,7 +6,7 @@ from decimal import Decimal
 import asyncio
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-csv_path = os.path.join(current_dir, "..", "..", "Stocks_Prueba.csv")
+csv_path = os.path.join(current_dir, "..", "..", "Stocks_Definitivo.csv")
 print("Cargando csv...")
 df = pl.read_csv(csv_path)
 
@@ -38,7 +38,6 @@ async def obtener_datos_activo(ticker, periodo):
         pl.col("Close").alias("precio")
     ])
     
-    # Devolver lista invertida
     lista = result.to_dicts()
     return lista[::-1]
 
@@ -94,7 +93,7 @@ async def verificar_ventas_automaticas(transacciones):
             
     
 # # Ejemplo de uso
-# ticker = 'BTC'
+# ticker = 'AMZN'
 # ultimo_valor =  asyncio.run(obtener_valor_actual(ticker))
 
 # print(f"Último valor de {ticker}: {ultimo_valor}")

@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Modal from './Modal';
 
 const Register = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [modalCuentaRegistrada, setModalCuentaRegistrada] = useState(false);
+  const cerrarModalCuentaRegistrada = () => {
+    setModalCuentaRegistrada(false);
+    navigate('/'); 
+  };
 
   const crearCuenta = async (e) => {
     e.preventDefault();
@@ -30,8 +36,8 @@ const Register = () => {
 
       if (response.ok) {
         const data = await response.json();
-        alert('Cuenta registrada con éxito');
-        navigate('/'); 
+        setModalCuentaRegistrada(true);
+        
       } else {
         try {
           const errorData = await response.json();
@@ -52,6 +58,15 @@ const Register = () => {
 
   return (
     <div className="container bg-app d-flex align-items-center justify-content-center min-vh-100">
+
+      <Modal isOpen={modalCuentaRegistrada}>
+        <div className='modal-content-app p-4 text-center'>
+          <h2 className='mb-3'>Cuenta creada con éxito</h2>
+          <p className='mb-3'>Se le redirigirá a la página de inicio de sesión donde podrá iniciar sesión con la cuenta que acaba de crear</p>
+          <button className='btn btn-app-primary' onClick={cerrarModalCuentaRegistrada}>Aceptar</button>
+        </div>
+      </Modal>
+
       <div className="col-12 col-md-6 col-lg-4">
         <div className="card card-app p-4">
           <h2 className="text-center mb-4">Registro</h2>

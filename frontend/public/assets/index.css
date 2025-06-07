@@ -1,0 +1,496 @@
+body, .bg-app {
+  background-color: #1A1A1A !important;
+  color: #FFFFFF !important;
+  overflow-y: auto !important; 
+}
+
+ 
+.card-app {
+  background-color: #232323 !important;
+  border: 1px solid #757575 !important;
+  border-radius: 12px !important;
+  color: #FFFFFF !important;
+}
+
+ 
+.input-app {
+  background-color: #1A1A1A !important;
+  color: #FFFFFF !important;
+  border: 1px solid #757575 !important;
+  border-radius: 6px !important;
+  transition: border 0.2s;
+}
+.input-app:focus {
+  border-color: #4CAF50 !important;
+}
+
+.input-app::placeholder {
+  color: #B0B0B0 !important;
+}
+
+ 
+/* BOTONES */
+
+.btn-app-primary {
+  background-color: #4CAF50 !important;
+  color: #FFFFFF !important;
+  border-radius: 6px !important;
+  transition: background 0.2s;
+}
+
+.btn-app-primary:hover, .btn-app-primary:focus {
+  background-color: #43a047 !important;
+}
+ 
+.btn-app-danger {
+  background-color: #FF4D4D !important;
+  color: #FFFFFF !important;
+  border-radius: 6px !important;
+  transition: background 0.2s;
+}
+.btn-app-danger:hover, .btn-app-danger:focus {
+  background-color: #d32f2f !important;
+}
+
+ 
+.btn-app-secondary {
+  background-color: transparent !important;
+  color: #FFFFFF !important;
+  border: 1px solid #757575 !important;
+  border-radius: 6px !important;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-app-secondary:hover, .btn-app-secondary:focus {
+  background-color: #222 !important;
+  color: #4CAF50 !important;
+}
+
+/* END OF BOTONES */
+
+ 
+.alert-error {
+  background-color: #FF4D4D !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 6px !important;
+  margin-bottom: 1rem;
+}
+
+ 
+.text-gain {
+  color: #4CAF50 !important;
+}
+.text-loss {
+  color: #FF4D4D !important;
+}
+
+.link-app {
+  color: #4CAF50 !important;
+  text-decoration: none;
+}
+
+.link-app:hover {
+  text-decoration: underline;
+  color: #388e3c !important;
+}
+
+ 
+.error-container-simple {
+  max-width: 400px;
+  width: 100%;
+}
+
+ 
+.error-message-simple {
+  color: #B0B0B0;
+  font-size: 1rem;
+  margin: 0;
+}
+
+
+ /* MODALES */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-container {
+  background-color: #232323;
+  border-radius: 10px;
+  border: 1px solid #757575;
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+}
+
+ 
+.modal-content-app {
+  background-color: #232323 !important;
+  color: #FFFFFF !important;
+  border-radius: 10px !important;
+}
+
+ /* END OF MODALES */
+
+  /* GRÁFICA DONUT */
+ 
+.grafica-donut-container-large {
+  height: 70vh;
+  max-height: 700px;
+  min-height: 500px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.grafica-donut-wrapper .chartjs-legend,
+.grafica-donut-wrapper .chartjs-legend-item,
+.grafica-donut-wrapper .chartjs-legend-item-text {
+  color: #FFFFFF !important;
+}
+
+ 
+.grafica-donut-wrapper canvas + div {
+  color: #FFFFFF !important;
+}
+
+ 
+.grafica-donut-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+ 
+.grafica-donut-wrapper > div:first-child {
+  flex: 1;
+  position: relative;
+}
+
+.grafica-donut-wrapper canvas {
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+
+ /* END OF GRÁFICA DONUT */
+
+  /* GRÁFICA NORMAL */
+
+
+ 
+.grafica-line-container {
+  height: 100vh;  
+  max-height: 65vh;
+  min-height: 250px;
+  width: 100%;
+  margin: 1rem auto;
+  position: relative;
+}
+
+ 
+.grafica-sin-datos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #B0B0B0;
+  font-size: 1rem;
+}
+
+  /* END OF GRÁFICA NORMAL */
+
+  /* TARJETAS DE ACTIVO */
+
+.activos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  max-width: 1050px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+}
+
+.activos-grid > * {
+  flex: 0 0 317px;
+}
+
+
+ 
+.activo-card {
+  background: #1e1e1e;
+  border: 1px solid #757575;
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.activo-ganancia:hover {
+  transform: translateY(-4px);
+  border-color: #4CAF50;
+}
+
+.activo-perdida:hover {
+  transform: translateY(-4px);
+  border-color: #FF4D4D;
+}
+
+
+.activo-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding-top: 0.5rem;
+}
+
+.activo-nombre {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 0.5rem;
+}
+
+.activo-ticker {
+  font-size: 0.9rem;
+  color: #B0B0B0;
+  font-weight: 500;
+}
+
+.activo-precios {
+  margin-bottom: 1.5rem;
+}
+
+.precio-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.precio-label {
+  font-size: 0.9rem;
+  color: #E0E0E0;
+}
+
+.precio-valor {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.activo-configuracion {
+  margin-bottom: 1.5rem;
+}
+
+.config-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.config-label {
+  font-size: 0.85rem;
+  color: #B0B0B0;
+}
+
+.config-valor {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.activo-cambio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-weight: 600;
+  gap: 0.5rem;
+}
+
+.cambio-positivo {
+  background-color: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  color: #4CAF50;
+}
+
+.cambio-negativo {
+  background-color: rgba(255, 77, 77, 0.1);
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  color: #FF4D4D;
+}
+
+.cambio-icono {
+  font-size: 1.2rem;
+}
+
+.cambio-porcentaje {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.cambio-texto {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+  /* END OF TARJETAS DE ACTIVO */
+ 
+
+ /* DROPDOWN */
+.dropdown-app .react-dropdown-select {
+  background-color: #232323 !important;
+  border: 1px solid #757575 !important;
+  border-radius: 6px !important;
+  color: #FFFFFF !important;
+}
+
+.dropdown-app .react-dropdown-select-dropdown {
+  background-color: #232323 !important;
+  border: 1px solid #757575 !important;
+  border-radius: 6px !important;
+}
+
+.dropdown-app .react-dropdown-select-option {
+  background-color: #232323 !important;
+  color: #FFFFFF !important;
+  padding: 8px 12px;
+}
+
+.dropdown-app .react-dropdown-select-input {
+  color: #FFFFFF !important;
+}
+
+.dropdown-app .react-dropdown-select-clear,
+.dropdown-app .react-dropdown-select-dropdown-handle {
+  color: #757575 !important;
+}
+
+ /* END OF DROPDOWN */
+
+
+.transacciones-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.transaccion-card-compacta {
+  background: #1e1e1e;
+  border: 1px solid #757575;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.transaccion-compra {
+  border-left: 4px solid #4CAF50;
+}
+
+
+.transaccion-compra:hover {
+  border-color: #4CAF50 !important;
+  transform: translateY(-2px);
+}
+
+.transaccion-venta {
+  border-left: 4px solid #FF4D4D;
+}
+
+.transaccion-venta:hover {
+  border-color: #FF4D4D !important;
+  transform: translateY(-2px);
+}
+
+ 
+.transaccion-contenido {
+  max-width: 300px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.transaccion-tipo {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.tipo-compra {
+  color: #4CAF50;
+}
+
+.tipo-venta {
+  color: #FF4D4D;
+}
+
+
+.transaccion-activo {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
+
+.transaccion-dinero {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.transaccion-acciones {
+  font-size: 1.1rem;
+  color: #E0E0E0;
+  font-weight: 500;
+}
+
+
+.transaccion-fecha {
+  font-size: 0.75rem;
+  color: #B0B0B0;
+}
+
+ 
+.transacciones-vacio {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #B0B0B0;
+}
+
+
+.usuario-card-compacta {
+  background: #1e1e1e;
+  border: 1px solid #757575;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}

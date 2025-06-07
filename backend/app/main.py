@@ -165,24 +165,28 @@ async def datos_pre_transaccion(
     except Exception as e:
         raise HTTPException(500, detail=str(e))
 
+    ###########################EN DESUSO################################
+# @app.get("/consultar-saldo")
+# async def consultar_saldo(usuario: str = Depends(get_current_user)):
+#     try:
+#         return {"saldo": await consultar_saldo_disponible(usuario)}
+#     except ValueError as e:
+#         raise HTTPException(404, str(e))
+#     except Exception as e:
+#         raise HTTPException(500, str(e))
     
-@app.get("/consultar-saldo")
-async def consultar_saldo(usuario: str = Depends(get_current_user)):
-    try:
-        return {"saldo": await consultar_saldo_disponible(usuario)}
-    except ValueError as e:
-        raise HTTPException(404, str(e))
-    except Exception as e:
-        raise HTTPException(500, str(e))
     
-    
-@app.get("/consultar-precio-actual")
-def consultar_precio_actual(activo: str):
-    try:
-        precio = obtener_valor_actual(activo)
-        return {"precio": precio}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+# @app.get("/consultar-precio-actual")
+# def consultar_precio_actual(activo: str):
+#     try:
+#         precio = obtener_valor_actual(activo)
+#         return {"precio": precio}
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
+    ###########################EN DESUSO################################
+
+
+
 
 @app.post("/comprar-acciones")
 async def comprar_acciones(activo: str = Body(...), cantidad: float = Body(...), stopLoss: float = Body(0), takeProfit: float = Body(0), usuario: str = Depends(get_current_user)):
@@ -243,13 +247,10 @@ async def datos_pre_transaccion_venta(
     try:
         precio_activo = await obtener_valor_actual(activo)
         print("el precio del activo es: "+ str(precio_activo))
-        print (type(precio_activo))
-        #Consultar cuantas acciones tiene el usuario de este activo y devolver 
         numAcciones = await consultar_cantidad_acciones(usuario, activo)
-        print("El numero de acciones es " + str(numAcciones))
-        print(type(numAcciones))    
         numAcciones = float(numAcciones)  # Asegurarse de que sea un número flotante
-        cantidadDisponible = round(numAcciones * precio_activo, 4)
+        print("El número de acciones que tiene es: " + str(numAcciones))
+        cantidadDisponible = (numAcciones * precio_activo)
         print("La multiplicación es el saldo total del activo, que es: " + str(cantidadDisponible))
         return {
             "precioActivo": precio_activo,
@@ -291,10 +292,7 @@ async def vender_acciones(activo: str,cantidad: float,usuario: str = Depends(get
 async def cargar_pagina_admin(usuario: str = Depends(get_current_user)):
     try:
         if await es_admin(usuario):
-            #Pedir lista de usuarios y sus saldos
             usuariosYSaldos = await cargar_usuarios()
-            print("Usuarios y Saldos cargados correctamente")
-            print(usuariosYSaldos)
             return {"usuariosYSaldos" : usuariosYSaldos}
 
             
