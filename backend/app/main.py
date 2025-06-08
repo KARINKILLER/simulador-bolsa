@@ -8,7 +8,7 @@ from priceConsultor import *
 
 
 
-
+# Inicialización de la base de datos y configuración de la aplicación FastAPI
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
@@ -20,6 +20,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+# Configuración de CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -28,7 +29,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+# Configuración de la sesión
 app.add_middleware(
     SessionMiddleware, 
     secret_key=";vsW9t-G,ca@_!00m!LNmlVw",
@@ -37,6 +38,7 @@ app.add_middleware(
     https_only=False,
 )
 
+# Configuración de las acciones automáticas que se realizarán cada 10 minutos
 @repeat_every(seconds=600) 
 async def acciones_automaticas():
     print("Ejecutando acciones automáticas...")
@@ -46,6 +48,7 @@ async def acciones_automaticas():
     print("Acciones automáticas completadas.")
 
 
+#Función para realizar las acciones automáticas detectadas
 async def realizar_ventas_automaticas(ventas_a_realizar):
     for venta in ventas_a_realizar:
         usuario = venta[0]
@@ -63,18 +66,21 @@ async def realizar_ventas_automaticas(ventas_a_realizar):
 
 
 
+#Función para extraer el nombre de usuario actual de la sesión
 async def get_current_user(request: Request):
     username = request.session.get("username")
     if not username:
         raise HTTPException(status_code=401, detail="No autenticado")
     return username
 
+#Función para comprobar si el usuario es administrador
 async def check_admin(username: str = Depends(get_current_user)):
     if await es_admin(username):
         return True
     else:
         return False
 
+#Ruta para validar el login del usuario
 @app.post("/login")
 async def login(request: Request, username: str = Body(...), password: str = Body(...)):
     try:
@@ -94,7 +100,7 @@ async def login(request: Request, username: str = Body(...), password: str = Bod
         raise HTTPException(status_code=500, detail="Error interno del servidor")
 
 
-
+#Ruta para comprobar si el usuario ha iniciado sesión
 @app.get("/session-status")
 async def session_status(request: Request):
     print("Sesión actual:", request.session)
@@ -104,6 +110,7 @@ async def session_status(request: Request):
         "username": username
     }
 
+#Ruta para comprobar si el usuario ha iniciado sesión y es administrador
 @app.get("/session-status-admin")
 async def session_status(request: Request):
     username = request.session.get("username")
@@ -116,7 +123,7 @@ async def session_status(request: Request):
             "es_admin": "False",
         }
 
-
+# Ruta para registrar un nuevo usuario
 @app.post("/register")
 async def register(email: str = Body(...), username: str = Body(...), password: str = Body(...)):
     try:
@@ -129,7 +136,7 @@ async def register(email: str = Body(...), username: str = Body(...), password: 
         raise HTTPException(status_code=500, detail="Error interno del servidor")
 
 
-    
+# Ruta para consultar datos de un activo
 @app.get("/consult")
 async def consult(activo: str, periodo: str):
     print("Entramos en el endpoint de consult")
@@ -139,6 +146,7 @@ async def consult(activo: str, periodo: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# Ruta para obtener el valor actual de un activo y el saldo disponible del usuario
 @app.get("/datos-pre-transaccion-compra")
 async def datos_pre_transaccion(
     activo: str, 
@@ -154,29 +162,7 @@ async def datos_pre_transaccion(
     except Exception as e:
         raise HTTPException(500, detail=str(e))
 
-    ###########################EN DESUSO################################
-# @app.get("/consultar-saldo")
-# async def consultar_saldo(usuario: str = Depends(get_current_user)):
-#     try:
-#         return {"saldo": await consultar_saldo_disponible(usuario)}
-#     except ValueError as e:
-#         raise HTTPException(404, str(e))
-#     except Exception as e:
-#         raise HTTPException(500, str(e))
-    
-    
-# @app.get("/consultar-precio-actual")
-# def consultar_precio_actual(activo: str):
-#     try:
-#         precio = obtener_valor_actual(activo)
-#         return {"precio": precio}
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=str(e))
-    ###########################EN DESUSO################################
-
-
-
-
+# Ruta para comprar acciones
 @app.post("/comprar-acciones")
 async def comprar_acciones(activo: str = Body(...), cantidad: float = Body(...), stopLoss: float = Body(0), takeProfit: float = Body(0), usuario: str = Depends(get_current_user)):
     try:
@@ -198,6 +184,7 @@ async def comprar_acciones(activo: str = Body(...), cantidad: float = Body(...),
     except Exception as e:
         raise HTTPException(500, f"Error interno: {str(e)}")
 
+# Ruta para obtener datos previos a la transacción de venta
 @app.get("/datos-pre-transaccion-venta")
 async def datos_pre_transaccion_venta(
     activo: str, 
@@ -207,7 +194,7 @@ async def datos_pre_transaccion_venta(
         precio_activo = await obtener_valor_actual(activo)
         print("el precio del activo es: "+ str(precio_activo))
         numAcciones = await consultar_cantidad_acciones(usuario, activo)
-        numAcciones = float(numAcciones)  # Asegurarse de que sea un número flotante
+        numAcciones = float(numAcciones)  
         print("El número de acciones que tiene es: " + str(numAcciones))
         cantidadDisponible = (numAcciones * precio_activo)
         print("La multiplicación es el saldo total del activo, que es: " + str(cantidadDisponible))
@@ -219,6 +206,7 @@ async def datos_pre_transaccion_venta(
     except Exception as e:
         raise HTTPException(500, detail=str(e))
     
+# Ruta para vender acciones
 @app.post("/vender-acciones")
 async def vender_acciones(activo: str,cantidad: float,usuario: str = Depends(get_current_user)):
     try:
@@ -247,7 +235,7 @@ async def vender_acciones(activo: str,cantidad: float,usuario: str = Depends(get
     except Exception as e:
         raise HTTPException(500, f"Error interno: {str(e)}")   
 
-
+#Ruta para cargar los activos del perfil del usuario
 @app.get("/cargar-activos-perfil")
 async def cargar_perfil(usuario: str = Depends(get_current_user)):
     try:
@@ -255,6 +243,7 @@ async def cargar_perfil(usuario: str = Depends(get_current_user)):
     except Exception as e:
         raise HTTPException(500, str(e))
 
+# Ruta para cargar las transacciones del perfil del usuario
 @app.get("/cargar-transacciones-perfil")
 async def cargar_transacciones_perfil(usuario: str = Depends(get_current_user)):
     try:
@@ -262,6 +251,7 @@ async def cargar_transacciones_perfil(usuario: str = Depends(get_current_user)):
     except Exception as e:
         raise HTTPException(500, str(e))
     
+# Ruta para reiniciar un usuario
 @app.post("/reinicio")
 async def reinicio(usuario: str = Depends(get_current_user)):
     try:
@@ -270,11 +260,13 @@ async def reinicio(usuario: str = Depends(get_current_user)):
     except Exception as e:
         raise HTTPException(500, str(e))
     
+# Ruta para cerrar sesión
 @app.post("/logout")
 async def logout(request: Request):
     request.session.clear()
     return {"message": "Sesión cerrada"}
 
+# Ruta para cargar todas las transacciones de un usuario
 @app.get("/cargar-todas-transacciones")
 async def cargar_todas_transacciones(usuario: str = Depends(get_current_user)):
     try:
@@ -283,6 +275,7 @@ async def cargar_todas_transacciones(usuario: str = Depends(get_current_user)):
         raise HTTPException(500, str(e))
 
 
+# Ruta para cargar la página del administrador
 @app.get('/cargar-pagina-admin')
 async def cargar_pagina_admin(usuario: str = Depends(get_current_user)):
     try:
@@ -296,6 +289,7 @@ async def cargar_pagina_admin(usuario: str = Depends(get_current_user)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# Ruta para reiniciar a un usuario forzadamente
 @app.post('/reiniciar-forzado')
 async def reiniciar_forzado(admin: str = Depends(get_current_user), nombre_usuario: str = Body(...)):
     try:
