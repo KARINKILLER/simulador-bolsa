@@ -14,6 +14,7 @@ DATABASE_CONFIG = {
 
 connection_pool = None
 
+# Inicia la conexión a la base de datos
 async def init_db():
     global connection_pool
     try:
@@ -24,12 +25,14 @@ async def init_db():
         print(f"Error al inicializar la base de datos: {e}")
         raise
 
+# Cierra la conexión a la base de datos
 async def close_db():
     if connection_pool:
         print("Cerrando la conexión a la base de datos...")
         await connection_pool.close()
         print("Conexión a la base de datos cerrada correctamente.")
 
+# Valida el login del usuario
 async def validarLogin(username: str, password: str) -> bool:
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -46,6 +49,7 @@ async def validarLogin(username: str, password: str) -> bool:
         print(f"Error en loginValidation: {e}")
         return False
 
+# Registra un nuevo usuario en la base de datos si no existe y el email no está en uso
 async def registrarUsuario(email: str, username: str, password: str):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -54,7 +58,8 @@ async def registrarUsuario(email: str, username: str, password: str):
         query = "INSERT INTO usuarios (nombre_usuario, correo_electronico, contrasenna, saldo_virtual) VALUES ($1, $2, $3, 1000)"
         password_hash = hash_password(password)
         await connection.execute(query, username, email, password_hash)
-    
+
+# Verifica si el usuario es administrador    
 async def es_admin(username: str) -> bool:
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -68,6 +73,7 @@ async def es_admin(username: str) -> bool:
         print(f"Error al verificar si es admin: {e}")
         raise
 
+# Consulta el saldo virtual disponible del usuario
 async def consultar_saldo_disponible(username: str) -> float:
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -84,6 +90,7 @@ async def consultar_saldo_disponible(username: str) -> float:
         print(f"Error al consultar saldo: {e}")
         raise
 
+# Actualiza el saldo virtual del usuario restando la cantidad especificada
 async def actualizar_saldo(username: str, cantidad: float):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -96,6 +103,7 @@ async def actualizar_saldo(username: str, cantidad: float):
         print(f"Error al actualizar saldo: {e}")
         raise
 
+# Registra una compra en la base de datos en la tabla de transacciones
 async def registrar_compra(username: str, activo: str, cantidad: float, precio: float):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -108,7 +116,8 @@ async def registrar_compra(username: str, activo: str, cantidad: float, precio: 
 
     except Exception as e:
         print(f"Error al registrar compra: {e}")
-        
+
+# Actualiza la cartera del usuario con el activo comprado, cantidad, precio promedio, stop loss y take profit        
 async def actualizar_cartera(username: str, activo: str, cantidad: float, precio: float, stopLoss: float, takeProfit: float):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -143,6 +152,7 @@ async def actualizar_cartera(username: str, activo: str, cantidad: float, precio
         print(f"Error al actualizar cartera: {e}")
         raise
 
+# Reinicia los datos del usuario, eliminando transacciones, vaciando cartera y restableciendo el saldo a 1000
 async def reiniciar(username: str):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -170,6 +180,7 @@ async def reiniciar(username: str):
         print(f"Error al eliminar datos y restablecer saldo: {e}")
         raise
 
+# Consulta los datos para el perfil del usuario, incluyendo saldo y activos en cartera
 async def cargarPerfil(username: str):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -226,6 +237,7 @@ async def cargarPerfil(username: str):
         raise
 
 
+# Carga las últimas 3 transacciones del usuario para mostrar en su perfil
 async def cargarTransaccionesPerfil(username: str):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -242,6 +254,7 @@ async def cargarTransaccionesPerfil(username: str):
         print(f"Error al consultar transacciones: {e}")
         raise
 
+# Carga todas las transacciones del usuario
 async def cargarTodasLasTransacciones(username: str):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -258,6 +271,7 @@ async def cargarTodasLasTransacciones(username: str):
         print(f"Error al consultar transacciones: {e}")
         raise
 
+# Consulta el número de acciones que el usuario tiene en su cartera para un activo específico
 async def consultar_cantidad_acciones(username: str, activo: str) -> float:
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -276,6 +290,7 @@ async def consultar_cantidad_acciones(username: str, activo: str) -> float:
         print(f"Error al consultar cantidad de acciones: {e}")
         raise
 
+#EN DESUSO
 async def consultar_cantidad_disponible(username: str, activo: str) -> float:
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -293,6 +308,7 @@ async def consultar_cantidad_disponible(username: str, activo: str) -> float:
         print(f"Error al consultar cantidad de acciones: {e}")
         raise
 
+# Registra una venta en la base de datos
 async def registrar_venta(username: str, activo: str, cantidad: float, precio: float):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -309,6 +325,7 @@ async def registrar_venta(username: str, activo: str, cantidad: float, precio: f
     except Exception as e:
         print(f"Error al registrar venta: {e}")
 
+# Elimina acciones de la cartera del usuario, actualizando el número de acciones y eliminando el activo si es necesario
 async def eliminar_acciones(username: str, activo: str, cantidad: float):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -332,7 +349,8 @@ async def eliminar_acciones(username: str, activo: str, cantidad: float):
     except Exception as e:
         print(f"Error al eliminar acciones: {e}")
         raise
-#función que se ejecuta cada 5 minutos para comprobar si hay que vender acciones con stop loss o take profit mayor que 0
+
+# Selecciona aquellas transacciones automáticas cuyo Stop Loss o Take Profit sean mayores que 0
 async def transacciones_automaticas():
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -354,6 +372,7 @@ async def transacciones_automaticas():
         print(f"Error en transacciones automáticas: {e}")
         raise    
 
+# Ejecuta una venta automática, lo que significa eliminar el activo de la cartera del usuario
 async def venta_automatica(id_cartera: int, simbolo_activo: str):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -372,6 +391,7 @@ async def venta_automatica(id_cartera: int, simbolo_activo: str):
         print(f"Error en venta automática: {e}")
         raise
 
+# Elimina todas las acciones de un activo específico del usuario
 async def eliminar_todas_acciones(usuario: str, activo: str):
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")
@@ -384,6 +404,7 @@ async def eliminar_todas_acciones(usuario: str, activo: str):
         print(f"Error al eliminar todas las acciones: {e}")
         raise
 
+# Carga los usuarios de la base de datos, excluyendo administradores, ordenados por saldo virtual
 async def cargar_usuarios():
     if not connection_pool:
         raise Exception("La conexión a la base de datos no ha sido inicializada")

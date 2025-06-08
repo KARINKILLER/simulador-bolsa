@@ -11,6 +11,7 @@ const Register = () => {
     navigate('/'); 
   };
 
+  // Función para crear una cuenta
   const crearCuenta = async (e) => {
     e.preventDefault();
     setError(''); 

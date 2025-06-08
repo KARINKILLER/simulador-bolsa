@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import GraficaDonut from './GraficaDonut';
+
+//EN DESUSO
 const Help = () => {
   const datosActivos = [
   { activo: "Acciones", cantidad: 5000 },

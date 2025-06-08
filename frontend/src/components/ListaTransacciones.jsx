@@ -46,11 +46,13 @@ const ListaTransacciones = ({ transacciones }) => {
         {nombre: 'Monero (XMR)', ticker: 'XMR' }
     ];
 
+    // Esta función busca el nombre del activo basado en su ticker
     const obtenerNombreActivo = (ticker) => {
         const activo = opcionesAcciones.find(opcion => opcion.ticker === ticker);
         return activo ? activo.nombre : ticker;
     };
 
+    //Esta función formatea la fecha al formato español
     const formatearFecha = (fecha) => {
         return new Date(fecha).toLocaleDateString('es-ES', {
             day: '2-digit',

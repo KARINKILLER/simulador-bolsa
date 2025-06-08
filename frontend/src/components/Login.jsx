@@ -5,6 +5,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  //Función para enviar el formulario de inicio de sesión
   const enviarFormulario = async (e) => {
   e.preventDefault();
   setError(''); 

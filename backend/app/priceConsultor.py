@@ -5,11 +5,15 @@ import dbHelper
 from decimal import Decimal
 import asyncio
 
+#Cargar el CSV de acciones
 current_dir = os.path.dirname(os.path.abspath(__file__))
 csv_path = os.path.join(current_dir, "..", "..", "Stocks_Definitivo.csv")
 print("Cargando csv...")
 df = pl.read_csv(csv_path)
+print("CSV cargado correctamente.")
 
+
+#Obtiene los datos de un activo en un periodo determinado
 async def obtener_datos_activo(ticker, periodo):
     fecha_actual = datetime.now()
     # fecha_simulada = fecha_actual - timedelta(days=365.25 * 20) 
@@ -41,6 +45,7 @@ async def obtener_datos_activo(ticker, periodo):
     lista = result.to_dicts()
     return lista[::-1]
 
+#Obtiene el valor actual de un activo
 async def obtener_valor_actual(ticker):
     fecha_actual = datetime.now()
     # fecha_simulada = fecha_actual - timedelta(days=365.25 * 20) 
@@ -61,6 +66,7 @@ async def obtener_valor_actual(ticker):
 
     return precio_actual
 
+# Verifica si hay que realizar alguna venta automática 
 async def verificar_ventas_automaticas(transacciones):
     ventas = []
     for transaccion in transacciones:

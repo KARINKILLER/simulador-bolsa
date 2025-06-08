@@ -8,6 +8,7 @@ const Transacciones = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        // Verificar el estado de la sesión al cargar el componente
         const verificarSesion = async () => {
             try {
                 const response = await fetch("http://localhost:8000/session-status", {
@@ -24,6 +25,7 @@ const Transacciones = () => {
             }
         };
 
+        // Cargar las transacciones al montar el componente
         const cargarTransacciones = async () => {
             try {
                 await verificarSesion();

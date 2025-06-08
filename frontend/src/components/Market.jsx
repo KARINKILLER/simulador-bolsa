@@ -92,6 +92,7 @@ const Market = () => {
     { value: 2, label: '1 mes', codigo:'mes'},
     { value: 3, label: '1 semana', codigo:'semana'}]
 
+  //Función que se encarga de pedir los datos al backend sobre un activo en un periodo de tiempo concreto
   const pedirDatos = async (ticker, codigoTiempo) => {
     if (!ticker || !codigoTiempo) return;
     setDatosCargando(true);
@@ -179,6 +180,7 @@ const Market = () => {
     }
   };
 
+  //función que se encarga de pedir los datos al backend para antes de la compra de un activo
   const preCompra = async () => {
     const response = await fetch(`http://localhost:8000/datos-pre-transaccion-compra?activo=${tickerSeleccionado}`, {credentials: 'include'});    
     if (!response.ok) throw new Error(`Error: ${response.status}`);
@@ -192,6 +194,7 @@ const Market = () => {
     setModalCompraOpen(true);
   };
 
+  //función que se encarga de confirmar la compra de un activo
   const confirmarCompra = async () => {
     setCantidadCompra(document.getElementById('cantidad-compra').value);
     const cantidadComprada = document.getElementById('cantidad-compra').value;
@@ -224,6 +227,7 @@ const Market = () => {
     }
   };
 
+  //función que se encarga de pedir los datos al backend para antes de la venta de un activo
   const preVenta = async () => {
     console.log("Mirar si se tienen acciones y cuanto valen")
     const response = await fetch(`http://localhost:8000/datos-pre-transaccion-venta?activo=${tickerSeleccionado}`, {credentials: 'include'});
@@ -235,6 +239,7 @@ const Market = () => {
     setModalVentaOpen(true);
   }
 
+  //función que se encarga de confirmar la venta de un activo
   const confirmarVenta = async () => {
     setCantidadVenta(document.getElementById('cantidad-venta').value);
     const cantidadVendida = document.getElementById('cantidad-venta').value;
@@ -279,7 +284,7 @@ const Market = () => {
           <div className='modal-content-app p-4'>
             <h2 className='mb-3'>Vas a vender acciones de {accionSeleccionada}</h2>
             <h4 className='mb-3'>¿Cuánto dinero de este activo quieres vender?</h4>
-            <h5 className='mb-3'>Cantidad disponible: <span className='text-gain'>${cantidadDisponible}</span></h5>
+            <h5 className='mb-3'>Cantidad disponible: <span className='text-gain'>${cantidadDisponible.toFixed(2)}</span></h5>
             <input placeholder="0" type='number' className='form-control input-app mb-3' id='cantidad-venta' step="1" max={cantidadDisponible} onBlur={() => ajustarMaximo('cantidad-venta', cantidadDisponible)} />
             <div className='text-center'>
               <button className='btn btn-app-primary me-2' onClick={confirmarVenta}>Confirmar</button>

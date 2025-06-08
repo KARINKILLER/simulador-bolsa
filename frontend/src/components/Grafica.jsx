@@ -57,6 +57,7 @@ function Grafica({ datos }) {
         beginAtZero: false,
         ticks: {
           color: '#FFFFFF', 
+          // Formatear los valores para que aparezcan como moneda
           callback: (value) => {
             return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
           }
@@ -78,6 +79,7 @@ function Grafica({ datos }) {
         callbacks: {
           label: (context) => {
             let label;
+            //Formatear el valor del tooltip como moneda
             if (context.parsed !== null) {
               label = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.raw);
             }

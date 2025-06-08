@@ -46,7 +46,7 @@ const opcionesAcciones = [
     {nombre: 'Monero (XMR)', ticker: 'XMR' }
 ];
 
-
+// Esta función busca el nombre del activo basado en su ticker
 const obtenerNombreActivo = (ticker) => {
     const activo = opcionesAcciones.find(opcion => opcion.ticker === ticker);
     return activo ? activo.nombre : ticker;

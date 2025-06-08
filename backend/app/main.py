@@ -37,7 +37,7 @@ app.add_middleware(
     https_only=False,
 )
 
-@repeat_every(seconds=6) 
+@repeat_every(seconds=600) 
 async def acciones_automaticas():
     print("Ejecutando acciones automáticas...")
     transacciones = await transacciones_automaticas()
@@ -93,10 +93,7 @@ async def login(request: Request, username: str = Body(...), password: str = Bod
         print(f"Error en login: {e}")
         raise HTTPException(status_code=500, detail="Error interno del servidor")
 
-@app.post("/logout")
-async def logout(request: Request):
-    request.session.clear()
-    return {"message": "Sesión cerrada"}
+
 
 @app.get("/session-status")
 async def session_status(request: Request):
@@ -131,13 +128,6 @@ async def register(email: str = Body(...), username: str = Body(...), password: 
         print(f"Error en la ruta /register: {e}")
         raise HTTPException(status_code=500, detail="Error interno del servidor")
 
-            
-    except HTTPException:
-        # Re-lanzar HTTPExceptions para mantener el status code
-        raise
-    except Exception as e:
-        print(f"Error en la ruta /register: {e}")
-        raise HTTPException(status_code=500, detail="Error interno del servidor")
 
     
 @app.get("/consult")
@@ -208,36 +198,6 @@ async def comprar_acciones(activo: str = Body(...), cantidad: float = Body(...),
     except Exception as e:
         raise HTTPException(500, f"Error interno: {str(e)}")
 
-    
-@app.post("/reinicio")
-async def reinicio(usuario: str = Depends(get_current_user)):
-    try:
-        await reiniciar(usuario)
-        return {"message": "Cartera reiniciada correctamente"}
-    except Exception as e:
-        raise HTTPException(500, str(e))
-
-@app.get("/cargar-activos-perfil")
-async def cargar_perfil(usuario: str = Depends(get_current_user)):
-    try:
-        return await cargarPerfil(usuario)
-    except Exception as e:
-        raise HTTPException(500, str(e))
-
-@app.get("/cargar-transacciones-perfil")
-async def cargar_transacciones_perfil(usuario: str = Depends(get_current_user)):
-    try:
-        return await cargarTransaccionesPerfil(usuario)
-    except Exception as e:
-        raise HTTPException(500, str(e))
-
-@app.get("/cargar-todas-transacciones")
-async def cargar_todas_transacciones(usuario: str = Depends(get_current_user)):
-    try:
-        return await cargarTodasLasTransacciones(usuario)
-    except Exception as e:
-        raise HTTPException(500, str(e))
-
 @app.get("/datos-pre-transaccion-venta")
 async def datos_pre_transaccion_venta(
     activo: str, 
@@ -285,7 +245,43 @@ async def vender_acciones(activo: str,cantidad: float,usuario: str = Depends(get
     except ValueError as e:
         raise HTTPException(404, str(e))
     except Exception as e:
-        raise HTTPException(500, f"Error interno: {str(e)}")
+        raise HTTPException(500, f"Error interno: {str(e)}")   
+
+
+@app.get("/cargar-activos-perfil")
+async def cargar_perfil(usuario: str = Depends(get_current_user)):
+    try:
+        return await cargarPerfil(usuario)
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
+@app.get("/cargar-transacciones-perfil")
+async def cargar_transacciones_perfil(usuario: str = Depends(get_current_user)):
+    try:
+        return await cargarTransaccionesPerfil(usuario)
+    except Exception as e:
+        raise HTTPException(500, str(e))
+    
+@app.post("/reinicio")
+async def reinicio(usuario: str = Depends(get_current_user)):
+    try:
+        await reiniciar(usuario)
+        return {"message": "Cartera reiniciada correctamente"}
+    except Exception as e:
+        raise HTTPException(500, str(e))
+    
+@app.post("/logout")
+async def logout(request: Request):
+    request.session.clear()
+    return {"message": "Sesión cerrada"}
+
+@app.get("/cargar-todas-transacciones")
+async def cargar_todas_transacciones(usuario: str = Depends(get_current_user)):
+    try:
+        return await cargarTodasLasTransacciones(usuario)
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
 
 @app.get('/cargar-pagina-admin')
 async def cargar_pagina_admin(usuario: str = Depends(get_current_user)):

@@ -15,6 +15,7 @@ const Perfil = () => {
 
 
     useEffect(() => {
+        // Verificar el estado de la sesión al cargar el componente
         const verificarSesion = async () => {
             try {
                 const response = await fetch("http://localhost:8000/session-status", {
@@ -31,6 +32,7 @@ const Perfil = () => {
             }
         };
 
+        // Cargar los datos del perfil y las transacciones
         const cargarPerfil = async () => {
             try {
                 await verificarSesion();
@@ -74,6 +76,7 @@ const Perfil = () => {
         window.location.reload();
     };
 
+    // Función para reiniciar la cuenta
     const reinicio = async () => {
         const response = await fetch('http://localhost:8000/reinicio', {method: 'POST', credentials: 'include'});
         if (!response.ok) throw new Error(`Error: ${response.status}`);
@@ -95,6 +98,7 @@ const Perfil = () => {
         navigate('/transacciones');
     };
     
+    // Función para cerrar sesión
     const logout = async () => {
         try {
             const response = await fetch('http://localhost:8000/logout', {

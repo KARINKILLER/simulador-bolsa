@@ -108,6 +108,7 @@ function GraficaDonut({ activos }) {
         callbacks: {
           label: (context) => {
             const label = context.label || '';
+            // Formatear el valor del tooltip como moneda
             const value = new Intl.NumberFormat('en-US', { 
               style: 'currency', 
               currency: 'USD' 

@@ -1,3 +1,6 @@
+# ARCHIVO EN DESUSO, SE MANTIENE COMO PRUEBA DE SU EXISTENCIA
+# Este archivo contiene funciones para obtener datos de acciones desde la API de Alpha Vantage.
+
 import requests
 from datetime import datetime, timedelta
 

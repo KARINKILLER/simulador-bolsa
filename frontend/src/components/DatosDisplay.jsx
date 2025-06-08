@@ -1,4 +1,6 @@
 import React from 'react';
+//EN DESUSO
+
 
 const DatosDisplay = ({ datos }) => {
     const datosArray = datos.datos || [];

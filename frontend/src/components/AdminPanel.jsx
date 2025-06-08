@@ -5,7 +5,7 @@ import Modal from './Modal';
 
 
 
-
+// Función para cerrar sesión
 const logout = async () => {
     try {
         const response = await fetch('http://localhost:8000/logout', {
@@ -25,16 +25,12 @@ const logout = async () => {
 }
 
 const AdminPanel = () => {
-    const [modalOpen, setModalOpen] = useState(false);
-    const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
 
-    const cerrarModal = () => {
-        setModalOpen(false);
-    };
     const [listaUsuarios, setListaUsuarios] = useState([]);
 
     const navigate = useNavigate();
     
+    // Verificar el estado de la sesión y cargar la lista de usuarios al montar el componente
       useEffect(() => {
         fetch("http://localhost:8000/session-status", {method: "GET",credentials: "include"})
           .then(response => response.json())

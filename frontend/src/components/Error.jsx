@@ -12,7 +12,7 @@ const Error = () => {
             credentials: 'include' 
         });
         if (response.ok) {
-            window.location.href = '/';
+            navigate("/");
         } else {
             console.error('Error al cerrar sesión');
         }

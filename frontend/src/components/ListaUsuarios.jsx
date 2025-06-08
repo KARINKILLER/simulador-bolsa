@@ -25,6 +25,7 @@ const ListaUsuarios = ({ usuarios }) => {
     setModalOpen(true);
   };
 
+  // Función para reiniciar la cuenta de un usuario seleccionado previamente
   const reinicio = (usuario) => {
       fetch("http://localhost:8000/reiniciar-forzado", {
         method: 'POST', credentials: 'include',

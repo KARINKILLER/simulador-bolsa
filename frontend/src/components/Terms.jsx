@@ -42,15 +42,15 @@ const Terms = () => {
                                 <h3>Propósito Educativo</h3>
                                 <p>
                                     El objetivo de esta plataforma es proporcionar una experiencia de aprendizaje 
-                                    sobre conceptos de inversión y trading sin riesgo financiero real. No constituye 
-                                    asesoramiento financiero ni recomendaciones de inversión.
+                                    sobre conceptos de inversión y trading sin riesgo financiero real. <strong>No constituye 
+                                    asesoramiento financiero ni recomendaciones de inversión.</strong>
                                 </p>
                             </div>
 
                             <div className='mb-3'>
                                 <h3>Limitación de Responsabilidad</h3>
                                 <p>
-                                    Los desarrolladores de esta aplicación no se hacen responsables de ninguna 
+                                    Los desarrolladores de esta aplicación <strong>no se hacen responsables</strong> de ninguna 
                                     decisión de inversión real que pueda tomar el usuario basándose en la 
                                     experiencia obtenida en esta simulación.
                                 </p>
