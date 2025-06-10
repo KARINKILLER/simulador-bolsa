@@ -1,7 +1,7 @@
 import os
 import polars as pl
 from datetime import datetime, timedelta
-import .dbHelper
+from . import dbHelper
 from decimal import Decimal
 import asyncio
 
