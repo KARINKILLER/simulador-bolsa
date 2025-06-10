@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import logoUAH from '../assets/logo_uah_2.png';
 
 const Terms = () => {
     const navigate = useNavigate();
@@ -13,6 +14,9 @@ const Terms = () => {
             <div className='row justify-content-center'>
                 <div className='col-12 col-lg-8'>
                     <h1 className='mt-2 text-center'>Web app para la simulación de inversiones en bolsa y en criptomonedas</h1>
+                    <div className='text-center mt-3 mb-4'>
+                        <img src = {logoUAH} className='text-center imagen-logo'></img>
+                    </div>
                     <div className='card card-app p-4 mt-4 mb-4'>
                         <div className='text-center mb-4'>
                             <h2>Términos y Condiciones</h2>

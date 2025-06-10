@@ -494,3 +494,9 @@ body, .bg-app {
   transition: all 0.3s ease;
   width: 100%;
 }
+
+.imagen-logo {
+  width: 150px;
+  height: 150px;
+  margin-right: 1rem;
+}

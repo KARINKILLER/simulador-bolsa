@@ -7,7 +7,7 @@ import asyncio
 
 #Cargar el CSV de acciones
 current_dir = os.path.dirname(os.path.abspath(__file__))
-csv_path = os.path.join(current_dir, "..", "..", "Stocks_Definitivo.csv")
+csv_path = os.path.join(current_dir, '..', 'csvs', 'Stocks_Definitivo.csv')
 print("Cargando csv...")
 df = pl.read_csv(csv_path)
 print("CSV cargado correctamente.")
