@@ -1,6 +1,6 @@
 import asyncpg
-from pwEncrypt import *
-from priceConsultor import *
+from .pwEncrypt import *
+from .priceConsultor import *
 from decimal import Decimal
 
 
