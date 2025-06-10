@@ -5,7 +5,6 @@ import Register from './components/Register';
 import Market from './components/Market';
 import Perfil from './components/Perfil';
 import Transacciones from './components/Transacciones';
-import Help from './components/Help';
 import Error from './components/Error';
 import Terms from './components/Terms';
 import AdminPanel from './components/AdminPanel';
