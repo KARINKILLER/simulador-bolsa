@@ -3,8 +3,8 @@ from fastapi_utils.tasks import repeat_every
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from contextlib import asynccontextmanager
-from dbHelper import *
-from priceConsultor import *
+from .dbHelper import *
+from .priceConsultor import *
 
 
 
