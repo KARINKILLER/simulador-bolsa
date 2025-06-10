@@ -4,7 +4,6 @@ bcrypt
 asyncpg
 requests
 datetime
-contextlib
 polars
 itsdangerous #De cuando se ponen las sesiones
 fastapi_utils
