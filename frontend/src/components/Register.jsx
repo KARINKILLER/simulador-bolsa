@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Modal from './Modal';
+import logoSimuMarket from '../assets/simumarket2.png';
+
 
 const Register = () => {
   const [error, setError] = useState('');
@@ -58,7 +60,7 @@ const Register = () => {
   };
 
   return (
-    <div className="container bg-app d-flex align-items-center justify-content-center min-vh-100">
+    <div className="container bg-app d-flex justify-content-center min-vh-100">
 
       <Modal isOpen={modalCuentaRegistrada}>
         <div className='modal-content-app p-4 text-center'>
@@ -69,8 +71,11 @@ const Register = () => {
       </Modal>
 
       <div className="col-12 col-md-6 col-lg-4">
-        <div className="card card-app p-4">
-          <h2 className="text-center mb-4">Registro</h2>
+                <div className="justify-content-center mt-4">
+            <img src={logoSimuMarket} alt="Logo SimuMarket" className='mb-4' style={{ maxWidth: '430px' }} />
+                </div>
+        <div className="card card-app p-3 mt-2">
+          <h2 className="text-center mb-2">Registro</h2>
           {error && (
             <div className="alert alert-danger py-2 px-3" style={{backgroundColor: "#FF4D4D", color: "#fff", border: "none"}}>
               {error}

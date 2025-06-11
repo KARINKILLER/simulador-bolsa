@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import logoSimuMarket from '../assets/simumarket2.png';
 
 const Login = () => {
   const [error, setError] = useState('');
@@ -44,10 +45,13 @@ const Login = () => {
   };
 
   return (
-    <div className="container bg-app d-flex align-items-center justify-content-center min-vh-100">
+    <div className="container bg-app d-flex justify-content-center min-vh-100">
       <div className="col-12 col-md-6 col-lg-4">
-        <div className="card card-app p-4">
-          <h2 className="text-center mb-4">Inicio de sesión</h2>
+        <div className="align-items-center justify-content-center mt-4">
+            <img src={logoSimuMarket} alt="Logo SimuMarket" className='mb-4 mt-4' style={{ maxWidth: '430px' }} />
+        </div>
+        <div className="card card-app p-4 mt-3">
+          <h2 className="text-center mb-4 mt-3">Inicio de sesión</h2>
           {error && (
             <div className="alert alert-danger py-2 px-3" style={{backgroundColor: "#FF4D4D", color: "#fff", border: "none"}}>
               {error}
