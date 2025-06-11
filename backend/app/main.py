@@ -6,6 +6,13 @@ from contextlib import asynccontextmanager
 from .dbHelper import *
 from .priceConsultor import *
 
+from pydantic import BaseModel
+
+class UserRegister(BaseModel):
+    email: str
+    username: str
+    password: str
+
 
 
 # Inicialización de la base de datos y configuración de la aplicación FastAPI
@@ -125,17 +132,12 @@ async def session_status(request: Request):
 
 # Ruta para registrar un nuevo usuario
 @app.post("/register")
-async def register(datos_usuario: dict):
+async def register(user: UserRegister):
     try:
-        email = datos_usuario.get("email")
-        username = datos_usuario.get("username") 
-        password = datos_usuario.get("password")
-        await registrarUsuario(email, username, password)
-        return {"message": "Usuario registrado correctamente", "username": username}
-    except asyncpg.UniqueViolationError:
-        raise HTTPException(status_code=409, detail="El nombre de usuario o correo electrónico ya están en uso")
+        await registrarUsuario(user.email, user.username, user.password)
+        return {"message": "Usuario registrado correctamente", "username": user.username}
     except Exception as e:
-        print(f"Error en la ruta /register: {e}")
+        print(f"Error: {e}")
         raise HTTPException(status_code=500, detail="Error interno del servidor")
 
 
