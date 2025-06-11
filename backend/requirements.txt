@@ -5,7 +5,7 @@ asyncpg
 requests
 datetime
 polars
-# itsdangerous #De cuando se ponen las sesiones
+itsdangerous #De cuando se ponen las sesiones
 fastapi_utils
 typing_inspect
 # xlsxwriter #Formateo de excels
