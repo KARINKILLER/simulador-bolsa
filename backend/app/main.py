@@ -5,14 +5,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from contextlib import asynccontextmanager
 from .dbHelper import *
 from .priceConsultor import *
-
-from pydantic import BaseModel
-
-class UserRegister(BaseModel):
-    email: str
-    username: str
-    password: str
-
+import requests
 
 
 # Inicialización de la base de datos y configuración de la aplicación FastAPI
@@ -21,6 +14,7 @@ async def lifespan(app: FastAPI):
     try:
         await init_db()
         await acciones_automaticas()
+        await keep_alive()
         yield
     finally:
         await close_db()
@@ -71,7 +65,24 @@ async def realizar_ventas_automaticas(ventas_a_realizar):
         except Exception as e:
             print(f"Error al realizar la venta automática para {usuario} de {num_acciones} acciones de {activo}: {e}")
 
+@repeat_every(seconds=600)
+async def keep_alive():
+    try:
+        response = requests.get("https://simulador-bolsa-05g9.onrender.com/keepalive")
+        if response.status_code == 200:
+            print("Keep alive exitoso.")
+        else:
+            print(f"Error en keep alive: {response.status_code}")
+    except requests.RequestException as e:
+        print(f"Error al hacer keep alive: {e}")
 
+@app.get("/keepalive")
+async def keepalive():
+    return {
+        "status": "alive",
+        "timestamp": datetime.now(),
+        "message": "Simulador de bolsa activo"
+    }
 
 #Función para extraer el nombre de usuario actual de la sesión
 async def get_current_user(request: Request):
