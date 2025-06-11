@@ -125,8 +125,11 @@ async def session_status(request: Request):
 
 # Ruta para registrar un nuevo usuario
 @app.post("/register")
-async def register(email: str = Body(...), username: str = Body(...), password: str = Body(...)):
+async def register(datos_usuario: dict):
     try:
+        email = datos_usuario.get("email")
+        username = datos_usuario.get("username") 
+        password = datos_usuario.get("password")
         await registrarUsuario(email, username, password)
         return {"message": "Usuario registrado correctamente", "username": username}
     except asyncpg.UniqueViolationError:
