@@ -6,7 +6,7 @@ const Error = () => {
 
     const logout = async () => {
     try {
-        const response = await fetch('http://localhost:8000/logout', {
+        const response = await fetch('https://simulador-bolsa-05g9.onrender.com/logout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include' 

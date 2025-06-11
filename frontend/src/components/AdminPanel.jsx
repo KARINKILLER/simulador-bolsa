@@ -8,7 +8,7 @@ import Modal from './Modal';
 // Función para cerrar sesión
 const logout = async () => {
     try {
-        const response = await fetch('http://localhost:8000/logout', {
+        const response = await fetch('https://simulador-bolsa-05g9.onrender.com/logout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include' 
@@ -32,7 +32,7 @@ const AdminPanel = () => {
     
     // Verificar el estado de la sesión y cargar la lista de usuarios al montar el componente
       useEffect(() => {
-        fetch("http://localhost:8000/session-status", {method: "GET",credentials: "include"})
+        fetch("https://simulador-bolsa-05g9.onrender.com/session-status", {method: "GET",credentials: "include"})
           .then(response => response.json())
           .then(data => {
             console.log(data);
@@ -44,7 +44,7 @@ const AdminPanel = () => {
             navigate("/error");
           });
 
-        fetch("http://localhost:8000/session-status-admin", {method: "GET",credentials: "include"})
+        fetch("https://simulador-bolsa-05g9.onrender.com/session-status-admin", {method: "GET",credentials: "include"})
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -56,7 +56,7 @@ const AdminPanel = () => {
                 navigate("/error");
             });
 
-        fetch("http://localhost:8000/cargar-pagina-admin", {method: "GET", credentials: "include"})
+        fetch("https://simulador-bolsa-05g9.onrender.com/cargar-pagina-admin", {method: "GET", credentials: "include"})
             .then(response => response.json())
             .then(data => {
                 console.log(data);
