@@ -130,10 +130,10 @@ async def session_status(request: Request):
             "es_admin": "False",
         }
 
-# Ruta para registrar un nuevo usuario
 @app.post("/register")
 async def register(user: UserRegister):
     try:
+        print(f"Datos recibidos: {user.email}, {user.username}") 
         await registrarUsuario(user.email, user.username, user.password)
         return {"message": "Usuario registrado correctamente", "username": user.username}
     except Exception as e:
