@@ -3,6 +3,18 @@ from .pwEncrypt import *
 from .priceConsultor import *
 from decimal import Decimal
 
+import asyncpg
+import ssl
+
+# Configuración para Neon con SSL
+NEON_DATABASE_CONFIG = {
+    "host": "ep-super-bush-a9o5isnp-pooler.gwc.azure.neon.tech",
+    "port": 5432,
+    "user": "neondb_owner", 
+    "password": "npg_IwZC2FBgU7GS",
+    "database": "neondb",
+    "ssl": "require"
+}
 
 DATABASE_CONFIG = {
     "user": "postgres",
@@ -14,16 +26,28 @@ DATABASE_CONFIG = {
 
 connection_pool = None
 
-# Inicia la conexión a la base de datos
+# # Inicia la conexión a la base de datos
+# async def init_db():
+#     global connection_pool
+#     try:
+#         print("Inicializando la base de datos...")
+#         connection_pool = await asyncpg.create_pool(**DATABASE_CONFIG)
+#         print("Base de datos inicializada correctamente.")
+#     except Exception as e:
+#         print(f"Error al inicializar la base de datos: {e}")
+#         raise
+
 async def init_db():
     global connection_pool
     try:
         print("Inicializando la base de datos...")
-        connection_pool = await asyncpg.create_pool(**DATABASE_CONFIG)
+        # Cambiar de DATABASE_CONFIG a NEON_DATABASE_CONFIG
+        connection_pool = await asyncpg.create_pool(**NEON_DATABASE_CONFIG)
         print("Base de datos inicializada correctamente.")
     except Exception as e:
         print(f"Error al inicializar la base de datos: {e}")
         raise
+
 
 # Cierra la conexión a la base de datos
 async def close_db():
