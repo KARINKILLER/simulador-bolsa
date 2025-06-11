@@ -22,6 +22,7 @@ function App() {
         <Route path="/error" element={<Error />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/adminPanel" element={<AdminPanel />} />
+        <Route path="*" element={<Error />} />
 
       </Routes>
     </Router>
