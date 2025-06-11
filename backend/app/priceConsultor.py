@@ -1,9 +1,7 @@
 import os
 import polars as pl
-from datetime import datetime, timedelta
-from . import dbHelper
+from datetime import datetime
 from decimal import Decimal
-import asyncio
 
 #Cargar el CSV de acciones
 current_dir = os.path.dirname(os.path.abspath(__file__))

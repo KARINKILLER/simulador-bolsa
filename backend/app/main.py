@@ -76,7 +76,7 @@ async def keep_alive():
     except requests.RequestException as e:
         print(f"Error al hacer keep alive: {e}")
 
-@app.get("/keepalive")
+@app.head("/keepalive")
 async def keepalive():
     return {
         "status": "alive",

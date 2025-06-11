@@ -3,9 +3,6 @@ from .pwEncrypt import *
 from .priceConsultor import *
 from decimal import Decimal
 
-import asyncpg
-import ssl
-
 # Configuración para Neon con SSL
 NEON_DATABASE_CONFIG = {
     "host": "ep-super-bush-a9o5isnp-pooler.gwc.azure.neon.tech",
