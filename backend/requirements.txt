@@ -1,7 +1,7 @@
 fastapi 
 uvicorn
 bcrypt==3.2.0
-asyncpg==0.24.0
+asyncpg
 requests==2.25.1
 
 datetime
