@@ -99,7 +99,7 @@ const Market = () => {
     setDatosListos(false);
 
     try {
-      const response = await fetch(`http://localhost:8000/consult?activo=${ticker}&periodo=${codigoTiempo}`);
+      const response = await fetch(`https://simulador-bolsa-05g9.onrender.com/?activo=${ticker}&periodo=${codigoTiempo}`);
       
       if (!response.ok) throw new Error(`Error: ${response.status}`);
 

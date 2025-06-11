@@ -23,7 +23,7 @@ app = FastAPI(lifespan=lifespan)
 # Configuración de CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173", "https://simulador-bolsa-m2ln.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -34,8 +34,8 @@ app.add_middleware(
     SessionMiddleware, 
     secret_key=";vsW9t-G,ca@_!00m!LNmlVw",
     session_cookie="session_cookie",
-    same_site="lax",
-    https_only=False,
+    same_site="none",
+    https_only=True
 )
 
 # Configuración de las acciones automáticas que se realizarán cada 10 minutos
