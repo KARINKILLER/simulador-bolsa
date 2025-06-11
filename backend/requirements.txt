@@ -3,7 +3,6 @@ uvicorn
 bcrypt==3.2.0
 asyncpg
 requests==2.25.1
-datetime
 polars
 itsdangerous #De cuando se ponen las sesiones
 fastapi_utils
