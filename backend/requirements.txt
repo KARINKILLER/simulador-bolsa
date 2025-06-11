@@ -1,11 +1,12 @@
 fastapi 
 uvicorn
-bcrypt
-asyncpg
-requests
+bcrypt==3.2.0
+asyncpg==0.24.0
+requests==2.25.1
+
 datetime
-polars
+polars==0.14.0
 itsdangerous #De cuando se ponen las sesiones
 fastapi_utils
-typing_inspect
-# xlsxwriter #Formateo de excels
+typing-inspect==0.6.0
+
