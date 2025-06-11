@@ -130,16 +130,17 @@ async def session_status(request: Request):
             "es_admin": "False",
         }
 
+# Ruta para registrar un nuevo usuario
 @app.post("/register")
-async def register(user: UserRegister):
+async def register(email: str = Body(...), username: str = Body(...), password: str = Body(...)):
     try:
-        print(f"Datos recibidos: {user.email}, {user.username}") 
-        await registrarUsuario(user.email, user.username, user.password)
-        return {"message": "Usuario registrado correctamente", "username": user.username}
+        await registrarUsuario(email, username, password)
+        return {"message": "Usuario registrado correctamente", "username": username}
+    except asyncpg.UniqueViolationError:
+        raise HTTPException(status_code=409, detail="El nombre de usuario o correo electrónico ya están en uso")
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error en la ruta /register: {e}")
         raise HTTPException(status_code=500, detail="Error interno del servidor")
-
 
 # Ruta para consultar datos de un activo
 @app.get("/consult")
