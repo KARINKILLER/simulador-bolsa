@@ -30,7 +30,7 @@ app = FastAPI(lifespan=lifespan)
 # Configuración de CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://simulador-bolsa-m2ln.vercel.app"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
