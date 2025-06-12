@@ -27,7 +27,7 @@ const ListaUsuarios = ({ usuarios }) => {
 
   // Función para reiniciar la cuenta de un usuario seleccionado previamente
   const reinicio = (usuario) => {
-      fetch("https://simulador-bolsa-05g9.onrender.com/reiniciar-forzado", {
+      fetch("https://inappropriate-dari-karinkiller-25441d28.koyeb.app/reiniciar-forzado", {
         method: 'POST', credentials: 'include',
        body: usuario, 
         headers: {
