@@ -5,20 +5,8 @@ const Error = () => {
     const navigate = useNavigate();
 
     const logout = async () => {
-    try {
-        const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app/logout', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include' 
-        });
-        if (response.ok) {
-            navigate("/");
-        } else {
-            console.error('Error al cerrar sesión');
-        }
-    } catch (error) {
-        console.error('Error de conexión con el servidor', error);
-    }
+
+        navigate("/");
 
 }
 
