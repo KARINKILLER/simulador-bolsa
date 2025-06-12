@@ -4,11 +4,16 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: '/frontend/',
+  build: {
+    outDir: 'dist'
+  },
   define: {
     'process.env': process.env
   },
   server: {
-    allowedHosts: true
+    allowedHosts: true,
+    historyApiFallback: true
   }
 
 })
