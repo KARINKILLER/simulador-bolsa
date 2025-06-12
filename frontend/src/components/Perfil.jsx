@@ -73,7 +73,7 @@ const Perfil = () => {
 
     const cerrarModalCuentaReiniciada = () => {
         setModalCuentaReiniciada(false);
-        navigate('/perfil'); // Redirigir al inicio o a otra página
+        navigate(0); 
     };
 
     // Función para reiniciar la cuenta
