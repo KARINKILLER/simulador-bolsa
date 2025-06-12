@@ -18,7 +18,7 @@ const Perfil = () => {
         // Verificar el estado de la sesión al cargar el componente
         const verificarSesion = async () => {
             try {
-                const response = await fetch("https://inappropriate-dari-karinkiller-25441d28.koyeb.app//session-status", {
+                const response = await fetch("https://inappropriate-dari-karinkiller-25441d28.koyeb.app/session-status", {
                     method: "GET",
                     credentials: "include"
                 });
@@ -37,10 +37,10 @@ const Perfil = () => {
             try {
                 await verificarSesion();
                 
-                const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app//cargar-activos-perfil', {
+                const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app/cargar-activos-perfil', {
                     credentials: 'include'
                 });
-                const response2 = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app//cargar-transacciones-perfil', {
+                const response2 = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app/cargar-transacciones-perfil', {
                     credentials: 'include'
                 });
                 
@@ -78,7 +78,7 @@ const Perfil = () => {
 
     // Función para reiniciar la cuenta
     const reinicio = async () => {
-        const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app//reinicio', {method: 'POST', credentials: 'include'});
+        const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app/reinicio', {method: 'POST', credentials: 'include'});
         if (!response.ok) throw new Error(`Error: ${response.status}`);
         setModalOpen(false); 
         setModalCuentaReiniciada(true);
@@ -101,7 +101,7 @@ const Perfil = () => {
     // Función para cerrar sesión
     const logout = async () => {
         try {
-            const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app//logout', {
+            const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app/logout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include' 

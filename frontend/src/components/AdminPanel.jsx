@@ -8,7 +8,7 @@ import Modal from './Modal';
 // Función para cerrar sesión
 const logout = async () => {
     try {
-        const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app//logout', {
+        const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app/logout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include' 
@@ -32,7 +32,7 @@ const AdminPanel = () => {
     
     // Verificar el estado de la sesión y cargar la lista de usuarios al montar el componente
       useEffect(() => {
-        fetch("https://inappropriate-dari-karinkiller-25441d28.koyeb.app//session-status", {method: "GET",credentials: "include"})
+        fetch("https://inappropriate-dari-karinkiller-25441d28.koyeb.app/session-status", {method: "GET",credentials: "include"})
           .then(response => response.json())
           .then(data => {
             console.log(data);
@@ -44,7 +44,7 @@ const AdminPanel = () => {
             navigate("/error");
           });
 
-        fetch("https://inappropriate-dari-karinkiller-25441d28.koyeb.app//session-status-admin", {method: "GET",credentials: "include"})
+        fetch("https://inappropriate-dari-karinkiller-25441d28.koyeb.app/session-status-admin", {method: "GET",credentials: "include"})
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -56,7 +56,7 @@ const AdminPanel = () => {
                 navigate("/error");
             });
 
-        fetch("https://inappropriate-dari-karinkiller-25441d28.koyeb.app//cargar-pagina-admin", {method: "GET", credentials: "include"})
+        fetch("https://inappropriate-dari-karinkiller-25441d28.koyeb.app/cargar-pagina-admin", {method: "GET", credentials: "include"})
             .then(response => response.json())
             .then(data => {
                 console.log(data);

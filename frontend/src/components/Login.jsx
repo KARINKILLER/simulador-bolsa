@@ -14,7 +14,7 @@ const Login = () => {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     
-    const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app//login', {
+    const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
