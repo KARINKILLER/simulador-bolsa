@@ -29,7 +29,7 @@ const Register = () => {
     }
 
     try {
-      const response = await fetch('https://simulador-bolsa-05g9.onrender.com/register', {
+      const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app//register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

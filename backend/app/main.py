@@ -14,7 +14,6 @@ async def lifespan(app: FastAPI):
     try:
         await init_db()
         await acciones_automaticas()
-        await keep_alive()
         yield
     finally:
         await close_db()
@@ -64,17 +63,6 @@ async def realizar_ventas_automaticas(ventas_a_realizar):
             print(f"Venta automática realizada para {usuario} de {num_acciones} acciones de {activo}.")
         except Exception as e:
             print(f"Error al realizar la venta automática para {usuario} de {num_acciones} acciones de {activo}: {e}")
-
-@repeat_every(seconds=600)
-async def keep_alive():
-    try:
-        response = requests.get("https://simulador-bolsa-05g9.onrender.com/keepalive")
-        if response.status_code == 200:
-            print("Keep alive exitoso.")
-        else:
-            print(f"Error en keep alive: {response.status_code}")
-    except requests.RequestException as e:
-        print(f"Error al hacer keep alive: {e}")
 
 @app.head("/keepalive")
 async def keepalive():

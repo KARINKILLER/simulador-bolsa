@@ -11,7 +11,7 @@ const Transacciones = () => {
         // Verificar el estado de la sesión al cargar el componente
         const verificarSesion = async () => {
             try {
-                const response = await fetch("https://simulador-bolsa-05g9.onrender.com/session-status", {
+                const response = await fetch("https://inappropriate-dari-karinkiller-25441d28.koyeb.app//session-status", {
                     method: "GET",
                     credentials: "include"
                 });
@@ -30,7 +30,7 @@ const Transacciones = () => {
             try {
                 await verificarSesion();
                 
-                const response = await fetch('https://simulador-bolsa-05g9.onrender.com/cargar-todas-transacciones', {
+                const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app//cargar-todas-transacciones', {
                     credentials: 'include'
                 });
                 

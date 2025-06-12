@@ -8,7 +8,7 @@ const Market = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://simulador-bolsa-05g9.onrender.com/session-status", {method: "GET",credentials: "include"})
+    fetch("https://inappropriate-dari-karinkiller-25441d28.koyeb.app//session-status", {method: "GET",credentials: "include"})
       .then(response => response.json())
       .then(data => {
         console.log(data);
@@ -99,7 +99,7 @@ const Market = () => {
     setDatosListos(false);
 
     try {
-      const response = await fetch(`https://simulador-bolsa-05g9.onrender.com/consult?activo=${ticker}&periodo=${codigoTiempo}`);
+      const response = await fetch(`https://inappropriate-dari-karinkiller-25441d28.koyeb.app//consult?activo=${ticker}&periodo=${codigoTiempo}`);
       
       if (!response.ok) throw new Error(`Error: ${response.status}`);
 
@@ -182,7 +182,7 @@ const Market = () => {
 
   //función que se encarga de pedir los datos al backend para antes de la compra de un activo
   const preCompra = async () => {
-    const response = await fetch(`https://simulador-bolsa-05g9.onrender.com/datos-pre-transaccion-compra?activo=${tickerSeleccionado}`, {credentials: 'include'});    
+    const response = await fetch(`https://inappropriate-dari-karinkiller-25441d28.koyeb.app//datos-pre-transaccion-compra?activo=${tickerSeleccionado}`, {credentials: 'include'});    
     if (!response.ok) throw new Error(`Error: ${response.status}`);
     const datosPreCompra = await response.json();
 
@@ -203,7 +203,7 @@ const Market = () => {
     const takeProfit = parseFloat(document.getElementById('take-profit').value) || 0;
 
     try {
-        const response = await fetch('https://simulador-bolsa-05g9.onrender.com/comprar-acciones', {
+        const response = await fetch('https://inappropriate-dari-karinkiller-25441d28.koyeb.app//comprar-acciones', {
             method: 'POST',credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
@@ -230,7 +230,7 @@ const Market = () => {
   //función que se encarga de pedir los datos al backend para antes de la venta de un activo
   const preVenta = async () => {
     console.log("Mirar si se tienen acciones y cuanto valen")
-    const response = await fetch(`https://simulador-bolsa-05g9.onrender.com/datos-pre-transaccion-venta?activo=${tickerSeleccionado}`, {credentials: 'include'});
+    const response = await fetch(`https://inappropriate-dari-karinkiller-25441d28.koyeb.app//datos-pre-transaccion-venta?activo=${tickerSeleccionado}`, {credentials: 'include'});
     if (!response.ok) throw new Error(`Error: ${response.status}`);
     const datosPreVenta = await response.json();
     setPrecioActivo(datosPreVenta.precioActivo);
@@ -243,7 +243,7 @@ const Market = () => {
   const confirmarVenta = async () => {
     setCantidadVenta(document.getElementById('cantidad-venta').value);
     const cantidadVendida = document.getElementById('cantidad-venta').value;
-    const response = await fetch(`https://simulador-bolsa-05g9.onrender.com/vender-acciones?activo=${tickerSeleccionado}&cantidad=${cantidadVendida}`, {credentials: 'include', method: 'POST'});
+    const response = await fetch(`https://inappropriate-dari-karinkiller-25441d28.koyeb.app//vender-acciones?activo=${tickerSeleccionado}&cantidad=${cantidadVendida}`, {credentials: 'include', method: 'POST'});
     if (!response.ok) throw new Error(`Error: ${response.status}`);
     cerrarModalVenta();
     setModalVentaRealizadaOpen(true);
