@@ -5,7 +5,6 @@ from starlette.middleware.sessions import SessionMiddleware
 from contextlib import asynccontextmanager
 from .dbHelper import *
 from .priceConsultor import *
-import requests
 
 
 # Inicialización de la base de datos y configuración de la aplicación FastAPI
@@ -136,7 +135,7 @@ async def register(email: str = Body(...), username: str = Body(...), password: 
         await registrarUsuario(email, username, password)
         return {"message": "Usuario registrado correctamente", "username": username}
     except asyncpg.UniqueViolationError:
-        raise HTTPException(status_code=409, detail="El nombre de usuario o correo electrónico ya están en uso")
+        raise HTTPException(status_code=409, detail="El nombre de usuario o correo ya están en uso")
     except Exception as e:
         print(f"Error en la ruta /register: {e}")
         raise HTTPException(status_code=500, detail="Error interno del servidor")

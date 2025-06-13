@@ -220,9 +220,10 @@ async def cargarPerfil(username: str):
             """
             activos = await connection.fetch(query_activos, id_usuario)
             
-            datos_activos = [
-                {"activo": "Saldo", "valor": float(saldo['saldo_virtual']), "stop_loss": 0, "take_profit": 0}
-            ]
+            if (float(saldo['saldo_virtual']) >0):
+                datos_activos = [
+                    {"activo": "Saldo", "valor": float(saldo['saldo_virtual']), "stop_loss": 0, "take_profit": 0}
+                ]
             
             # Para cada activo, calculamos su valor actual total
             for activo in activos:
