@@ -219,7 +219,7 @@ async def cargarPerfil(username: str):
                 WHERE id_usuario = $1
             """
             activos = await connection.fetch(query_activos, id_usuario)
-            
+            datos_activos = []
             if (float(saldo['saldo_virtual']) >0):
                 datos_activos = [
                     {"activo": "Saldo", "valor": float(saldo['saldo_virtual']), "stop_loss": 0, "take_profit": 0}
