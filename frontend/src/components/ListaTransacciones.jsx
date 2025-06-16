@@ -93,7 +93,7 @@ const ListaTransacciones = ({ transacciones }) => {
                         </div>
                         
                         <div className="transaccion-acciones">
-                            ${parseFloat(transaction.numero_acciones).toFixed(4)} acciones
+                            {parseFloat(transaction.numero_acciones).toFixed(4)} acciones
                         </div>
                         
                         <div className="transaccion-fecha">
