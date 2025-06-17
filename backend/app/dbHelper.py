@@ -38,7 +38,6 @@ async def init_db():
     global connection_pool
     try:
         print("Inicializando la base de datos...")
-        # Cambiar de DATABASE_CONFIG a NEON_DATABASE_CONFIG
         connection_pool = await asyncpg.create_pool(**NEON_DATABASE_CONFIG)
         print("Base de datos inicializada correctamente.")
     except Exception as e:
