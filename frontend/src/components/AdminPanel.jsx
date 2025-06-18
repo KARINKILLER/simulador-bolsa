@@ -52,6 +52,8 @@ const AdminPanel = () => {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                console.log("Es admin: ", data.es_admin);
+                console.log(!data.es_admin);
                 if (!data.es_admin) {
                 navigate("/error");
                 }
