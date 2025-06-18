@@ -54,7 +54,7 @@ const AdminPanel = () => {
                 console.log(data);
                 console.log("Es admin: ", data.es_admin);
                 console.log(!data.es_admin);
-                if (!data.es_admin) {
+                if (data.es_admin === false) {
                 navigate("/error");
                 }
             })
