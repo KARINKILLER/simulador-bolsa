@@ -24,9 +24,6 @@ const logout = async () => {
 
 }
 
-const sleep = (ms) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 const AdminPanel = () => {
 
@@ -51,22 +48,14 @@ const AdminPanel = () => {
         fetch("https://shivering-adriena-backendtfg-b6859741.koyeb.app/session-status-admin", {method: "GET",credentials: "include"})
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                console.log("Es admin: ", data.es_admin);
-                console.log(!data.es_admin);
-                if (data.es_admin === false) {
+                if (data.es_admin === "false") {
                 navigate("/error");
                 }
             })
             .catch(error => {
                 navigate("/error");
             });
-            
-            console.log("Sleeping for 1 second...");
-        // Esperar 1 segundo antes de cargar la lista de usuarios
-        sleep(1000).then(() => {
-            console.log("Continuing after sleep...");
-        });
+        
 
         fetch("https://shivering-adriena-backendtfg-b6859741.koyeb.app/cargar-pagina-admin", {method: "GET", credentials: "include"})
             .then(response => response.json())
