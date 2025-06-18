@@ -26,49 +26,70 @@ const logout = async () => {
 
 
 const AdminPanel = () => {
-
     const [listaUsuarios, setListaUsuarios] = useState([]);
-
     const navigate = useNavigate();
     
-    // Verificar el estado de la sesión y cargar la lista de usuarios al montar el componente
-      useEffect(() => {
-        fetch("https://shivering-adriena-backendtfg-b6859741.koyeb.app/session-status", {method: "GET",credentials: "include"})
-          .then(response => response.json())
-          .then(data => {
+    useEffect(() => {
+        // Verificar autenticación
+        fetch("https://shivering-adriena-backendtfg-b6859741.koyeb.app/session-status", {
+            method: "GET",
+            credentials: "include"
+        })
+        .then(response => response.json())
+        .then(data => {
             console.log(data);
             if (!data.authenticated) {
-              navigate("/error");
+                navigate("/error");
+                return; // Salir temprano si no está autenticado
             }
-          })
-          .catch(error => {
-            navigate("/error");
-          });
-
-        fetch("https://shivering-adriena-backendtfg-b6859741.koyeb.app/session-status-admin", {method: "GET",credentials: "include"})
-            .then(response => response.json())
-            .then(data => {
-                if (data.es_admin === "false") {
-                navigate("/error");
-                }
-            })
-            .catch(error => {
-                navigate("/error");
+            
+            // Solo verificar admin si está autenticado
+            return fetch("https://shivering-adriena-backendtfg-b6859741.koyeb.app/session-status-admin", {
+                method: "GET",
+                credentials: "include"
             });
-        
-
-        fetch("https://shivering-adriena-backendtfg-b6859741.koyeb.app/cargar-pagina-admin", {method: "GET", credentials: "include"})
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
+        })
+        .then(response => {
+            if (!response) return; // Si ya se redirigió, no continuar
+            return response.json();
+        })
+        .then(data => {
+            if (!data) return; // Si ya se redirigió, no continuar
+            
+            console.log(data);
+            console.log("Es admin: ", data.es_admin);
+            
+            // Corregir la comparación
+            if (data.es_admin === "False" || data.es_admin === false) {
+                navigate("/error");
+                return;
+            }
+            
+            // Solo cargar datos si es admin
+            return fetch("https://shivering-adriena-backendtfg-b6859741.koyeb.app/cargar-pagina-admin", {
+                method: "GET", 
+                credentials: "include"
+            });
+        })
+        .then(response => {
+            if (!response) return;
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.usuariosYSaldos && Array.isArray(data.usuariosYSaldos)) {
                 setListaUsuarios(data.usuariosYSaldos);
-            })
-            .catch(error => {
-                navigate("/error");
-            });
-
-      }, [navigate]);
-
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            navigate("/error");
+        });
+        
+    }, [navigate]);
+    
     return (
         <div className='container bg-app min-vh-100'>
 
